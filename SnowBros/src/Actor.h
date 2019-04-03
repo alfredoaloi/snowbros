@@ -9,6 +9,9 @@
 #define ACTOR_H_
 #include <allegro5/allegro.h>
 
+const int screenWidth = 800;
+const int screenHeight = 600;
+
 class Actor {
 protected:
 	int dim = 32;
@@ -20,9 +23,13 @@ protected:
 	float j_speed; //jumping speed
 	ALLEGRO_BITMAP* bitmap;
 public:
-	Actor(float x, float y, float s, float h, float f_s, float j_s, ALLEGRO_BITMAP* bit)
-		:pos_x(x), pos_y(y), speed(s), max_height(h), f_speed(f_s), j_speed(j_s), bitmap(bit){};
-	virtual ~Actor() {};
+	Actor(float x, float y, float s, float h, float f_s, float j_s,
+			ALLEGRO_BITMAP* bit) :
+			pos_x(x), pos_y(y), speed(s), max_height(h), f_speed(f_s), j_speed(
+					j_s), bitmap(bit) {
+	}
+	virtual ~Actor() {
+	}
 	//virtual void onAction() = 0;
 	virtual void onRedraw() = 0;
 };

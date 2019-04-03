@@ -1,10 +1,3 @@
-/*
- * Player.h
- *
- *  Created on: 17 mar 2019
- *      Author: francesco
- */
-
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
@@ -14,7 +7,7 @@ enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
 };
 
-class Player : public Actor {
+class Player: public Actor {
 	bool jumping = false;
 	bool falling = false;
 public:
