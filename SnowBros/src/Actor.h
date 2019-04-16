@@ -28,9 +28,9 @@ public:
 			pos_x(x), pos_y(y), speed(s), max_height(h), f_speed(f_s), j_speed(
 					j_s), bitmap(bit) {
 	}
-	virtual ~Actor() {
-	}
-	//virtual void onAction() = 0;
+	virtual ~Actor() {}
+	virtual void onAction() {}
+	virtual void onAction(bool [4]) {}
 	virtual void onRedraw() = 0;
 };
 

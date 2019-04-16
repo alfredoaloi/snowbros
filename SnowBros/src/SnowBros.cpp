@@ -3,7 +3,7 @@
 // Author      : 
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : SnowBros
 //============================================================================
 
 #include <iostream>
@@ -65,6 +65,7 @@ int main() {
 	float sx = windowWidth / (float) screenWidth;
 	float sy = windowHeight / (float) screenHeight;
 
+	//Provare il metodo dello stretched buffer
 	ALLEGRO_TRANSFORM trans;
 	al_identity_transform(&trans);
 	al_scale_transform(&trans, sx, sy);
@@ -76,6 +77,7 @@ int main() {
 		return -1;
 	}
 
+	//Da far fare ai livelli
 	float bouncer_x = 0;
 	float bouncer_y = screenHeight - BOUNCER_SIZE;
 	bouncer = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
@@ -92,6 +94,7 @@ int main() {
 	al_set_target_bitmap(al_get_backbuffer(display));
 
 	Player p(bouncer_x, bouncer_y, 6, 150, 10, 6, bouncer);
+	//
 
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
@@ -107,6 +110,7 @@ int main() {
 
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
+	//Lo sfondo non serve dopo aver gestito le mappe
 	al_clear_to_color(al_map_rgb(100, 100, 100));
 
 	al_flip_display();

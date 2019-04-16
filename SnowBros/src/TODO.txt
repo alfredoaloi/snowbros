@@ -1,0 +1,33 @@
++ Implementare una classe che si occupi di generare i mondi:
+	-La classe genererà un mondo a partire da un certo set di livelli;
+	-Sarebbe utile fare una classe derivata di list, in modo da avere già parte del lavoro sporco fatto;
+	-La classe dovrebbe gestire nello stesso momento almeno due livelli se vogliamo fare in modo di avere delle transizioni
+	 ogni volta che finiamo un livello;
+	-Le transizioni saranno un incubo da gestire e totalmente opzionali, by the way;
+	-Le responsabilità della classe saranno quelle di richiamare ad ogni ciclo di clock i metodi onRender dei livelli di
+	 competenza di quel particolare mondo e passare ai livelli tutto il necessario per poter mandare a buon fine i metodi
+	 onAction delle varie entità.
+	
++ Implementare una classe che si occupi di gestire i livelli:
+	-Un livello è composto da una tilemap da caricare via file e da un vettore di entities;
+	-A derivarla da vector non dovrebbe far male;
+	-Il livello costruisce le bitmap e le passa al costruttore delle entità;
+	-La grandezza TILE_DIM di una singola cella è screenWidth(screenHeight) / TILE_NUM;
+	-Rendere TILE_DIM le dimensioni del giocatore, considerando quanto difficile sarebbe altrimenti la gestione delle 
+	 collisioni (dovremmo fare una bounding box specifica per ciascuna entità);
+	-In questo modo dovremmo poter usare le trasformazioni a nostro vantaggio per rendere indipendenti dalla risoluzione
+	 dello schermo le operazioni di movimento e di collision detection usando variabili globali che non si devono passare
+	 da funzione a funzione, rendendo il tutto meno passibile di errori;
+	-Le entità in grado di muoversi dovranno poterlo fare indipendentemente dalle tiles della bitmap (la bitmap quindi 
+	 serve solo a pattuire i "punti di spawn" delle varie entities);
+	-Il livello deve essere in grado di richiamare correttamente i metodi onAction delle varie entities e per ogni frame
+	 deve richiamare il controller delle bounding box per rilevare eventuali collisioni;
+	-Il suo metodo onRender consiste nel chiamare i metodi onRender delle entities che sono contenute nello stesso (da
+	 decidere se fargli disegnare un background);
+	-Le informazioni relative alle bounding boxes, siccome tutte le entità hanno la stessa TILE_DIM, saranno contenute in
+	 una struttura apposita, da passare all'entità.
+	 
++ Implementare una classe EntitySpriteMap, che contiene le sprite delle entità per un particolare livello (o per tutto il
+  gioco):
+	-I livelli contengono un'istanza di questa classe;
+	-Le chiavi della mappa verranno usate per etichettare le sprite nella tilemap.
