@@ -11,6 +11,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
 #include "Player.h"
+#include "Level.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
@@ -26,6 +27,8 @@ int main() {
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bouncer = NULL;
+
+	Level l("./res/Level1.txt");
 
 	bool key[4] = { false, false, false, false };
 	bool redraw = true;
