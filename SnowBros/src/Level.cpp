@@ -16,14 +16,6 @@ Level::Level(std::string fileName) {
 		return;
 	}
 
-	/*for(int i = 0; i < dim_y; i++)
-	{
-		for(int j = 0; j < dim_x; j++)
-		{
-			tileMap[i][j] = 0;
-		}
-	}*/
-
 	for(int i = 0; i < dim_y; i++)
 	{
 		std::string s;
@@ -36,7 +28,24 @@ Level::Level(std::string fileName) {
 	}
 }
 
-Level::~Level() {
-	// TODO Auto-generated destructor stub
+/*Level::~Level() {
+	for(std::unordered_map<int, Entity>::iterator it = this->begin(); it != this->end(); it++)
+		it->second.~Entity();
+}*/
+
+void Level::drawLevel() {
+	/*ALLEGRO_BITMAP* quad;
+	quad = al_create_bitmap(10, 10);
+	al_set_target_bitmap(quad);*/
+	for(int i = 0; i < dim_y; i++) {
+		for(int j = 0; j < dim_x; j++) {
+			if(tileMap[i][j] == "e1"){
+				al_draw_filled_rectangle((float)j * (float)80, (float)i * (float)60, (float)j * 80 + (float)80,(float)i * 60 + (float)60, al_map_rgb(255, 255, 255));
+			}
+		}
+	}
 }
 
+void Level::addEntity(int key, Entity e){
+	(*this)[key] = e;
+}

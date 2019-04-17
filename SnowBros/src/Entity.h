@@ -21,6 +21,7 @@ protected:
 	Dimensions dim;
 
 public:
+	Entity() {}
 	Entity(float x, float y, Dimensions d) : pos_x(x), pos_y(y), dim(d) {};
 	virtual ~Entity() {};
 };

@@ -50,6 +50,7 @@ int main() {
 		return -1;
 	}
 
+	al_init_primitives_addon();
 	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
 	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 	//display = al_create_display(disp_data.width, disp_data.height);*/
@@ -177,6 +178,7 @@ int main() {
 			redraw = false;
 
 			al_clear_to_color(al_map_rgb(100, 100, 100));
+			l.drawLevel();
 			p.onRedraw();
 			al_flip_display();
 		}
