@@ -13,11 +13,6 @@
 	-A derivarla da vector non dovrebbe far male;
 	-Il livello costruisce le bitmap e le passa al costruttore delle entità;
 	-La grandezza TILE_DIM di una singola cella è screenWidth(screenHeight) / TILE_NUM;
-	-Rendere TILE_DIM le dimensioni del giocatore, considerando quanto difficile sarebbe altrimenti la gestione delle 
-	 collisioni (dovremmo fare una bounding box specifica per ciascuna entità);
-	-In questo modo dovremmo poter usare le trasformazioni a nostro vantaggio per rendere indipendenti dalla risoluzione
-	 dello schermo le operazioni di movimento e di collision detection usando variabili globali che non si devono passare
-	 da funzione a funzione, rendendo il tutto meno passibile di errori;
 	-Le entità in grado di muoversi dovranno poterlo fare indipendentemente dalle tiles della bitmap (la bitmap quindi 
 	 serve solo a pattuire i "punti di spawn" delle varie entities);
 	-Il livello deve essere in grado di richiamare correttamente i metodi onAction delle varie entities e per ogni frame
@@ -26,8 +21,3 @@
 	 decidere se fargli disegnare un background);
 	-Le informazioni relative alle bounding boxes, siccome tutte le entità hanno la stessa TILE_DIM, saranno contenute in
 	 una struttura apposita, da passare all'entità.
-	 
-+ Implementare una classe EntitySpriteMap, che contiene le sprite delle entità per un particolare livello (o per tutto il
-  gioco):
-	-I livelli contengono un'istanza di questa classe;
-	-Le chiavi della mappa verranno usate per etichettare le sprite nella tilemap.

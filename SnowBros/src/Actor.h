@@ -8,24 +8,22 @@
 #ifndef ACTOR_H_
 #define ACTOR_H_
 #include <allegro5/allegro.h>
+#include "Entity.h"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
 
-class Actor {
+class Actor : public Entity {
 protected:
-	int dim = 32;
-	float pos_x;
-	float pos_y;
 	float speed;
 	float max_height;
 	float f_speed; //falling speed
 	float j_speed; //jumping speed
 	ALLEGRO_BITMAP* bitmap;
 public:
-	Actor(float x, float y, float s, float h, float f_s, float j_s,
+	Actor(float x, float y, Dimensions d, float s, float h, float f_s, float j_s,
 			ALLEGRO_BITMAP* bit) :
-			pos_x(x), pos_y(y), speed(s), max_height(h), f_speed(f_s), j_speed(
+			Entity(x, y, d), speed(s), max_height(h), f_speed(f_s), j_speed(
 					j_s), bitmap(bit) {
 	}
 	virtual ~Actor() {}

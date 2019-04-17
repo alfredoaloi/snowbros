@@ -11,9 +11,9 @@ class Player: public Actor {
 	bool jumping = false;
 	bool falling = false;
 public:
-	Player(float x, float, float, float, float, float, ALLEGRO_BITMAP*);
+	Player(float, float,Dimensions , float, float, float, float, ALLEGRO_BITMAP*);
 	~Player();
-	void onAction(bool[4]);
+	void onAction(bool[4]) override;
 	void onRedraw() override;
 };
 

@@ -1,8 +1,8 @@
 #include "Player.h"
 
-Player::Player(float x, float y, float s, float h, float f_s, float j_s,
+Player::Player(float x, float y, Dimensions d, float s, float h, float f_s, float j_s,
 		ALLEGRO_BITMAP* bit) :
-		Actor(x, y, s, h, f_s, j_s, bit) {
+		Actor(x, y, d, s, h, f_s, j_s, bit) {
 }
 
 Player::~Player() {
@@ -18,23 +18,23 @@ void Player::onAction(bool key[4]) {
 		pos_x -= speed;
 	}
 
-	if (key[KEY_RIGHT] && pos_x <= screenWidth - dim - speed) {
+	if (key[KEY_RIGHT] && pos_x <= screenWidth - dim.x - speed) {
 		pos_x += speed;
 	}
 
-	if (jumping && !falling && pos_y >= screenHeight - dim - max_height) {
+	if (jumping && !falling && pos_y >= screenHeight - dim.y - max_height) {
 		pos_y -= j_speed;
 	}
 
-	if (pos_y <= screenHeight - dim - max_height) {
+	if (pos_y <= screenHeight - dim.y - max_height) {
 		falling = true;
 	}
 
-	if (falling && pos_y <= screenHeight - dim - f_speed) {
+	if (falling && pos_y <= screenHeight - dim.y - f_speed) {
 		pos_y += f_speed;
 	}
 
-	if (pos_y >= screenHeight - dim) {
+	if (pos_y >= screenHeight - dim.y) {
 		jumping = false;
 		falling = false;
 	}

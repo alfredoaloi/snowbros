@@ -5,17 +5,16 @@
 // Copyright   : Your copyright notice
 // Description : SnowBros
 //============================================================================
-
 #include <iostream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
 #include "Player.h"
-/*
- const int screenWidth = 800;
- const int screenHeight = 600;*/
-const float FPS = 60;
+
+/*extern const int screenHeight;
+extern const int screenWidth;*/
+const float FPS = 60.0;
 const int BOUNCER_SIZE = 32;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -93,7 +92,8 @@ int main() {
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 	al_set_target_bitmap(al_get_backbuffer(display));
 
-	Player p(bouncer_x, bouncer_y, 6, 150, 10, 6, bouncer);
+	Dimensions bouncer_dimensions = {32, 32};
+	Player p(bouncer_x, bouncer_y, bouncer_dimensions, 6, 150, 10, 6, bouncer);
 	//
 
 	event_queue = al_create_event_queue();
