@@ -1,29 +1,30 @@
 /*
  * Entity.h
  *
- *  Created on: 17 apr 2019
+ *  Created on: 19 apr 2019
  *      Author: francesco
  */
 
 #ifndef ENTITY_H_
 #define ENTITY_H_
 
-struct Dimensions
-{
-	float x;
-	float y;
-};
+#include "Dimensions.h"
+class Entity;
+#include "Action.h"
 
 class Entity {
 protected:
 	float pos_x;
 	float pos_y;
 	Dimensions dim;
+	Action* action;
 
 public:
-	Entity() {}
-	Entity(float x, float y, Dimensions d) : pos_x(x), pos_y(y), dim(d) {};
-	virtual ~Entity() {};
+	Entity();
+	Entity(float x, float y, Dimensions d, Action* a);
+	virtual void onRedraw();
+	Action* getAction();
+	virtual ~Entity();
 };
 
 #endif /* ENTITY_H_ */

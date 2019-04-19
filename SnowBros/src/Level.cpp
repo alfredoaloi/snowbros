@@ -34,9 +34,6 @@ Level::Level(std::string fileName) {
 }*/
 
 void Level::drawLevel() {
-	/*ALLEGRO_BITMAP* quad;
-	quad = al_create_bitmap(10, 10);
-	al_set_target_bitmap(quad);*/
 	for(int i = 0; i < dim_y; i++) {
 		for(int j = 0; j < dim_x; j++) {
 			if(tileMap[i][j] == "e1"){

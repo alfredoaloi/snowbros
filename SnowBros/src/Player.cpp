@@ -1,15 +1,15 @@
 #include "Player.h"
 
 Player::Player(float x, float y, Dimensions d, float s, float h, float f_s, float j_s,
-		ALLEGRO_BITMAP* bit) :
-		Actor(x, y, d, s, h, f_s, j_s, bit) {
+		ALLEGRO_BITMAP* bit, Action* a) :
+		Actor(x, y, d, s, h, f_s, j_s, bit, a) {
 }
 
 Player::~Player() {
 	al_destroy_bitmap(bitmap);
 }
 
-void Player::onAction(bool key[4]) {
+/*void Player::onAction(bool key[4]) {
 	if (key[KEY_UP] && !jumping) {
 		jumping = true;
 	}
@@ -38,7 +38,7 @@ void Player::onAction(bool key[4]) {
 		jumping = false;
 		falling = false;
 	}
-}
+}*/
 
 void Player::onRedraw() {
 	al_draw_bitmap(bitmap, pos_x, pos_y, 0);

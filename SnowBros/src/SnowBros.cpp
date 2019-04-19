@@ -12,6 +12,8 @@
 #include <allegro5/allegro_image.h>
 #include "Player.h"
 #include "Level.h"
+#include "Controller.h"
+#include "PlayerAction.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
@@ -96,8 +98,7 @@ int main() {
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 	al_set_target_bitmap(al_get_backbuffer(display));
 
-	Dimensions bouncer_dimensions = {32, 32};
-	Player p(bouncer_x, bouncer_y, bouncer_dimensions, 6, 150, 10, 6, bouncer);
+	Player p(bouncer_x, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer, new PlayerAction());
 	//
 
 	event_queue = al_create_event_queue();
@@ -123,12 +124,14 @@ int main() {
 
 	//bool jumping = false;
 	//bool falling = false;
+	Controller* c = new Controller(p.getAction(), key);
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-			p.onAction(key);
+			//p.onAction(key);
+			c->processAction();
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 			break;
