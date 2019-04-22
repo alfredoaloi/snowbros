@@ -9,7 +9,8 @@
 #define ENTITY_H_
 
 #include "Dimensions.h"
-class Entity;
+
+class Entity; //NON LO ELIMINARE TI PREGO
 #include "Action.h"
 
 class Entity {

@@ -28,10 +28,7 @@ Level::Level(std::string fileName) {
 	}
 }
 
-/*Level::~Level() {
-	for(std::unordered_map<int, Entity>::iterator it = this->begin(); it != this->end(); it++)
-		it->second.~Entity();
-}*/
+Level::~Level() { }
 
 void Level::drawLevel() {
 	for(int i = 0; i < dim_y; i++) {
@@ -43,6 +40,4 @@ void Level::drawLevel() {
 	}
 }
 
-void Level::addEntity(int key, Entity e){
-	(*this)[key] = e;
-}
+void Level::addEntity(int key, Entity* e) { (*this)[key] = e; }

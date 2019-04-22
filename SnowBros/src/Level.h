@@ -17,14 +17,14 @@
 #include <iostream>
 #include "Entity.h"
 
-class Level : public std::unordered_map<int, Entity>{
+class Level : public std::unordered_map<int, Entity* >{
 	static constexpr int dim_x = 10;
 	static constexpr int dim_y = 10;
 	std::string tileMap[dim_x][dim_y];
 public:
-	void addEntity(int, Entity);
+	void addEntity(int, Entity*);
 	Level(std::string);
-	//~Level();
+	~Level();
 	void drawLevel();
 };
 

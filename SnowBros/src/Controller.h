@@ -8,47 +8,27 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 #include "Action.h"
-#include <unordered_map>
 
 class Controller {
 private:
-	//std::unordered_map<int, Controller*> instances;
-	int idController;
 	Action* action;
 	bool* commands;
 public:
 	virtual void processAction()
 	{
-		action->onAction(commands);
+		if(action != nullptr && commands != nullptr)
+			action->onAction(commands);
 	}
 
+	Controller() { action = nullptr; commands = nullptr; }
 
-	Controller() { action = nullptr; }
-
-	Controller(Action* a, bool* c) : commands(c)
-	{
-		/*idController = instances.size();*/
-		action = a;
-		//instances[idController] = this;*/
-	}
-
-	/*void iterateControllers()
-	{
-		for(std::unordered_map<int ,Controller*>::iterator it = instances.begin(); it != instances.end(); it++)
-		{
-			it->second->processAction();
-		}
-	}*/
+	Controller(Action* a, bool* c) :action(a) ,commands(c) { }
 
 	void changeCommands(bool *c) { commands = c; }
 
 	void changeAction(Action* a) { action = a; }
 
-	virtual ~Controller()
-	{
-		delete action;
-		//instances.erase(idController);
-	}
+	virtual ~Controller() { delete action; delete[] commands; }
 };
 
 #endif /* CONTROLLER_H_ */
