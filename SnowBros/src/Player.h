@@ -3,10 +3,6 @@
 
 #include "Actor.h"
 
-enum MYKEYS {
-	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
-};
-
 class Player: public Actor {
 	bool jumping = false;
 	bool falling = false;

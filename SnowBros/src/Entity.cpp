@@ -17,6 +17,14 @@ Entity::Entity(float x, float y, Dimensions d, Action* a) : pos_x(x), pos_y(y), 
 		action->setEntity(this);
 }
 
+Entity::Entity(Entity* e)
+{
+	this->pos_x = e->pos_x;
+	this->pos_y = e->pos_y;
+	this->dim = e->dim;
+	this->action = e->action;
+}
+
 Entity::~Entity() { }
 
 Action* Entity::getAction() { return action; }

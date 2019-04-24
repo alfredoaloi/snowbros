@@ -14,6 +14,7 @@
 #include "Level.h"
 #include "Controller.h"
 #include "PlayerAction.h"
+#include "TileDescriptor.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
@@ -51,6 +52,8 @@ int main() {
 		std::cerr << "Failed to initialize timer!";
 		return -1;
 	}
+
+	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(80, 60), EntityDescriptor::createBitmapFromColor(Dimensions::createDimensions(80, 60), 255, 255, 255)));
 
 	al_init_primitives_addon();
 	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
@@ -131,6 +134,7 @@ int main() {
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 			//p.onAction(key);
+			l.processLevel();
 			c->processAction();
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {

@@ -8,6 +8,10 @@
 #ifndef PLAYERACTION_H_
 #define PLAYERACTION_H_
 
+enum MYKEYS {
+	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
+};
+
 #include "Action.h"
 #include "Player.h"
 

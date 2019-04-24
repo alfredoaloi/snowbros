@@ -12,12 +12,14 @@
 #include "Entity.h"
 
 class EntityDescriptor {
+protected:
 	Dimensions dim;
 	ALLEGRO_BITMAP* bitmap;
-	Action action;
-	public:
-	EntityDescriptor(Dimensions d, ALLEGRO_BITMAP* b, Action a): dim(d), bitmap(b), action(a) {};
-	virtual ~EntityDescriptor() {};
+	Action* action;
+
+public:
+	EntityDescriptor(Dimensions d, ALLEGRO_BITMAP* b, Action* a): dim(d), bitmap(b), action(a){}
+	virtual ~EntityDescriptor() {}
 
 	static ALLEGRO_BITMAP* createBitmapFromColor(Dimensions d, int r, int g, int b)
 	{

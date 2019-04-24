@@ -22,7 +22,9 @@ public:
 
 	Controller() { action = nullptr; commands = nullptr; }
 
-	Controller(Action* a, bool* c) :action(a) ,commands(c) { }
+	Controller(Action* a, bool* c) :action(a) ,commands(c) {  }
+
+	Controller(bool* c): action(nullptr), commands(c) {  }
 
 	void changeCommands(bool *c) { commands = c; }
 

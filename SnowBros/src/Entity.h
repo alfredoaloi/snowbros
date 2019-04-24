@@ -23,8 +23,9 @@ protected:
 public:
 	Entity();
 	Entity(float x, float y, Dimensions d, Action* a);
+	Entity(Entity*);
 	virtual void onRedraw();
-	Action* getAction();
+	virtual Action* getAction();
 	virtual ~Entity();
 };
 
