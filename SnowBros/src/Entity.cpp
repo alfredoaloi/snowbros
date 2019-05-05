@@ -27,4 +27,34 @@ Entity::Entity(Entity* e)
 
 Entity::~Entity() { }
 
-Action* Entity::getAction() { return action; }
+Action* Entity::getAction() {
+	return action;
+}
+
+/*void Entity::setAction(Action*& action) {
+	this->action = action;
+}*/
+
+Dimensions Entity::getDim() const {
+	return dim;
+}
+
+void Entity::setDim(Dimensions dim) {
+	this->dim = dim;
+}
+
+float Entity::getPosX() const {
+	return pos_x;
+}
+
+void Entity::setPosX(float posX) {
+	pos_x = posX;
+}
+
+float Entity::getPosY() const {
+	return pos_y;
+}
+
+void Entity::setPosY(float posY) {
+	pos_y = posY;
+}

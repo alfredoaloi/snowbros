@@ -27,6 +27,13 @@ public:
 	virtual void onRedraw();
 	virtual Action* getAction();
 	virtual ~Entity();
+	//void setAction(const Action*& action);
+	Dimensions getDim() const;
+	void setDim(Dimensions dim);
+	float getPosX() const;
+	void setPosX(float posX);
+	float getPosY() const;
+	void setPosY(float posY);
 };
 
 #endif /* ENTITY_H_ */

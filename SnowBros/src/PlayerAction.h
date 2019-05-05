@@ -13,12 +13,12 @@ enum MYKEYS {
 };
 
 #include "Action.h"
-#include "Player.h"
+#include "Actor.h"
 
 class PlayerAction: public Action {
 public:
 	PlayerAction();
-	PlayerAction(Player*);
+	//PlayerAction(Player*);
 	virtual ~PlayerAction();
 	virtual void onAction(bool*) override;
 };

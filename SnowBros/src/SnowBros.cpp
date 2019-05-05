@@ -10,7 +10,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
-#include "Player.h"
+#include "Actor.h"
 #include "Level.h"
 #include "Controller.h"
 #include "PlayerAction.h"
@@ -24,12 +24,33 @@ const int BOUNCER_SIZE = 32;
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
  };*/
 
+void collisionDetection(Actor& a1, Actor& a2)
+{
+	if ((a1.getPosX() > a2.getPosX() + a2.getDim().x - 1) || // is b1 on the right side of b2?
+		(a1.getPosY() > a2.getPosY() + a2.getDim().y - 1) || // is b1 under b2?
+		(a2.getPosX() > a1.getPosX() + a1.getDim().x - 1) || // is b2 on the right side of b1?
+		(a2.getPosY() > a1.getPosY() + a1.getDim().y - 1))   // is b2 under b1?
+	{
+		return;
+	}
+
+	if((a1.getPosX() + a1.getDim().x) - a2.getPosX() >= 0)
+		a1.setPosX(a2.getPosX() - a1.getDim().x);
+	if((a1.getPosY() + a1.getDim().y) - a2.getPosY() >= a1.getPosY() + a1.getDim().y)
+		a1.setPosY(a2.getPosY() - a1.getDim().y);
+	if((a2.getPosX() + a2.getDim().x) - a1.getPosX() >= 0)
+		a1.setPosX(a2.getPosX() + a2.getDim().x);
+	if((a2.getPosY() + a2.getDim().y) - a1.getPosY() >= a2.getPosY() + a2.getDim().y)
+		a1.setPosY(a2.getPosY() + a1.getDim().y);
+}
+
 int main() {
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_BITMAP *bouncer = NULL;
+	ALLEGRO_BITMAP *bouncer2 = NULL;
 
 	Level l("./res/Level1.txt");
 
@@ -89,6 +110,7 @@ int main() {
 	float bouncer_x = 0;
 	float bouncer_y = screenHeight - BOUNCER_SIZE;
 	bouncer = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
+	bouncer2 = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 
 	if (!bouncer) {
 		std::cerr << "Failed to create bitmap!";
@@ -100,8 +122,12 @@ int main() {
 	al_set_target_bitmap(bouncer);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 	al_set_target_bitmap(al_get_backbuffer(display));
+	al_set_target_bitmap(bouncer2);
+	al_clear_to_color(al_map_rgb(255, 0, 255));
+	al_set_target_bitmap(al_get_backbuffer(display));
 
-	Player p(bouncer_x, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer, new PlayerAction());
+	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer, new PlayerAction());
+	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer2, nullptr);
 	//
 
 	event_queue = al_create_event_queue();
@@ -136,6 +162,7 @@ int main() {
 			//p.onAction(key);
 			l.processLevel();
 			c->processAction();
+			collisionDetection(p, p2);
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 			break;
@@ -187,6 +214,7 @@ int main() {
 			al_clear_to_color(al_map_rgb(100, 100, 100));
 			l.drawLevel();
 			p.onRedraw();
+			p2.onRedraw();
 			al_flip_display();
 		}
 	}
