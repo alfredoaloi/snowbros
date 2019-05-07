@@ -6,6 +6,7 @@
 // Description : SnowBros
 //============================================================================
 #include <iostream>
+#include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
@@ -19,7 +20,7 @@
 /*extern const int screenHeight;
 extern const int screenWidth;*/
 const float FPS = 60.0;
-const int BOUNCER_SIZE = 32;
+const int BOUNCER_SIZE = 50;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
  };*/
@@ -34,14 +35,29 @@ void collisionDetection(Actor& a1, Actor& a2)
 		return;
 	}
 
-	if((a1.getPosX() + a1.getDim().x) - a2.getPosX() >= 0)
-		a1.setPosX(a2.getPosX() - a1.getDim().x);
-	if((a1.getPosY() + a1.getDim().y) - a2.getPosY() >= a1.getPosY() + a1.getDim().y)
-		a1.setPosY(a2.getPosY() - a1.getDim().y);
-	if((a2.getPosX() + a2.getDim().x) - a1.getPosX() >= 0)
-		a1.setPosX(a2.getPosX() + a2.getDim().x);
-	if((a2.getPosY() + a2.getDim().y) - a1.getPosY() >= a2.getPosY() + a2.getDim().y)
-		a1.setPosY(a2.getPosY() + a1.getDim().y);
+	float x1 = a1.getPosX() + a1.getDim().x / 2;
+	float y1 = a1.getPosY() + a1.getDim().y / 2;
+	float x2 = a2.getPosX() + a2.getDim().x / 2;
+	float y2 = a2.getPosY() + a2.getDim().y / 2;
+
+	float x3 = x1;
+	float y3 = y2;
+	float x4 = x2;
+	float y4 = y1;
+
+	al_draw_line(x1, y1, x2, y2, al_map_rgb(255, 255, 255), 1);
+	al_draw_line(x2, y2, x3, y3, al_map_rgb(255, 0, 0), 1);
+	al_draw_line(x2, y2, x4, y4, al_map_rgb(0, 0, 255), 1);
+
+	float distX = sqrt(pow(x2 - x3, 2) + pow(y2 - y3, 2));
+	float distY = sqrt(pow(x2 - x4, 2) + pow(y2 - y4, 2));
+
+	if(distX <= a2.getDim().x && x1 < x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
+		a1.setPosX(a1.getPosX() - (a2.getDim().x - distX));
+	if(distX <= a2.getDim().x && x1 > x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
+		a1.setPosX(a1.getPosX() + (a2.getDim().x - distX));
+	if(distY <= a2.getDim().y && y1 < y2 && (x1 > x2 - a2.getDim().x / 2 && x1 < x2 + a2.getDim().x / 2))
+		a1.setPosY(a1.getPosY() - (a2.getDim().y - distY));
 }
 
 int main() {
@@ -126,8 +142,8 @@ int main() {
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 	al_set_target_bitmap(al_get_backbuffer(display));
 
-	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer, new PlayerAction());
-	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(32, 32), 6, 150, 10, 6, bouncer2, nullptr);
+	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 10, bouncer, new PlayerAction());
+	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, bouncer2, nullptr);
 	//
 
 	event_queue = al_create_event_queue();
@@ -215,6 +231,8 @@ int main() {
 			l.drawLevel();
 			p.onRedraw();
 			p2.onRedraw();
+
+
 			al_flip_display();
 		}
 	}
