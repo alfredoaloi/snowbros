@@ -16,6 +16,7 @@
 #include "Controller.h"
 #include "PlayerAction.h"
 #include "TileDescriptor.h"
+#include "SpritesheetManager.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
@@ -68,6 +69,8 @@ int main() {
 	ALLEGRO_BITMAP *bouncer = NULL;
 	ALLEGRO_BITMAP *bouncer2 = NULL;
 
+	al_init_image_addon();
+
 	Level l("./res/Level1.txt");
 
 	bool key[4] = { false, false, false, false };
@@ -90,31 +93,38 @@ int main() {
 		return -1;
 	}
 
-	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(80, 60), EntityDescriptor::createBitmapFromColor(Dimensions::createDimensions(80, 60), 255, 255, 255)));
+	SpritesheetManager m;
+	m.setNewSpritesheet("player1", new Spritesheet(al_load_bitmap("./res/player4.bmp"), 4));
+	m.setWidth(50);
+	m.setHeight(50);
+
+	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(80, 60), al_load_bitmap("./res/tile1.bmp")));
 
 	al_init_primitives_addon();
-	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-	//display = al_create_display(disp_data.width, disp_data.height);*/
+//	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
+//	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+//	//display = al_create_display(disp_data.width, disp_data.height);*/
+//
+//	float windowWidth = disp_data.width;
+//	float windowHeight = disp_data.height;
+//
+//	//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+//	display = al_create_display(windowWidth, windowHeight);
+//	al_clear_to_color(al_map_rgb(100, 100, 100));
+//
+//	windowWidth = al_get_display_width(display);
+//	windowHeight = al_get_display_height(display);
+//
+//	float sx = windowWidth / (float) screenWidth;
+//	float sy = windowHeight / (float) screenHeight;
+//
+//	//Provare il metodo dello stretched buffer
+//	ALLEGRO_TRANSFORM trans;
+//	al_identity_transform(&trans);
+//	al_scale_transform(&trans, sx, sy);
+//	al_use_transform(&trans);
 
-	float windowWidth = disp_data.width;
-	float windowHeight = disp_data.height;
-
-	//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-	display = al_create_display(windowWidth, windowHeight);
-	al_clear_to_color(al_map_rgb(100, 100, 100));
-
-	windowWidth = al_get_display_width(display);
-	windowHeight = al_get_display_height(display);
-
-	float sx = windowWidth / (float) screenWidth;
-	float sy = windowHeight / (float) screenHeight;
-
-	//Provare il metodo dello stretched buffer
-	ALLEGRO_TRANSFORM trans;
-	al_identity_transform(&trans);
-	al_scale_transform(&trans, sx, sy);
-	al_use_transform(&trans);
+	display = al_create_display(800, 600);
 
 	if (!display) {
 		std::cerr << "Failed to create display!";
@@ -125,7 +135,7 @@ int main() {
 	//Da far fare ai livelli
 	float bouncer_x = 0;
 	float bouncer_y = screenHeight - BOUNCER_SIZE;
-	bouncer = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
+	bouncer = al_create_bitmap(50, 50);
 	bouncer2 = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
 
 	if (!bouncer) {
@@ -135,12 +145,11 @@ int main() {
 		return -1;
 	}
 
-	al_set_target_bitmap(bouncer);
-	al_clear_to_color(al_map_rgb(255, 0, 255));
-	al_set_target_bitmap(al_get_backbuffer(display));
+//	ALLEGRO_BITMAP* spritesheet = al_load_bitmap("./res/player1.bmp");
+//	al_set_target_bitmap(bouncer);
+//	al_draw_bitmap_region(spritesheet, 0, 0, 28, 28, 0, 0, 0);
 	al_set_target_bitmap(bouncer2);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
-	al_set_target_bitmap(al_get_backbuffer(display));
 
 	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 10, bouncer, new PlayerAction());
 	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, bouncer2, nullptr);
@@ -161,6 +170,7 @@ int main() {
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	//Lo sfondo non serve dopo aver gestito le mappe
+	al_set_target_bitmap(al_get_backbuffer(display));
 	al_clear_to_color(al_map_rgb(100, 100, 100));
 
 	al_flip_display();
@@ -226,7 +236,9 @@ int main() {
 
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
-
+			m.selectCurrentSpritesheet("player1");
+			m.nextSprite(bouncer);
+			al_set_target_bitmap(al_get_backbuffer(display));
 			al_clear_to_color(al_map_rgb(100, 100, 100));
 			l.drawLevel();
 			p.onRedraw();

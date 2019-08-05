@@ -42,11 +42,11 @@ public:
 
 	/*const ALLEGRO_BITMAP*& getBitmap() const {
 		return bitmap;
-	}
-
-	void setBitmap(const ALLEGRO_BITMAP*& bitmap) {
-		this->bitmap = bitmap;
 	}*/
+
+	void setBitmap(ALLEGRO_BITMAP* bitmap) {
+		this->bitmap = bitmap;
+	}
 
 	float get_f_speed() const {
 		return f_speed;
