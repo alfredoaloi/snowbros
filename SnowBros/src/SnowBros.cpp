@@ -20,7 +20,7 @@
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
-const float FPS = 60.0;
+const float FPS = 10.0;
 const int BOUNCER_SIZE = 50;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -46,10 +46,6 @@ void collisionDetection(Actor& a1, Actor& a2)
 	float x4 = x2;
 	float y4 = y1;
 
-	al_draw_line(x1, y1, x2, y2, al_map_rgb(255, 255, 255), 1);
-	al_draw_line(x2, y2, x3, y3, al_map_rgb(255, 0, 0), 1);
-	al_draw_line(x2, y2, x4, y4, al_map_rgb(0, 0, 255), 1);
-
 	float distX = sqrt(pow(x2 - x3, 2) + pow(y2 - y3, 2));
 	float distY = sqrt(pow(x2 - x4, 2) + pow(y2 - y4, 2));
 
@@ -73,7 +69,7 @@ int main() {
 
 	Level l("./res/Level1.txt");
 
-	bool key[4] = { false, false, false, false };
+	bool key[5] = { false, false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
 
@@ -93,14 +89,19 @@ int main() {
 		return -1;
 	}
 
-	SpritesheetManager m;
-	m.setNewSpritesheet("player1", new Spritesheet(al_load_bitmap("./res/player4.bmp"), 4));
-	m.setWidth(50);
-	m.setHeight(50);
+	SpritesheetManager* m = new SpritesheetManager();
+	m->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/fermoR.bmp"), 1));
+	m->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/fermoL.bmp"), 1));
+	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/camminaL.bmp"), 4));
+	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/camminaR.bmp"), 4));
+	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/sparaR.bmp"), 4));
+	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/sparaL.bmp"), 4));
+	m->setWidth(50);
+	m->setHeight(50);
 
-	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(80, 60), al_load_bitmap("./res/tile1.bmp")));
+	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(50, 46.154), al_load_bitmap("./res/tile1.bmp")));
 
-	al_init_primitives_addon();
+//	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
 //	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 //	//display = al_create_display(disp_data.width, disp_data.height);*/
@@ -145,14 +146,11 @@ int main() {
 		return -1;
 	}
 
-//	ALLEGRO_BITMAP* spritesheet = al_load_bitmap("./res/player1.bmp");
-//	al_set_target_bitmap(bouncer);
-//	al_draw_bitmap_region(spritesheet, 0, 0, 28, 28, 0, 0, 0);
 	al_set_target_bitmap(bouncer2);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
-	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 10, bouncer, new PlayerAction());
-	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, bouncer2, nullptr);
+	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 10, new PlayerAction(), m);
+	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, nullptr, m);
 	//
 
 	event_queue = al_create_event_queue();
@@ -209,6 +207,9 @@ int main() {
 			case ALLEGRO_KEY_RIGHT:
 				key[KEY_RIGHT] = true;
 				break;
+			case ALLEGRO_KEY_SPACE:
+				key[KEY_SPACE] = true;
+				break;
 			}
 		} else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
 			switch (ev.keyboard.keycode) {
@@ -227,6 +228,9 @@ int main() {
 			case ALLEGRO_KEY_RIGHT:
 				key[KEY_RIGHT] = false;
 				break;
+			case ALLEGRO_KEY_SPACE:
+				key[KEY_SPACE] = false;
+				break;
 
 			case ALLEGRO_KEY_ESCAPE:
 				doexit = true;
@@ -236,14 +240,14 @@ int main() {
 
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
-			m.selectCurrentSpritesheet("player1");
-			m.nextSprite(bouncer);
 			al_set_target_bitmap(al_get_backbuffer(display));
 			al_clear_to_color(al_map_rgb(100, 100, 100));
+
+			al_hold_bitmap_drawing(1);
 			l.drawLevel();
 			p.onRedraw();
 			p2.onRedraw();
-
+			al_hold_bitmap_drawing(0);
 
 			al_flip_display();
 		}

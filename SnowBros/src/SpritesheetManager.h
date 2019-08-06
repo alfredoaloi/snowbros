@@ -27,7 +27,7 @@ public:
 	virtual ~SpritesheetManager();
 	void setNewSpritesheet(std::string, Spritesheet*);
 	void selectCurrentSpritesheet(std::string);
-	void nextSprite(ALLEGRO_BITMAP*&);
+	void nextSprite(ALLEGRO_BITMAP*);
 	void setWidth(float);
 	void setHeight(float);
 };

@@ -17,7 +17,7 @@ SpritesheetManager::SpritesheetManager()
 
 SpritesheetManager::~SpritesheetManager() { }
 
-void SpritesheetManager::nextSprite(ALLEGRO_BITMAP*& sprite)
+void SpritesheetManager::nextSprite(ALLEGRO_BITMAP* sprite)
 {
 	ALLEGRO_BITMAP* nextSprite = al_create_bitmap(width, height);
 	ALLEGRO_BITMAP* spritesheet = al_create_bitmap(500, 500);
@@ -43,6 +43,8 @@ void SpritesheetManager::selectCurrentSpritesheet(std::string spritesheetID)
 	it = spritesheets.find(spritesheetID);
 
 	currentSpritesheet = it->second;
+
+	currentSprite = 0;
 }
 
 void SpritesheetManager::setNewSpritesheet(std::string spritesheetID, Spritesheet* spritesheet)

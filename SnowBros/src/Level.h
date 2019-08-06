@@ -20,9 +20,9 @@
 #include "Controller.h"
 
 class Level {
-	static constexpr int dim_x = 10;
-	static constexpr int dim_y = 10;
-	std::string tileMap[dim_x][dim_y];
+	static constexpr int dim_x = 16;
+	static constexpr int dim_y = 13;
+	std::string tileMap[dim_y][dim_x];
 	std::unordered_map<std::string, EntityDescriptor* > entities;
 	std::unordered_map<std::string, EntityDescriptor* > players;
 	std::list<Controller*> playerControllers;

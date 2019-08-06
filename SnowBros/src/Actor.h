@@ -9,6 +9,7 @@
 #define ACTOR_H_
 #include <allegro5/allegro.h>
 #include "Entity.h"
+#include "SpritesheetManager.h"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
@@ -22,13 +23,15 @@ protected:
 	float f_speed; //falling speed
 	float j_speed; //jumping speed
 	ALLEGRO_BITMAP* bitmap;
+	SpritesheetManager* spritesheetManager;
 
 public:
-	Actor(float x, float y, Dimensions d, float s, float h, float f_s, float j_s,
-			ALLEGRO_BITMAP* bit, Action* a) :
-			Entity(x, y, d, a), speed(s), max_height(h), f_speed(f_s), j_speed(
-					j_s), bitmap(bit) {
+	Actor(float x, float y, Dimensions d, float s, float h, float f_s, float j_s, Action* a, SpritesheetManager* ssm) :
+			Entity(x, y, d, a), speed(s), max_height(h), f_speed(f_s), j_speed(j_s), spritesheetManager(ssm)
+	{
+		bitmap = al_create_bitmap(d.x, d.y);
 	}
+
 	virtual ~Actor() { al_destroy_bitmap(bitmap); }
 	void onRedraw() override { al_draw_bitmap(bitmap, pos_x, pos_y, 0); }
 
@@ -40,9 +43,9 @@ public:
 		this->action = action;
 	}
 
-	/*const ALLEGRO_BITMAP*& getBitmap() const {
+	ALLEGRO_BITMAP* getBitmap() const {
 		return bitmap;
-	}*/
+	}
 
 	void setBitmap(ALLEGRO_BITMAP* bitmap) {
 		this->bitmap = bitmap;
@@ -94,6 +97,14 @@ public:
 
 	void setSpeed(float speed) {
 		this->speed = speed;
+	}
+
+	SpritesheetManager* getSpritesheetManager() const {
+		return spritesheetManager;
+	}
+
+	void setSpritesheetManager(SpritesheetManager* spritesheetManager) {
+		this->spritesheetManager = spritesheetManager;
 	}
 };
 
