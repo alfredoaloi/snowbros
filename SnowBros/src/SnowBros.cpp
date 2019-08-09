@@ -4,6 +4,7 @@
 // Version     :
 // Copyright   : Your copyright notice
 // Description : SnowBros
+// Dimensioni = 256X224
 //============================================================================
 #include <iostream>
 #include <math.h>
@@ -20,8 +21,8 @@
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
-const float FPS = 10.0;
-const int BOUNCER_SIZE = 50;
+const float FPS = 20.0;
+const int BOUNCER_SIZE = 30;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
  };*/
@@ -62,12 +63,9 @@ int main() {
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	ALLEGRO_BITMAP *bouncer = NULL;
 	ALLEGRO_BITMAP *bouncer2 = NULL;
 
 	al_init_image_addon();
-
-	Level l("./res/Level1.txt");
 
 	bool key[5] = { false, false, false, false, false };
 	bool redraw = true;
@@ -89,17 +87,19 @@ int main() {
 		return -1;
 	}
 
+	Level l("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
+
 	SpritesheetManager* m = new SpritesheetManager();
 	m->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/fermoR.bmp"), 1));
 	m->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/fermoL.bmp"), 1));
-	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/camminaL.bmp"), 4));
-	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/camminaR.bmp"), 4));
-	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/sparaR.bmp"), 4));
-	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/sparaL.bmp"), 4));
-	m->setWidth(50);
-	m->setHeight(50);
+	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/camminaL.bmp"), 3));
+	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/camminaR.bmp"), 3));
+	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/sparaR.bmp"), 2));
+	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/sparaL.bmp"), 2));
+	m->setWidth(25);
+	m->setHeight(30);
 
-	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(50, 46.154), al_load_bitmap("./res/tile1.bmp")));
+	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(16, 16), EntityDescriptor::createBitmapFromColor(Dimensions::createDimensions(16, 16), 255, 255, 255)));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
@@ -125,7 +125,7 @@ int main() {
 //	al_scale_transform(&trans, sx, sy);
 //	al_use_transform(&trans);
 
-	display = al_create_display(800, 600);
+	display = al_create_display(256, 200);
 
 	if (!display) {
 		std::cerr << "Failed to create display!";
@@ -136,20 +136,12 @@ int main() {
 	//Da far fare ai livelli
 	float bouncer_x = 0;
 	float bouncer_y = screenHeight - BOUNCER_SIZE;
-	bouncer = al_create_bitmap(50, 50);
 	bouncer2 = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
-
-	if (!bouncer) {
-		std::cerr << "Failed to create bitmap!";
-		al_destroy_timer(timer);
-		al_destroy_display(display);
-		return -1;
-	}
 
 	al_set_target_bitmap(bouncer2);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
-	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 10, new PlayerAction(), m);
+	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(30, 30), 6, 150, 10, 10, new PlayerAction(), m);
 	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, nullptr, m);
 	//
 
@@ -158,7 +150,6 @@ int main() {
 		std::cerr << "Failed to create event queue!";
 		al_destroy_timer(timer);
 		al_destroy_display(display);
-		al_destroy_bitmap(bouncer);
 		return -1;
 	}
 	al_register_event_source(event_queue, al_get_display_event_source(display));
@@ -169,7 +160,9 @@ int main() {
 
 	//Lo sfondo non serve dopo aver gestito le mappe
 	al_set_target_bitmap(al_get_backbuffer(display));
-	al_clear_to_color(al_map_rgb(100, 100, 100));
+	//al_clear_to_color(al_map_rgb(100, 100, 100));
+
+	al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 0, 0);
 
 	al_flip_display();
 

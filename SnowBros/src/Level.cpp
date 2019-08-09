@@ -7,7 +7,7 @@
 
 #include "Level.h"
 
-Level::Level(std::string fileName) {
+Level::Level(std::string fileName, ALLEGRO_BITMAP* levelBackground) {
 	std::ifstream file(fileName);
 
 	if(file.fail())
@@ -26,6 +26,8 @@ Level::Level(std::string fileName) {
 			ss >> tileMap[i][j];
 		}
 	}
+
+	this->levelBackground = levelBackground;
 }
 
 Level::~Level() { }
@@ -34,6 +36,8 @@ void Level::drawLevel() {
 
 	if(constructedEntities.empty()/* || constructedControllers.empty()*/)
 		constructLevel();
+
+	al_draw_bitmap(levelBackground, 0, 0, 0);
 
 	for(std::list<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
 	{
@@ -62,7 +66,7 @@ void Level::constructLevel()
 			it = entities.find(tileMap[i][j]);
 			if(it != entities.end())
 			{
-				Entity* tmpEntity = it->second->getDescripted((float)j * (float)50, (float)i * (float)46.154);
+				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16);
 				if(tmpEntity->getAction() != nullptr)
 				{
 					Controller* tmpController = new Controller();
@@ -71,23 +75,23 @@ void Level::constructLevel()
 				}
 				constructedEntities.push_back(tmpEntity);
 			}
-			//Non testato, ma dovrebbe funzionare
-			else
-			{
-				it = players.find(tileMap[i][j]);
-				if(it != players.end())
-				{
-					Entity* tmpEntity = it->second->getDescripted((float)j * (float)50, (float)i * (float)46.154);
-					if(!playerControllers.empty() && playerControllers.front() != nullptr)
-					{
-						Controller* tmpController = new Controller(*playerControllers.front());
-						playerControllers.pop_front();
-						tmpController->changeAction(tmpEntity->getAction());
-						constructedControllers.push_back(tmpController);
-					}
-					constructedEntities.push_back(tmpEntity);
-				}
-			}//
+//			//Non testato, ma dovrebbe funzionare
+//			else
+//			{
+//				it = players.find(tileMap[i][j]);
+//				if(it != players.end())
+//				{
+//					Entity* tmpEntity = it->second->getDescripted((float)j * (float)50, (float)i * (float)46.154);
+//					if(!playerControllers.empty() && playerControllers.front() != nullptr)
+//					{
+//						Controller* tmpController = new Controller(*playerControllers.front());
+//						playerControllers.pop_front();
+//						tmpController->changeAction(tmpEntity->getAction());
+//						constructedControllers.push_back(tmpController);
+//					}
+//					constructedEntities.push_back(tmpEntity);
+//				}
+//			}//
 		}
 	}
 
@@ -101,3 +105,5 @@ void Level::registerEntity(std::string key, EntityDescriptor* e) { entities[key]
 void Level::registerPlayer(std::string key, EntityDescriptor* e) { players[key] = e; }
 
 void Level::registerController(Controller* c) { playerControllers.push_back(c); }
+
+void Level::setLevelbackground(ALLEGRO_BITMAP* levelBackground) { this->levelBackground = levelBackground; }
