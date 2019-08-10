@@ -8,7 +8,6 @@
 #ifndef ACTION_H_
 #define ACTION_H_
 
-class Action; //NON LO ELIMINARE TI PREGO
 #include "Entity.h"
 
 class Action {

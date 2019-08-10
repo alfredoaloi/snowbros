@@ -7,7 +7,7 @@
 
 #include "Tile.h"
 
-Tile::Tile(float x, float y, Dimensions d, ALLEGRO_BITMAP* b, Action* a) : Entity(x, y, d, a), bitmap(b) {}
+Tile::Tile(float x, float y, Dimensions* d, ALLEGRO_BITMAP* b, std::string t) : Entity(x, y, d, t), bitmap(b){  }
 
 Tile::~Tile() {
 	al_destroy_bitmap(bitmap);
@@ -15,6 +15,5 @@ Tile::~Tile() {
 
 void Tile::onRedraw()
 {
-	al_draw_bitmap(bitmap, pos_x, pos_y, 0);
+	//al_draw_bitmap(bitmap, pos_x, pos_y, 0);
 }
-

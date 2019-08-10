@@ -11,10 +11,9 @@ Entity::Entity() { }
 
 void Entity::onRedraw() { }
 
-Entity::Entity(float x, float y, Dimensions d, Action* a) : pos_x(x), pos_y(y), dim(d), action(a)
+Entity::Entity(float x, float y, Dimensions* d, std::string t) : pos_x(x), pos_y(y), dim(d), type(t)
 {
-	if(action != nullptr)
-		action->setEntity(this);
+
 }
 
 Entity::Entity(Entity* e)
@@ -22,24 +21,20 @@ Entity::Entity(Entity* e)
 	this->pos_x = e->pos_x;
 	this->pos_y = e->pos_y;
 	this->dim = e->dim;
-	this->action = e->action;
+	this->type = e->type;
 }
 
 Entity::~Entity() { }
-
-Action* Entity::getAction() {
-	return action;
-}
 
 /*void Entity::setAction(Action*& action) {
 	this->action = action;
 }*/
 
-Dimensions Entity::getDim() const {
+Dimensions* Entity::getDim() const {
 	return dim;
 }
 
-void Entity::setDim(Dimensions dim) {
+void Entity::setDim(Dimensions* dim) {
 	this->dim = dim;
 }
 
@@ -58,3 +53,5 @@ float Entity::getPosY() const {
 void Entity::setPosY(float posY) {
 	pos_y = posY;
 }
+
+std::string Entity::getType() { return type; }

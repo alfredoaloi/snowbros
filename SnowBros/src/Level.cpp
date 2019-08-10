@@ -34,7 +34,7 @@ Level::~Level() { }
 
 void Level::drawLevel() {
 
-	if(constructedEntities.empty()/* || constructedControllers.empty()*/)
+	if(constructedEntities.empty() || constructedControllers.empty())
 		constructLevel();
 
 	al_draw_bitmap(levelBackground, 0, 0, 0);
@@ -47,12 +47,24 @@ void Level::drawLevel() {
 
 void Level::processLevel()
 {
-	if(constructedEntities.empty()/* || constructedControllers.empty()*/)
+	if(constructedEntities.empty() || constructedControllers.empty())
 			constructLevel();
 
 	for(std::list<Controller*>::iterator it = constructedControllers.begin(); it != constructedControllers.end(); it++)
 	{
 		(*it)->processAction();
+	}
+
+	for(std::list<CollisionHandler*>::iterator it1 = constructedCollisionHandlers.begin(); it1 != constructedCollisionHandlers.end(); it1++)
+	{
+		for(std::list<Entity*>::iterator it2 = constructedEntities.begin(); it2 != constructedEntities.end(); it2++)
+		{
+			if((*it1)->getEntity() != *it2)
+			{
+				if((*it1)->handleCollision(*it2))
+					break;
+			}
+		}
 	}
 }
 
@@ -67,43 +79,28 @@ void Level::constructLevel()
 			if(it != entities.end())
 			{
 				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16);
-				if(tmpEntity->getAction() != nullptr)
+				if(it->second->getDescriptedController() != nullptr)
 				{
-					Controller* tmpController = new Controller();
-					tmpController->changeAction(tmpEntity->getAction());
+					Controller* tmpController = it->second->getDescriptedController();
+					Action* action = it->second->getDescriptedAction();
+					action->setEntity(tmpEntity);
+					tmpController->changeAction(action);
 					constructedControllers.push_back(tmpController);
+				}
+				if(it->second->getDescriptedCollisionHandler() != nullptr)
+				{
+					CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
+					tmpCollisionhandler->setEntity(tmpEntity);
+					constructedCollisionHandlers.push_back(tmpCollisionhandler);
 				}
 				constructedEntities.push_back(tmpEntity);
 			}
-//			//Non testato, ma dovrebbe funzionare
-//			else
-//			{
-//				it = players.find(tileMap[i][j]);
-//				if(it != players.end())
-//				{
-//					Entity* tmpEntity = it->second->getDescripted((float)j * (float)50, (float)i * (float)46.154);
-//					if(!playerControllers.empty() && playerControllers.front() != nullptr)
-//					{
-//						Controller* tmpController = new Controller(*playerControllers.front());
-//						playerControllers.pop_front();
-//						tmpController->changeAction(tmpEntity->getAction());
-//						constructedControllers.push_back(tmpController);
-//					}
-//					constructedEntities.push_back(tmpEntity);
-//				}
-//			}//
 		}
 	}
 
 	entities.clear();
-	players.clear();
-	playerControllers.clear();
 }
 
 void Level::registerEntity(std::string key, EntityDescriptor* e) { entities[key] = e; }
-
-void Level::registerPlayer(std::string key, EntityDescriptor* e) { players[key] = e; }
-
-void Level::registerController(Controller* c) { playerControllers.push_back(c); }
 
 void Level::setLevelbackground(ALLEGRO_BITMAP* levelBackground) { this->levelBackground = levelBackground; }

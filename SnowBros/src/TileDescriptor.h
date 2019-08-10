@@ -13,12 +13,12 @@
 
 class TileDescriptor: public EntityDescriptor {
 public:
-	TileDescriptor(Dimensions d, ALLEGRO_BITMAP* b) : EntityDescriptor(d, b, nullptr) {}
+	TileDescriptor(Dimensions* d, ALLEGRO_BITMAP* b) : EntityDescriptor(d, b, nullptr, nullptr, nullptr, nullptr,"Tile") { }
 	virtual ~TileDescriptor() {}
 
 	Entity* getDescripted(float x, float y) override
 	{
-		return new Tile(x, y, dim, bitmap, action);
+		return new Tile(x, y, dim, bitmap, type);
 	}
 };
 

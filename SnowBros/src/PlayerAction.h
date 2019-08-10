@@ -12,19 +12,6 @@ enum MYKEYS {
 	KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE
 };
 
-enum LAST_DIRECTION {
-	NO_DIRECTION_LEFT = 1,
-	NO_DIRECTION_RIGHT = 1 << 1 ,
-	LEFT = 1 << 2,
-	RIGHT = 1 << 3,
-	UP = 1 << 4,
-	SHOOTING_LEFT = 1 << 5,
-	SHOOTING_RIGHT = 1 << 6,
-	SHOOTING = SHOOTING_LEFT | SHOOTING_RIGHT,
-	NO_DIRECTION = NO_DIRECTION_LEFT | NO_DIRECTION_RIGHT,
-};
-typedef LAST_DIRECTION LastDirection;
-
 #include "Action.h"
 #include "Actor.h"
 #include <string>
@@ -36,7 +23,6 @@ public:
 	virtual ~PlayerAction();
 	virtual void onAction(bool*) override;
 
-	LastDirection lastDirection;
 	bool isMoving;
 	bool isShooting;
 };

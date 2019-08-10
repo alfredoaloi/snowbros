@@ -10,38 +10,48 @@
 #include <allegro5/allegro.h>
 #include "Entity.h"
 #include "SpritesheetManager.h"
+#include <list>
 
 const int screenWidth = 256;
 const int screenHeight = 192;
+
+enum LAST_DIRECTION {
+	NO_DIRECTION_LEFT = 1,
+	NO_DIRECTION_RIGHT = 1 << 1 ,
+	LEFT = 1 << 2,
+	RIGHT = 1 << 3,
+	UP = 1 << 4,
+	SHOOTING_LEFT = 1 << 5,
+	SHOOTING_RIGHT = 1 << 6,
+	SHOOTING = SHOOTING_LEFT | SHOOTING_RIGHT,
+	NO_DIRECTION = NO_DIRECTION_LEFT | NO_DIRECTION_RIGHT,
+};
+typedef LAST_DIRECTION LastDirection;
 
 class Actor : public Entity {
 protected:
 	bool jumping = false;
 	bool falling = false;
+	bool canJump = true;
+	bool canFall = true;
 	float speed;
 	float max_height;
 	float f_speed; //falling speed
 	float j_speed; //jumping speed
 	ALLEGRO_BITMAP* bitmap;
 	SpritesheetManager* spritesheetManager;
+	LastDirection lastDirection;
 
 public:
-	Actor(float x, float y, Dimensions d, float s, float h, float f_s, float j_s, Action* a, SpritesheetManager* ssm) :
-			Entity(x, y, d, a), speed(s), max_height(h), f_speed(f_s), j_speed(j_s), spritesheetManager(ssm)
+	Actor(float x, float y, Dimensions* d, float s, float h, float f_s, float j_s, std::string t, SpritesheetManager* ssm) :
+			Entity(x, y, d, t), speed(s), max_height(h), f_speed(f_s), j_speed(j_s), spritesheetManager(ssm)
 	{
-		bitmap = al_create_bitmap(d.x, d.y);
+		bitmap = al_create_bitmap(d->x, d->y);
+		lastDirection = NO_DIRECTION;
 	}
 
 	virtual ~Actor() { al_destroy_bitmap(bitmap); }
 	void onRedraw() override { al_draw_bitmap(bitmap, pos_x, pos_y, 0); }
-
-	Action* getAction() const {
-		return action;
-	}
-
-	void setAction(Action*& action) {
-		this->action = action;
-	}
 
 	ALLEGRO_BITMAP* getBitmap() const {
 		return bitmap;
@@ -105,6 +115,30 @@ public:
 
 	void setSpritesheetManager(SpritesheetManager* spritesheetManager) {
 		this->spritesheetManager = spritesheetManager;
+	}
+
+	LastDirection getLastDirection() const {
+		return lastDirection;
+	}
+
+	void setLastDirection(LastDirection lastDirection) {
+		this->lastDirection = lastDirection;
+	}
+
+	bool isCanFall() const {
+		return canFall;
+	}
+
+	void setCanFall(bool canFall = true) {
+		this->canFall = canFall;
+	}
+
+	bool isCanJump() const {
+		return canJump;
+	}
+
+	void setCanJump(bool canJump = true) {
+		this->canJump = canJump;
 	}
 };
 

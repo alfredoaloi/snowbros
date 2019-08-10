@@ -13,10 +13,10 @@ class Dimensions
 public:
 	float x;
 	float y;
-	static Dimensions createDimensions(float x, float y)
+	Dimensions(float x, float y)
 	{
-		Dimensions tmp = {x, y};
-		return tmp;
+		this->x = x;
+		this->y = y;
 	}
 };
 

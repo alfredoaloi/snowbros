@@ -9,31 +9,29 @@
 #define ENTITY_H_
 
 #include "Dimensions.h"
-
-class Entity; //NON LO ELIMINARE TI PREGO
-#include "Action.h"
+#include <string>
+#include <list>
 
 class Entity {
 protected:
 	float pos_x;
 	float pos_y;
-	Dimensions dim;
-	Action* action;
+	Dimensions* dim;
+	std::string type;
 
 public:
 	Entity();
-	Entity(float x, float y, Dimensions d, Action* a);
+	Entity(float, float, Dimensions*, std::string);
 	Entity(Entity*);
 	virtual void onRedraw();
-	virtual Action* getAction();
 	virtual ~Entity();
-	//void setAction(const Action*& action);
-	Dimensions getDim() const;
-	void setDim(Dimensions dim);
+	Dimensions* getDim() const;
+	void setDim(Dimensions*);
 	float getPosX() const;
-	void setPosX(float posX);
+	void setPosX(float);
 	float getPosY() const;
-	void setPosY(float posY);
+	void setPosY(float);
+	std::string getType();
 };
 
 #endif /* ENTITY_H_ */

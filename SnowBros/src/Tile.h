@@ -13,7 +13,7 @@
 class Tile : public Entity{
 	ALLEGRO_BITMAP *bitmap;
 public:
-	Tile(float x, float y, Dimensions d, ALLEGRO_BITMAP* b, Action*);
+	Tile(float, float, Dimensions*, ALLEGRO_BITMAP*, std::string);
 	virtual ~Tile();
 	void onRedraw() override;
 };

@@ -23,11 +23,10 @@ class Level {
 	static constexpr int dim_x = 16;
 	static constexpr int dim_y = 12;
 	std::string tileMap[dim_y][dim_x];
-	std::unordered_map<std::string, EntityDescriptor* > entities;
-	std::unordered_map<std::string, EntityDescriptor* > players;
-	std::list<Controller*> playerControllers;
+	std::unordered_map<std::string, EntityDescriptor*> entities;
 	std::list<Entity*> constructedEntities;
 	std::list<Controller*> constructedControllers;
+	std::list<CollisionHandler*> constructedCollisionHandlers;
 	ALLEGRO_BITMAP* levelBackground;
 	void constructLevel();
 public:

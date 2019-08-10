@@ -17,7 +17,9 @@
 #include "Controller.h"
 #include "PlayerAction.h"
 #include "TileDescriptor.h"
+#include "ActorDescriptor.h"
 #include "SpritesheetManager.h"
+#include "PlayerCollisionHandler.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
@@ -27,43 +29,42 @@ const int BOUNCER_SIZE = 30;
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
  };*/
 
-void collisionDetection(Actor& a1, Actor& a2)
-{
-	if ((a1.getPosX() > a2.getPosX() + a2.getDim().x - 1) || // is b1 on the right side of b2?
-		(a1.getPosY() > a2.getPosY() + a2.getDim().y - 1) || // is b1 under b2?
-		(a2.getPosX() > a1.getPosX() + a1.getDim().x - 1) || // is b2 on the right side of b1?
-		(a2.getPosY() > a1.getPosY() + a1.getDim().y - 1))   // is b2 under b1?
-	{
-		return;
-	}
-
-	float x1 = a1.getPosX() + a1.getDim().x / 2;
-	float y1 = a1.getPosY() + a1.getDim().y / 2;
-	float x2 = a2.getPosX() + a2.getDim().x / 2;
-	float y2 = a2.getPosY() + a2.getDim().y / 2;
-
-	float x3 = x1;
-	float y3 = y2;
-	float x4 = x2;
-	float y4 = y1;
-
-	float distX = sqrt(pow(x2 - x3, 2) + pow(y2 - y3, 2));
-	float distY = sqrt(pow(x2 - x4, 2) + pow(y2 - y4, 2));
-
-	if(distX <= a2.getDim().x && x1 < x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
-		a1.setPosX(a1.getPosX() - (a2.getDim().x - distX));
-	if(distX <= a2.getDim().x && x1 > x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
-		a1.setPosX(a1.getPosX() + (a2.getDim().x - distX));
-	if(distY <= a2.getDim().y && y1 < y2 && (x1 > x2 - a2.getDim().x / 2 && x1 < x2 + a2.getDim().x / 2))
-		a1.setPosY(a1.getPosY() - (a2.getDim().y - distY));
-}
+//void collisionDetection(Actor& a1, Actor& a2)
+//{
+//	if ((a1.getPosX() > a2.getPosX() + a2.getDim().x - 1) || // is b1 on the right side of b2?
+//		(a1.getPosY() > a2.getPosY() + a2.getDim().y - 1) || // is b1 under b2?
+//		(a2.getPosX() > a1.getPosX() + a1.getDim().x - 1) || // is b2 on the right side of b1?
+//		(a2.getPosY() > a1.getPosY() + a1.getDim().y - 1))   // is b2 under b1?
+//	{
+//		return;
+//	}
+//
+//	float x1 = a1.getPosX() + a1.getDim().x / 2;
+//	float y1 = a1.getPosY() + a1.getDim().y / 2;
+//	float x2 = a2.getPosX() + a2.getDim().x / 2;
+//	float y2 = a2.getPosY() + a2.getDim().y / 2;
+//
+//	float x3 = x1;
+//	float y3 = y2;
+//	float x4 = x2;
+//	float y4 = y1;
+//
+//	float distX = sqrt(pow(x2 - x3, 2) + pow(y2 - y3, 2));
+//	float distY = sqrt(pow(x2 - x4, 2) + pow(y2 - y4, 2));
+//
+//	if(distX <= a2.getDim().x && x1 < x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
+//		a1.setPosX(a1.getPosX() - (a2.getDim().x - distX));
+//	if(distX <= a2.getDim().x && x1 > x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
+//		a1.setPosX(a1.getPosX() + (a2.getDim().x - distX));
+//	if(distY <= a2.getDim().y && y1 < y2 && (x1 > x2 - a2.getDim().x / 2 && x1 < x2 + a2.getDim().x / 2))
+//		a1.setPosY(a1.getPosY() - (a2.getDim().y - distY));
+//}
 
 int main() {
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
-	ALLEGRO_BITMAP *bouncer2 = NULL;
 
 	al_init_image_addon();
 
@@ -99,7 +100,8 @@ int main() {
 	m->setWidth(25);
 	m->setHeight(30);
 
-	l.registerEntity("e1", new TileDescriptor(Dimensions::createDimensions(16, 16), EntityDescriptor::createBitmapFromColor(Dimensions::createDimensions(16, 16), 255, 255, 255)));
+	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255)));
+	l.registerEntity("P", new ActorDescriptor(new Dimensions(BOUNCER_SIZE, BOUNCER_SIZE),  6, 40, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), m, "Player"));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
@@ -136,13 +138,9 @@ int main() {
 	//Da far fare ai livelli
 	float bouncer_x = 0;
 	float bouncer_y = screenHeight - BOUNCER_SIZE;
-	bouncer2 = al_create_bitmap(BOUNCER_SIZE, BOUNCER_SIZE);
-
-	al_set_target_bitmap(bouncer2);
 	al_clear_to_color(al_map_rgb(255, 0, 255));
 
-	Actor p(bouncer_x, bouncer_y, Dimensions::createDimensions(30, 30), 6, 150, 10, 10, new PlayerAction(), m);
-	Actor p2(bouncer_x + 100, bouncer_y, Dimensions::createDimensions(50, 50), 6, 150, 10, 6, nullptr, m);
+	//Actor p(bouncer_x, bouncer_y, new Dimensions(30, 30), 6, 150, 10, 10, new PlayerAction(), new PlayerCollisionHandler(), "Player", m);
 	//
 
 	event_queue = al_create_event_queue();
@@ -170,7 +168,6 @@ int main() {
 
 	//bool jumping = false;
 	//bool falling = false;
-	Controller* c = new Controller(p.getAction(), key);
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -178,8 +175,6 @@ int main() {
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 			//p.onAction(key);
 			l.processLevel();
-			c->processAction();
-			collisionDetection(p, p2);
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 			break;
@@ -238,8 +233,6 @@ int main() {
 
 			al_hold_bitmap_drawing(1);
 			l.drawLevel();
-			p.onRedraw();
-			p2.onRedraw();
 			al_hold_bitmap_drawing(0);
 
 			al_flip_display();
