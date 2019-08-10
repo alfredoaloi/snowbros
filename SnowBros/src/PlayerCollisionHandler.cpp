@@ -43,25 +43,22 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 //		double dist = sqrt(pow(tmp_x3 - other_x1, 2) + pow(tmp_y3 - other_y1, 2));
 
 		tmp->setPosY(other->getPosY() - tmp->getDim()->y);
-		tmp->setFalling(false);
-		tmp->setJumping(false);
-		tmp->setCanFall(false);
 		tmp->setCanJump(true);
 		return true;
 	}
 
-	else if(!checkCollision(other) && other->getType() == "Tile")
+	else if(!checkCollision(other))
 	{
-		if(!tmp->isJumping())
-		{
-			tmp->setCanFall(true);
-			tmp->setCanJump(false);
-		}
-		else
-		{
-			tmp->setCanFall(false);
-			tmp->setCanJump(true);
-		}
+//		if(!tmp->isJumping())
+//		{
+//			tmp->setCanFall(true);
+//			tmp->setCanJump(false);
+//		}
+//		else
+//		{
+//			tmp->setCanFall(false);
+//			tmp->setCanJump(true);
+//		}
 
 		return false;
 	}

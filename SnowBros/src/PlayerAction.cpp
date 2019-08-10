@@ -39,14 +39,6 @@ void PlayerAction::onAction(bool* key)
 		isShooting = false;
 		//lastDirection = NO_DIRECTION;
 	}
-
-	if (key[KEY_UP] && tmp->isCanJump()) {
-		tmp->setJumping(true);
-		tmp->setFalling(false);
-		tmp->setCanJump(false);
-		tmp->setCanFall(false);
-		isMoving = true;
-	}
 	if (key[KEY_LEFT] && tmp->getPosX() >= tmp->getSpeed()) {
 		if(!isShooting)
 		{
@@ -93,20 +85,38 @@ void PlayerAction::onAction(bool* key)
 		isMoving = true;
 	}
 
-	if (tmp->isJumping() && !tmp->isFalling()) {
-		tmp->setPosY(tmp->getPosY() - tmp->get_j_speed());
+//	if (tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->getMaxHeight() && tmp->isCanFall()) {
+//		tmp->setFalling(true);
+//		tmp->setCanFall(false);
+//		tmp->setCanJump(false);
+//		isMoving = true;
+//	}
+
+	if (key[KEY_UP] && tmp->isCanJump()) {
+		tmp->setJumping(true);
+		tmp->setFalling(false);
+		tmp->setCanJump(false);
 		isMoving = true;
 	}
 
-	if (tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->getMaxHeight() && tmp->isCanFall()) {
+	if(!tmp->isJumping())
 		tmp->setFalling(true);
-		tmp->setCanFall(false);
-		tmp->setCanJump(false);
+
+	if (tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->getMaxHeight())
+	{
+		tmp->setJumping(false);
+		tmp->setFalling(true);
 		isMoving = true;
 	}
 
 	if (tmp->isFalling() && tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->get_f_speed()) {
 		tmp->setPosY(tmp->getPosY() + tmp->get_f_speed());
+		tmp->setCanFall(false);
+		isMoving = true;
+	}
+
+	if (tmp->isJumping() && !tmp->isFalling()) {
+		tmp->setPosY(tmp->getPosY() - tmp->get_j_speed());
 		isMoving = true;
 	}
 

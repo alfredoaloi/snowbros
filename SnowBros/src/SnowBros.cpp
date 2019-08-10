@@ -101,7 +101,7 @@ int main() {
 	m->setHeight(30);
 
 	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255)));
-	l.registerEntity("P", new ActorDescriptor(new Dimensions(BOUNCER_SIZE, BOUNCER_SIZE),  6, 40, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), m, "Player"));
+	l.registerEntity("P", new ActorDescriptor(new Dimensions(BOUNCER_SIZE, BOUNCER_SIZE),  6, 150, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), m, "Player"));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
