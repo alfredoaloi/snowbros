@@ -19,14 +19,14 @@ void CollisionHandler::setEntity(Entity* e){ entity = e; }
 
 Side_t CollisionHandler::checkCollision(Entity* other)
 {
-//	if(other->getPosX() + other->getDim()->x - 1 > entity->getPosX() && other->getPosX() - 1 < entity->getPosX() + entity->getDim()->x && entity->getPosY() == other->getPosY())
-//		return SIDE_LEFT;
-//	if(entity->getPosX() + entity->getDim()->x - 1 > other->getPosX() && entity->getPosX() - 1 < other->getPosX() + other->getDim()->x && entity->getPosY() == other->getPosY())
-//		return SIDE_RIGHT;
+	if(other->getPosY() + other->getDim()->y > entity->getPosY() && other->getPosY() + other->getDim()->y < entity->getPosY() + entity->getDim()->y && other->getPosX() >= entity->getPosX() - entity->getPosX() && other->getPosX() <= entity->getPosX() + entity->getDim()->x)
+		return SIDE_UP;
 	if(entity->getPosY() + entity->getDim()->y > other->getPosY() && entity->getPosY() + entity->getDim()->y < other->getPosY() + other->getDim()->y && entity->getPosX() >= other->getPosX() - other->getDim()->x && entity->getPosX() <= other->getPosX() + other->getDim()->x)
 		return SIDE_DOWN;
-//	if(other->getPosY() + other->getDim()->y - 1 > entity->getPosY() && other->getPosY() - 1 < entity->getPosY() + entity->getDim()->y && entity->getPosX() == other->getPosX())
-//		return SIDE_UP;
+	if(other->getPosX() + other->getDim()->x > entity->getPosX() && other->getPosX() < entity->getPosX() + entity->getDim()->x && other->getPosY() >= entity->getPosY() - entity->getPosY() && other->getPosY() <= entity->getPosY() + entity->getDim()->y)
+		return SIDE_LEFT;
+	if(entity->getPosX() + entity->getDim()->x - 1 > other->getPosX() && entity->getPosX() - 1 < other->getPosX() + other->getDim()->x && other->getPosY() >= other->getPosY() - other->getPosY() && entity->getPosY() <= other->getPosY() + other->getDim()->y)
+		return SIDE_RIGHT;
 
 	return NO_COLLISION;
 }

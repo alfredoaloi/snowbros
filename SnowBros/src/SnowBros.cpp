@@ -91,12 +91,18 @@ int main() {
 	Level l("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
 
 	SpritesheetManager* m = new SpritesheetManager();
-	m->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/fermoR.bmp"), 1));
-	m->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/fermoL.bmp"), 1));
-	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/camminaL.bmp"), 3));
-	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/camminaR.bmp"), 3));
-	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/sparaR.bmp"), 2));
-	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/sparaL.bmp"), 2));
+	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/player/camminaL.bmp"), 3));
+	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/player/camminaR.bmp"), 3));
+	m->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/player/fermoL.bmp"), 1));
+	m->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/player/fermoR.bmp"), 1));
+	m->setNewSpritesheet("morto", new Spritesheet(al_load_bitmap("./res/player/morto.bmp"), 3));
+	m->setNewSpritesheet("respawn", new Spritesheet(al_load_bitmap("./res/player/respawn.bmp"), 4));
+	m->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/player/saltaL.bmp"), 5));
+	m->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/player/saltaR.bmp"), 5));
+	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/player/sparaL.bmp"), 2));
+	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/player/sparaR.bmp"), 2));
+	m->setNewSpritesheet("spingeL", new Spritesheet(al_load_bitmap("./res/player/spingeL.bmp"), 3));
+	m->setNewSpritesheet("spingeR", new Spritesheet(al_load_bitmap("./res/player/spingeR.bmp"), 3));
 	m->setWidth(25);
 	m->setHeight(30);
 
