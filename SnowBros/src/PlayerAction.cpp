@@ -17,6 +17,11 @@ void PlayerAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
+	if (!tmp->isJumping())
+	{
+		tmp->setMaxHeight(tmp->getPosY() - 48);
+	}
+
 	if(key[KEY_SPACE])
 	{
 		if((!isShooting && tmp->getLastDirection() == RIGHT) || (!isShooting && tmp->getLastDirection() == NO_DIRECTION_RIGHT))
@@ -102,9 +107,10 @@ void PlayerAction::onAction(bool* key)
 	if(!tmp->isJumping())
 		tmp->setFalling(true);
 
-	if (tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->getMaxHeight())
+	if (tmp->getPosY() <= tmp->getMaxHeight())
 	{
 		tmp->setJumping(false);
+		tmp->setCanJump(false);
 		tmp->setFalling(true);
 		isMoving = true;
 	}
@@ -112,12 +118,13 @@ void PlayerAction::onAction(bool* key)
 	if (tmp->isFalling() && tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->get_f_speed()) {
 		tmp->setPosY(tmp->getPosY() + tmp->get_f_speed());
 		tmp->setCanFall(false);
-		isMoving = true;
+		tmp->setCanJump(false);
+//		isMoving = true;
 	}
 
 	if (tmp->isJumping() && !tmp->isFalling()) {
 		tmp->setPosY(tmp->getPosY() - tmp->get_j_speed());
-		isMoving = true;
+//		isMoving = true;
 	}
 
 //	if (tmp->getPosY() >= screenHeight - tmp->getDim()->y) {
