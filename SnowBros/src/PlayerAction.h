@@ -17,6 +17,7 @@ enum MYKEYS {
 #include <string>
 
 class PlayerAction: public Action {
+	int spawnCounter;
 public:
 	PlayerAction();
 	//PlayerAction(Player*);

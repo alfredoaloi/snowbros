@@ -27,6 +27,7 @@ enum LAST_DIRECTION {
 	JUMPING_RIGHT = 1 << 8,
 	FALLING_LEFT = 1 << 9,
 	FALLING_RIGHT = 1 << 10,
+	SPAWN = 1 << 11,
 	SHOOTING = SHOOTING_LEFT | SHOOTING_RIGHT,
 	NO_DIRECTION = NO_DIRECTION_LEFT | NO_DIRECTION_RIGHT,
 	JUMPING = JUMPING_LEFT | JUMPING_RIGHT,
@@ -36,12 +37,13 @@ typedef LAST_DIRECTION LastDirection;
 
 class Actor : public Entity {
 protected:
-	bool jumping = false;
-	bool falling = false;
-	bool canJump = true;
-	bool canFall = true;
-	bool shooting = false;
-	bool moving = false;
+	bool jumping;
+	bool falling;
+	bool canJump;
+	bool canFall;
+	bool shooting;
+	bool moving;
+	bool spawning;
 	float speed;
 	float max_height;
 	float f_speed; //falling speed
@@ -55,7 +57,15 @@ public:
 			Entity(x, y, d, t), speed(s), max_height(h), f_speed(f_s), j_speed(j_s), spritesheetManager(ssm)
 	{
 		bitmap = al_create_bitmap(d->x, d->y);
-		lastDirection = NO_DIRECTION;
+		lastDirection = SPAWN;
+
+		jumping = false;
+		falling = false;
+		canJump = true;
+		canFall = true;
+		shooting = false;
+		moving = false;
+		spawning = true;
 	}
 
 	virtual ~Actor() { al_destroy_bitmap(bitmap); }
@@ -163,6 +173,14 @@ public:
 
 	void setShooting(bool shooting = false) {
 		this->shooting = shooting;
+	}
+
+	bool isSpawning() const {
+		return spawning;
+	}
+
+	void setSpawning(bool spawning) {
+		this->spawning = spawning;
 	}
 };
 
