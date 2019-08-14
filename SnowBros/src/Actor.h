@@ -23,8 +23,14 @@ enum LAST_DIRECTION {
 	UP = 1 << 4,
 	SHOOTING_LEFT = 1 << 5,
 	SHOOTING_RIGHT = 1 << 6,
+	JUMPING_LEFT = 1 << 7,
+	JUMPING_RIGHT = 1 << 8,
+	FALLING_LEFT = 1 << 9,
+	FALLING_RIGHT = 1 << 10,
 	SHOOTING = SHOOTING_LEFT | SHOOTING_RIGHT,
 	NO_DIRECTION = NO_DIRECTION_LEFT | NO_DIRECTION_RIGHT,
+	JUMPING = JUMPING_LEFT | JUMPING_RIGHT,
+	FALLING = FALLING_LEFT | FALLING_RIGHT
 };
 typedef LAST_DIRECTION LastDirection;
 
@@ -34,6 +40,8 @@ protected:
 	bool falling = false;
 	bool canJump = true;
 	bool canFall = true;
+	bool shooting = false;
+	bool moving = false;
 	float speed;
 	float max_height;
 	float f_speed; //falling speed
@@ -139,6 +147,22 @@ public:
 
 	void setCanJump(bool canJump = true) {
 		this->canJump = canJump;
+	}
+
+	bool isMoving() const {
+		return moving;
+	}
+
+	void setMoving(bool moving = false) {
+		this->moving = moving;
+	}
+
+	bool isShooting() const {
+		return shooting;
+	}
+
+	void setShooting(bool shooting = false) {
+		this->shooting = shooting;
 	}
 };
 

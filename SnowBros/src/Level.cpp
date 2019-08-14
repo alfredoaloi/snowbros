@@ -57,12 +57,45 @@ void Level::processLevel()
 
 	for(std::list<CollisionHandler*>::iterator it1 = constructedCollisionHandlers.begin(); it1 != constructedCollisionHandlers.end(); it1++)
 	{
+		Actor* tmp = dynamic_cast<Actor*>((*it1)->getEntity());
+		bool chk = false;
 		for(std::list<Entity*>::iterator it2 = constructedEntities.begin(); it2 != constructedEntities.end(); it2++)
 		{
 			if((*it1)->getEntity() != *it2)
 			{
 				if((*it1)->handleCollision(*it2))
+				{
+					chk = true;
 					break;
+				}
+			}
+		}
+
+		if(!chk)
+		{
+			if(!tmp->isJumping())
+			{
+				if(tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == JUMPING_RIGHT)
+				{
+					tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaR");
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->setLastDirection(FALLING_RIGHT);
+				}
+				else if(tmp->getLastDirection() == LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == JUMPING_LEFT)
+				{
+					tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+					tmp->setLastDirection(FALLING_LEFT);
+				}
+				tmp->setShooting(false);
 			}
 		}
 	}

@@ -18,6 +18,7 @@
 #include "Entity.h"
 #include "EntityDescriptor.h"
 #include "Controller.h"
+#include "Actor.h"
 
 class Level {
 	static constexpr int dim_x = 16;

@@ -22,9 +22,6 @@ public:
 	//PlayerAction(Player*);
 	virtual ~PlayerAction();
 	virtual void onAction(bool*) override;
-
-	bool isMoving;
-	bool isShooting;
 };
 
 #endif /* PLAYERACTION_H_ */

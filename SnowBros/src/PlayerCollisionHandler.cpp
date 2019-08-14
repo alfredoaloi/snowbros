@@ -44,7 +44,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 
 		tmp->setPosY(other->getPosY() - tmp->getDim()->y);
 		tmp->setCanJump(true);
-		tmp->setFalling(true);
+		tmp->setFalling(false);
 		return true;
 	}
 
