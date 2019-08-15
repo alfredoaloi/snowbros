@@ -15,7 +15,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "Entity.h"
 #include "EntityDescriptor.h"
 #include "Controller.h"
 #include "Actor.h"
