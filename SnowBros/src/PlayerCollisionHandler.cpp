@@ -14,7 +14,7 @@ PlayerCollisionHandler::~PlayerCollisionHandler() { }
 bool PlayerCollisionHandler::handleCollision(Entity* other)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
-	if(checkCollision(other) == SIDE_DOWN && other->getType() == "Tile" && tmp->isFalling())
+	if(checkCollision(other) == SIDE_DOWN && (other->getType() == "T" || other->getType() == "T2") && tmp->isFalling())
 	{
 //		double tmp_x1 = tmp->getPosX();
 //		double tmp_y1 = tmp->getPosY();
@@ -50,15 +50,24 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 
 	//NON ELIMINARE
 
-//	else if(checkCollision(other) == SIDE_LEFT && other->getType() == "Tile")
-//	{
-//		tmp->setPosX(other->getPosX() + other->getDim()->x);
-//		return true;
-//	}
+	else if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR"  && tmp->isFalling() && !tmp->isJumping())
+	{
+		tmp->setPosX(other->getPosX() + other->getDim()->x);
+		return true;
+	}
+
+	else if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping())
+	{
+		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
+		return true;
+	}
 //
-//	else if(checkCollision(other) == SIDE_RIGHT && other->getType() == "Tile")
+//	else if(checkCollision(other) == SIDE_UP && other->getType() == "T")
 //	{
-//		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
+//		tmp->setPosY(other->getPosY() + other->getDim()->y);
+//		tmp->setFalling(true);
+//		tmp->setCanJump(false);
+//		tmp->setJumping(false);
 //		return true;
 //	}
 

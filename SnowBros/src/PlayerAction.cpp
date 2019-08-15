@@ -21,7 +21,7 @@ void PlayerAction::onAction(bool* key)
 	{
 		if (!tmp->isJumping())
 		{
-			tmp->setMaxHeight(tmp->getPosY() - 48);
+			tmp->setMaxHeight(tmp->getPosY() - 32);
 		}
 
 		if(key[KEY_SPACE])
