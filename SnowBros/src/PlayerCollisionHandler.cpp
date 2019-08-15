@@ -48,6 +48,20 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		return true;
 	}
 
+	//NON ELIMINARE
+
+//	else if(checkCollision(other) == SIDE_LEFT && other->getType() == "Tile")
+//	{
+//		tmp->setPosX(other->getPosX() + other->getDim()->x);
+//		return true;
+//	}
+//
+//	else if(checkCollision(other) == SIDE_RIGHT && other->getType() == "Tile")
+//	{
+//		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
+//		return true;
+//	}
+
 	else if(!checkCollision(other))
 	{
 //		if(!tmp->isJumping())

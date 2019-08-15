@@ -66,7 +66,6 @@ void Level::processLevel()
 				if((*it1)->handleCollision(*it2))
 				{
 					chk = true;
-					break;
 				}
 			}
 		}
