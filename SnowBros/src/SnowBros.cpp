@@ -12,6 +12,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
 #include "Actor.h"
 #include "Level.h"
 #include "Controller.h"
@@ -65,8 +66,10 @@ int main() {
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
+	ALLEGRO_FONT* font;
 
 	al_init_image_addon();
+	al_init_font_addon();
 
 	bool key[5] = { false, false, false, false, false };
 	bool redraw = true;
@@ -143,14 +146,6 @@ int main() {
 		return -1;
 	}
 
-	//Da far fare ai livelli
-	float bouncer_x = 0;
-	float bouncer_y = screenHeight - BOUNCER_SIZE;
-	al_clear_to_color(al_map_rgb(255, 0, 255));
-
-	//Actor p(bouncer_x, bouncer_y, new Dimensions(30, 30), 6, 150, 10, 10, new PlayerAction(), new PlayerCollisionHandler(), "Player", m);
-	//
-
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
 		std::cerr << "Failed to create event queue!";
@@ -164,7 +159,8 @@ int main() {
 
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	//Lo sfondo non serve dopo aver gestito le mappe
+	font = al_load_font("./res/fixed_font.tga", 0, 0);
+
 	al_set_target_bitmap(al_get_backbuffer(display));
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -174,14 +170,12 @@ int main() {
 
 	al_start_timer(timer);
 
-	//bool jumping = false;
-	//bool falling = false;
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
-			//p.onAction(key);
+
 			l.processLevel();
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -242,6 +236,62 @@ int main() {
 			al_hold_bitmap_drawing(1);
 			l.drawLevel();
 			al_hold_bitmap_drawing(0);
+
+			//DISEGNO INTERFACCIA GRAFICA
+			ALLEGRO_TRANSFORM trans2;
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 18, 6);
+			al_use_transform(&trans2);
+			al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 18, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", 0);
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 17, 6);
+			al_use_transform(&trans2);
+			al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 17, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", 0);
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 82, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", 2);
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 81, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", 2);
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 98, 6);
+			al_use_transform(&trans2);
+			al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 97, 6);
+			al_use_transform(&trans2);
+			al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 98, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", 0);
+			al_identity_transform(&trans2);
+			al_scale_transform(&trans2, 1, 0.77);
+			al_translate_transform(&trans2, 97, 14);
+			al_use_transform(&trans2);
+			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", 0);
+			al_identity_transform(&trans2);
+			al_use_transform(&trans2);
+			//al_use_transform(&trans);
 
 			al_flip_display();
 		}
