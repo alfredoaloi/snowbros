@@ -20,6 +20,7 @@ protected:
 	Dimensions* dim;
 	std::string type;
 	Spawner* spawner;
+	bool destroyed = false;
 
 public:
 	Entity();
@@ -36,6 +37,8 @@ public:
 	std::string getType();
 	Spawner* getSpawner();
 	void setSpawner(Spawner*);
+	void setDestroyed(bool);
+	bool getDestroyed();
 };
 
 #endif /* ENTITY_H_ */

@@ -50,6 +50,14 @@ void Level::processLevel()
 	if(constructedEntities.empty() || constructedControllers.empty())
 			constructLevel();
 
+	for(std::list<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
+	{
+		if ((*it)->getDestroyed())
+		{
+			constructedEntities.erase(it);
+		}
+	}
+
 	for(std::list<Controller*>::iterator it = constructedControllers.begin(); it != constructedControllers.end(); it++)
 	{
 		(*it)->processAction();
@@ -70,7 +78,7 @@ void Level::processLevel()
 			}
 		}
 
-		if(!chk)
+		if(!chk && tmp->getType() == "Player")
 		{
 			if(!tmp->isJumping())
 			{

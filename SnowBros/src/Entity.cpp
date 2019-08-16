@@ -60,3 +60,7 @@ std::string Entity::getType() { return type; }
 Spawner* Entity::getSpawner() { return spawner; }
 
 void Entity::setSpawner(Spawner* spawner) { this->spawner = spawner; }
+
+void Entity::setDestroyed(bool destroyed) { this->destroyed = destroyed; }
+
+bool Entity::getDestroyed() { return destroyed; }

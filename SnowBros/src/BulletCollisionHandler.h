@@ -16,6 +16,7 @@ public:
 	BulletCollisionHandler();
 	virtual ~BulletCollisionHandler();
 	virtual bool handleCollision(Entity* other) override;
+	virtual CollisionHandler* clone() override;
 };
 
 #endif /* BULLETCOLLISIONHANDLER_H_ */
