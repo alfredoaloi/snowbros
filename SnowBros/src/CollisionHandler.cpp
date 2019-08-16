@@ -32,3 +32,5 @@ Side_t CollisionHandler::checkCollision(Entity* other)
 }
 
 Entity* CollisionHandler::getEntity(){ return entity; }
+
+CollisionHandler* CollisionHandler::clone() { return new CollisionHandler(); }

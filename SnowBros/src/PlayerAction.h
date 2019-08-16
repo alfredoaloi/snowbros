@@ -23,6 +23,7 @@ public:
 	//PlayerAction(Player*);
 	virtual ~PlayerAction();
 	virtual void onAction(bool*) override;
+	virtual Action* clone();
 };
 
 #endif /* PLAYERACTION_H_ */

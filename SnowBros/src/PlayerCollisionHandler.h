@@ -17,6 +17,7 @@ public:
 	PlayerCollisionHandler();
 	virtual ~PlayerCollisionHandler();
 	virtual bool handleCollision(Entity* other) override;
+	virtual CollisionHandler* clone() override;
 };
 
 #endif /* PLAYERCOLLISIONHANDLER_H_ */

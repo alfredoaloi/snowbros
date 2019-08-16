@@ -86,3 +86,5 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 	}
 }
 
+CollisionHandler* PlayerCollisionHandler::clone() { return new PlayerCollisionHandler(); }
+

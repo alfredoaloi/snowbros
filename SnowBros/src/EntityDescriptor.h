@@ -43,13 +43,13 @@ public:
 		return new Entity(x, y, dim, type);
 	}
 
-	CollisionHandler* getDescriptedCollisionHandler() { return collisionHandler; }
+	CollisionHandler* getDescriptedCollisionHandler() { return (collisionHandler == nullptr) ? (collisionHandler) : (collisionHandler->clone()); }
 
-	Action* getDescriptedAction() { return action; }
+	Action* getDescriptedAction() { return (action == nullptr) ? (action) : (action->clone()); }
 
-	SpritesheetManager* getDescriptedSpritesheetManager() { return spritesheetManager; }
+	SpritesheetManager* getDescriptedSpritesheetManager() { return spritesheetManager;}
 
-	Controller* getDescriptedController() { return controller; }
+	Controller* getDescriptedController() { return (controller == nullptr) ? (controller) : (controller->clone()); }
 };
 
 #endif /* ENTITYDESCRIPTOR_H_ */

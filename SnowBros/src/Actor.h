@@ -13,7 +13,7 @@
 #include <list>
 
 const int screenWidth = 256;
-const int screenHeight = 192;
+const int screenHeight = 224;
 
 enum LAST_DIRECTION {
 	NO_DIRECTION_LEFT = 1,

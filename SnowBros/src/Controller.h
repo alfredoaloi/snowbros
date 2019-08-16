@@ -31,6 +31,8 @@ public:
 	void changeAction(Action* a) { action = a; }
 
 	virtual ~Controller() { delete action; delete[] commands; }
+
+	Controller* clone() { return new Controller(commands); }
 };
 
 #endif /* CONTROLLER_H_ */

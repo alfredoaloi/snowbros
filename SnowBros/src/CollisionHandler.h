@@ -26,6 +26,7 @@ protected:
 	Entity* entity;
 public:
 	CollisionHandler();
+	virtual CollisionHandler* clone();
 	virtual ~CollisionHandler();
 	virtual bool handleCollision(Entity* other);
 	void setEntity(Entity*);

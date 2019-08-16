@@ -16,3 +16,5 @@ void Action::onAction(bool*) { }
 void Action::setEntity(Entity* e){ entity = e; }
 
 Action::~Action() { }
+
+Action* Action::clone() { return new Action(); }

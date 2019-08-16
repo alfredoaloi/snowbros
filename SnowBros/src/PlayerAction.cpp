@@ -192,3 +192,5 @@ void PlayerAction::onAction(bool* key)
 
 	tmp->setMoving(false);
 }
+
+Action* PlayerAction::clone() { return new PlayerAction(); }

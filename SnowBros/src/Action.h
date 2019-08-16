@@ -16,14 +16,11 @@ protected:
 
 public:
 	Action();
-
 	Action(Entity* e);
-
 	virtual ~Action();
-
 	virtual void onAction(bool*);
-
 	void setEntity(Entity* e);
+	virtual Action* clone();
 };
 
 #endif /* ACTION_H_ */

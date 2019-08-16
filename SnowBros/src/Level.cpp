@@ -37,7 +37,7 @@ void Level::drawLevel() {
 	if(constructedEntities.empty() || constructedControllers.empty())
 		constructLevel();
 
-	al_draw_bitmap(levelBackground, 0, 0, 0);
+	al_draw_bitmap(levelBackground, 0, 24, 0);
 
 	for(std::list<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
 	{
@@ -110,7 +110,7 @@ void Level::constructLevel()
 			it = entities.find(tileMap[i][j]);
 			if(it != entities.end())
 			{
-				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16);
+				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16 + (float)24);
 				if(it->second->getDescriptedController() != nullptr)
 				{
 					Controller* tmpController = it->second->getDescriptedController();

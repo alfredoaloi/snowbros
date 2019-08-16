@@ -135,7 +135,7 @@ int main() {
 //	al_scale_transform(&trans, sx, sy);
 //	al_use_transform(&trans);
 
-	display = al_create_display(256, 200);
+	display = al_create_display(256, 224);
 
 	if (!display) {
 		std::cerr << "Failed to create display!";
@@ -166,9 +166,9 @@ int main() {
 
 	//Lo sfondo non serve dopo aver gestito le mappe
 	al_set_target_bitmap(al_get_backbuffer(display));
-	//al_clear_to_color(al_map_rgb(100, 100, 100));
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 
-	al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 0, 0);
+	al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 24, 0);
 
 	al_flip_display();
 
@@ -237,7 +237,7 @@ int main() {
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
 			al_set_target_bitmap(al_get_backbuffer(display));
-			al_clear_to_color(al_map_rgb(100, 100, 100));
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 
 			al_hold_bitmap_drawing(1);
 			l.drawLevel();

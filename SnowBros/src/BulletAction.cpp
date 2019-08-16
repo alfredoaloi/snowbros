@@ -60,3 +60,5 @@ void BulletAction::onAction(bool* key) {
 		tmp->setPosY(tmp->getPosY() + tmp->getSpeed());
 	}
 }
+
+Action* BulletAction::clone() { return new BulletAction(); }

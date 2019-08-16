@@ -18,6 +18,7 @@ public:
 	BulletAction();
 	virtual ~BulletAction();
 	virtual void onAction(bool*) override;
+	virtual Action* clone();
 };
 
 #endif /* BULLETACTION_H_ */
