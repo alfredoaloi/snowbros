@@ -9,6 +9,7 @@
 #define ENTITY_H_
 
 #include "Dimensions.h"
+#include "Spawner.h"
 #include <string>
 #include <list>
 
@@ -18,6 +19,7 @@ protected:
 	float pos_y;
 	Dimensions* dim;
 	std::string type;
+	Spawner* spawner;
 
 public:
 	Entity();
@@ -32,6 +34,8 @@ public:
 	float getPosY() const;
 	void setPosY(float);
 	std::string getType();
+	Spawner* getSpawner();
+	void setSpawner(Spawner*);
 };
 
 #endif /* ENTITY_H_ */

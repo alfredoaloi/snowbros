@@ -19,6 +19,9 @@
 #include "Controller.h"
 #include "Actor.h"
 
+class Level;
+#include "LevelSpawner.h"
+
 class Level {
 	static constexpr int dim_x = 16;
 	static constexpr int dim_y = 12;
@@ -38,6 +41,7 @@ public:
 	Level(std::string, ALLEGRO_BITMAP*);
 	~Level();
 	void drawLevel();
+	void spawn(std::string, double, double);
 };
 
 #endif /* LEVEL_H_ */

@@ -11,7 +11,7 @@ Entity::Entity() { }
 
 void Entity::onRedraw() { }
 
-Entity::Entity(float x, float y, Dimensions* d, std::string t) : pos_x(x), pos_y(y), dim(d), type(t)
+Entity::Entity(float x, float y, Dimensions* d, std::string t) : pos_x(x), pos_y(y), dim(d), type(t), spawner(nullptr)
 {
 
 }
@@ -22,6 +22,7 @@ Entity::Entity(Entity* e)
 	this->pos_y = e->pos_y;
 	this->dim = e->dim;
 	this->type = e->type;
+	this->spawner = e->spawner;
 }
 
 Entity::~Entity() { }
@@ -55,3 +56,7 @@ void Entity::setPosY(float posY) {
 }
 
 std::string Entity::getType() { return type; }
+
+Spawner* Entity::getSpawner() { return spawner; }
+
+void Entity::setSpawner(Spawner* spawner) { this->spawner = spawner; }

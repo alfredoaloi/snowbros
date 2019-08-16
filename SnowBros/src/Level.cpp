@@ -115,6 +115,7 @@ void Level::constructLevel()
 				{
 					Controller* tmpController = it->second->getDescriptedController();
 					Action* action = it->second->getDescriptedAction();
+					tmpEntity->setSpawner(new LevelSpawner(this));
 					action->setEntity(tmpEntity);
 					tmpController->changeAction(action);
 					constructedControllers.push_back(tmpController);
@@ -130,9 +131,35 @@ void Level::constructLevel()
 		}
 	}
 
-	entities.clear();
+	//entities.clear();
 }
 
 void Level::registerEntity(std::string key, EntityDescriptor* e) { entities[key] = e; }
 
 void Level::setLevelbackground(ALLEGRO_BITMAP* levelBackground) { this->levelBackground = levelBackground; }
+
+void Level::spawn(std::string entity, double x, double y)
+{
+	std::unordered_map<std::string, EntityDescriptor*>::iterator it;
+	it = entities.find(entity);
+	if(it != entities.end())
+	{
+		Entity* tmpEntity = it->second->getDescripted(x, y);
+		if(it->second->getDescriptedController() != nullptr)
+		{
+			Controller* tmpController = it->second->getDescriptedController();
+			Action* action = it->second->getDescriptedAction();
+			action->setEntity(tmpEntity);
+			tmpEntity->setSpawner(new LevelSpawner(this));
+			tmpController->changeAction(action);
+			constructedControllers.push_back(tmpController);
+		}
+		if(it->second->getDescriptedCollisionHandler() != nullptr)
+		{
+			CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
+			tmpCollisionhandler->setEntity(tmpEntity);
+			constructedCollisionHandlers.push_back(tmpCollisionhandler);
+		}
+		constructedEntities.push_back(tmpEntity);
+	}
+}
