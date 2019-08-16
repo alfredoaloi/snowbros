@@ -26,7 +26,7 @@
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
-const float FPS = 10.0;
+const float FPS = 20.0;
 const int BOUNCER_SIZE = 30;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT

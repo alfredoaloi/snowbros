@@ -9,6 +9,7 @@
 #define LEVEL_H_
 #include <unordered_map>
 #include <list>
+#include <vector>
 #include <fstream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -27,9 +28,9 @@ class Level {
 	static constexpr int dim_y = 12;
 	std::string tileMap[dim_y][dim_x];
 	std::unordered_map<std::string, EntityDescriptor*> entities;
-	std::list<Entity*> constructedEntities;
-	std::list<Controller*> constructedControllers;
-	std::list<CollisionHandler*> constructedCollisionHandlers;
+	std::vector<Entity*> constructedEntities;
+	std::vector<Controller*> constructedControllers;
+	std::vector<CollisionHandler*> constructedCollisionHandlers;
 	ALLEGRO_BITMAP* levelBackground;
 	void constructLevel();
 public:

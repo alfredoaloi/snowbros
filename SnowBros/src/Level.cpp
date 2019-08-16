@@ -39,7 +39,7 @@ void Level::drawLevel() {
 
 	al_draw_bitmap(levelBackground, 0, 24, 0);
 
-	for(std::list<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
+	for(std::vector<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
 	{
 		(*it)->onRedraw();
 	}
@@ -50,59 +50,65 @@ void Level::processLevel()
 	if(constructedEntities.empty() || constructedControllers.empty())
 			constructLevel();
 
-	for(std::list<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
+	for(unsigned j = 0; j < constructedEntities.size(); j++)
 	{
-		if ((*it)->getDestroyed())
+		if (constructedEntities[j]->getDestroyed())
 		{
-			constructedEntities.erase(it);
+			constructedEntities.erase(constructedEntities.begin() + j);
+			constructedControllers.erase(constructedControllers.begin() + j);
+			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
 		}
 	}
 
-	for(std::list<Controller*>::iterator it = constructedControllers.begin(); it != constructedControllers.end(); it++)
+	for(unsigned i = 0; i < constructedControllers.size(); i++)
 	{
-		(*it)->processAction();
+		if(constructedControllers[i] != nullptr)
+			constructedControllers[i]->processAction();
 	}
 
-	for(std::list<CollisionHandler*>::iterator it1 = constructedCollisionHandlers.begin(); it1 != constructedCollisionHandlers.end(); it1++)
+	for(unsigned i = 0; i < constructedCollisionHandlers.size(); i++)
 	{
-		Actor* tmp = dynamic_cast<Actor*>((*it1)->getEntity());
-		bool chk = false;
-		for(std::list<Entity*>::iterator it2 = constructedEntities.begin(); it2 != constructedEntities.end(); it2++)
+		if(constructedCollisionHandlers[i] != nullptr)
 		{
-			if((*it1)->getEntity() != *it2)
+			Actor* tmp = dynamic_cast<Actor*>(constructedCollisionHandlers[i]->getEntity());
+			bool chk = false;
+			for(unsigned j = 0; j < constructedEntities.size(); j++)
 			{
-				if((*it1)->handleCollision(*it2))
+				if(constructedCollisionHandlers[i]->getEntity() != constructedEntities[j])
 				{
-					chk = true;
+					if(constructedCollisionHandlers[i]->handleCollision(constructedEntities[j]))
+					{
+						chk = true;
+					}
 				}
 			}
-		}
 
-		if(!chk && tmp->getType() == "Player")
-		{
-			if(!tmp->isJumping())
+			if(!chk && tmp->getType() == "Player")
 			{
-				if(tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == JUMPING_RIGHT)
+				if(!tmp->isJumping())
 				{
-					tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaR");
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->setLastDirection(FALLING_RIGHT);
+					if(tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == JUMPING_RIGHT)
+					{
+						tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaR");
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->setLastDirection(FALLING_RIGHT);
+					}
+					else if(tmp->getLastDirection() == LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == JUMPING_LEFT)
+					{
+						tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+						tmp->setLastDirection(FALLING_LEFT);
+					}
+					tmp->setShooting(false);
 				}
-				else if(tmp->getLastDirection() == LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == JUMPING_LEFT)
-				{
-					tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-					tmp->setLastDirection(FALLING_LEFT);
-				}
-				tmp->setShooting(false);
 			}
 		}
 	}
@@ -128,12 +134,18 @@ void Level::constructLevel()
 					tmpController->changeAction(action);
 					constructedControllers.push_back(tmpController);
 				}
+				else
+					constructedControllers.push_back(nullptr);
+
 				if(it->second->getDescriptedCollisionHandler() != nullptr)
 				{
 					CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
 					tmpCollisionhandler->setEntity(tmpEntity);
 					constructedCollisionHandlers.push_back(tmpCollisionhandler);
 				}
+				else
+					constructedCollisionHandlers.push_back(nullptr);
+
 				constructedEntities.push_back(tmpEntity);
 			}
 		}
@@ -162,12 +174,18 @@ void Level::spawn(std::string entity, double x, double y)
 			tmpController->changeAction(action);
 			constructedControllers.push_back(tmpController);
 		}
+		else
+			constructedControllers.push_back(nullptr);
+
 		if(it->second->getDescriptedCollisionHandler() != nullptr)
 		{
 			CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
 			tmpCollisionhandler->setEntity(tmpEntity);
 			constructedCollisionHandlers.push_back(tmpCollisionhandler);
 		}
+		else
+			constructedCollisionHandlers.push_back(nullptr);
+
 		constructedEntities.push_back(tmpEntity);
 	}
 }
