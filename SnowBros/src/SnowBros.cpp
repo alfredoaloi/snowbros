@@ -17,14 +17,16 @@
 #include "Level.h"
 #include "Controller.h"
 #include "PlayerAction.h"
+#include "BulletAction.h"
 #include "TileDescriptor.h"
 #include "ActorDescriptor.h"
 #include "SpritesheetManager.h"
 #include "PlayerCollisionHandler.h"
+#include "BulletCollisionHandler.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
-const float FPS = 20.0;
+const float FPS = 10.0;
 const int BOUNCER_SIZE = 30;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -109,10 +111,22 @@ int main() {
 	m->setWidth(25);
 	m->setHeight(30);
 
+	SpritesheetManager* m1 = new SpritesheetManager();
+	m1->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileL.bmp"), 1));
+	m1->setWidth(6);
+	m1->setHeight(11);
+
+	SpritesheetManager* m2 = new SpritesheetManager();
+	m2->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileR.bmp"), 1));
+	m2->setWidth(6);
+	m2->setHeight(11);
+
 	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	l.registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
 	l.registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
 	l.registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), m, "Player"));
+	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), m1, "BulletLeft"));
+	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), m2, "BulletRight"));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);

@@ -16,18 +16,27 @@ bool BulletCollisionHandler::handleCollision(Entity* other)
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 	if (checkCollision(other) == SIDE_DOWN && (other->getType() == "T" || other->getType() == "TL" || other->getType() == "TR"))
 	{
-		// dovrebbe essere distrutta
+		tmp->setDestroyed(true);
 		return true;
 	}
 
-	else if (checkCollision(other) && other->getType() == "Enemy")
+	else if (tmp->getPosX() < 0 || tmp->getPosX() > screenWidth)
 	{
-		// palla di neve e cazzi vari
+		tmp->setDestroyed(true);
 		return true;
 	}
+
+//	else if (checkCollision(other) && other->getType() == "Enemy")
+//	{
+//		// palla di neve e cazzi vari
+//		return true;
+//	}
 
 	else if (!checkCollision(other))
 	{
 		return false;
 	}
 }
+
+CollisionHandler* BulletCollisionHandler::clone() { return new BulletCollisionHandler(); }
+
