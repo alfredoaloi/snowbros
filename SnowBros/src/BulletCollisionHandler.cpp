@@ -26,11 +26,12 @@ bool BulletCollisionHandler::handleCollision(Entity* other)
 		return true;
 	}
 
-//	else if (checkCollision(other) && other->getType() == "Enemy")
-//	{
-//		// palla di neve e cazzi vari
-//		return true;
-//	}
+	else if (checkCollision(other) && other->getType() == "Enemy1")
+	{
+		tmp->setDestroyed(true);
+		other->setDestroyed(true);
+		return true;
+	}
 
 	else if (!checkCollision(other))
 	{

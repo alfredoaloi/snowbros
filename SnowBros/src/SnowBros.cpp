@@ -19,15 +19,17 @@
 #include "Controller.h"
 #include "PlayerAction.h"
 #include "BulletAction.h"
+#include "EnemyAction.h"
 #include "TileDescriptor.h"
 #include "ActorDescriptor.h"
 #include "SpritesheetManager.h"
 #include "PlayerCollisionHandler.h"
 #include "BulletCollisionHandler.h"
+#include "EnemyCollisionHandler.h"
 
 /*extern const int screenHeight;
 extern const int screenWidth;*/
-const float FPS = 20.0;
+const float FPS = 10.0;
 const int BOUNCER_SIZE = 30;
 /*enum MYKEYS {
  KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
@@ -73,6 +75,7 @@ enum GAME_STATE
 typedef GAME_STATE GameState;
 
 int main() {
+	srand(time(0));
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -104,38 +107,49 @@ int main() {
 
 	Level l("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
 
-	SpritesheetManager* m = new SpritesheetManager();
-	m->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/player/camminaL.bmp"), 3));
-	m->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/player/camminaR.bmp"), 3));
-	m->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/player/fermoL.bmp"), 1));
-	m->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/player/fermoR.bmp"), 1));
-	m->setNewSpritesheet("morto", new Spritesheet(al_load_bitmap("./res/player/morto.bmp"), 3));
-	m->setNewSpritesheet("respawn", new Spritesheet(al_load_bitmap("./res/player/respawn.bmp"), 4));
-	m->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/player/saltaL.bmp"), 5));
-	m->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/player/saltaR.bmp"), 5));
-	m->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/player/sparaL.bmp"), 2));
-	m->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/player/sparaR.bmp"), 2));
-	m->setNewSpritesheet("spingeL", new Spritesheet(al_load_bitmap("./res/player/spingeL.bmp"), 3));
-	m->setNewSpritesheet("spingeR", new Spritesheet(al_load_bitmap("./res/player/spingeR.bmp"), 3));
-	m->setWidth(25);
-	m->setHeight(30);
+	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
+	playerSpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/player/camminaL.bmp"), 3));
+	playerSpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/player/camminaR.bmp"), 3));
+	playerSpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/player/fermoL.bmp"), 1));
+	playerSpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/player/fermoR.bmp"), 1));
+	playerSpritesheetManager->setNewSpritesheet("morto", new Spritesheet(al_load_bitmap("./res/player/morto.bmp"), 3));
+	playerSpritesheetManager->setNewSpritesheet("respawn", new Spritesheet(al_load_bitmap("./res/player/respawn.bmp"), 4));
+	playerSpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/player/saltaL.bmp"), 5));
+	playerSpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/player/saltaR.bmp"), 5));
+	playerSpritesheetManager->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/player/sparaL.bmp"), 2));
+	playerSpritesheetManager->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/player/sparaR.bmp"), 2));
+	playerSpritesheetManager->setNewSpritesheet("spingeL", new Spritesheet(al_load_bitmap("./res/player/spingeL.bmp"), 3));
+	playerSpritesheetManager->setNewSpritesheet("spingeR", new Spritesheet(al_load_bitmap("./res/player/spingeR.bmp"), 3));
+	playerSpritesheetManager->setWidth(25);
+	playerSpritesheetManager->setHeight(30);
 
-	SpritesheetManager* m1 = new SpritesheetManager();
-	m1->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileL.bmp"), 1));
-	m1->setWidth(6);
-	m1->setHeight(11);
+	SpritesheetManager* bulletSpritesheetManager = new SpritesheetManager();
+	bulletSpritesheetManager->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileL.bmp"), 1));
+	bulletSpritesheetManager->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileR.bmp"), 1));
+	bulletSpritesheetManager->setWidth(6);
+	bulletSpritesheetManager->setHeight(11);
 
-	SpritesheetManager* m2 = new SpritesheetManager();
-	m2->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileR.bmp"), 1));
-	m2->setWidth(6);
-	m2->setHeight(11);
+	SpritesheetManager* enemy1SpritesheetManager = new SpritesheetManager();
+	enemy1SpritesheetManager->setNewSpritesheet("atterraL", new Spritesheet(al_load_bitmap("./res/enemy1/atterraL.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("atterraR", new Spritesheet(al_load_bitmap("./res/enemy1/atterraR.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/enemy1/camminaL.bmp"), 2));
+	enemy1SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/enemy1/camminaR.bmp"), 2));
+	enemy1SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/enemy1/fermoL.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/enemy1/fermoR.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/enemy1/mortoL.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/enemy1/mortoR.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy1/saltaL.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy1/saltaR.bmp"), 1));
+	enemy1SpritesheetManager->setWidth(25);
+	enemy1SpritesheetManager->setHeight(30);
 
 	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	l.registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
 	l.registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
-	l.registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), m, "Player"));
-	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), m1, "BulletLeft"));
-	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), m2, "BulletRight"));
+	l.registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
+	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
+	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
+	l.registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
