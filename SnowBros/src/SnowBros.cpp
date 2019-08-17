@@ -143,6 +143,10 @@ int main() {
 	enemy1SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/enemy1/mortoR.bmp"), 1));
 	enemy1SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy1/saltaL.bmp"), 1));
 	enemy1SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy1/saltaR.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
+	enemy1SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
 	enemy1SpritesheetManager->setWidth(25);
 	enemy1SpritesheetManager->setHeight(30);
 
@@ -158,7 +162,11 @@ int main() {
 	enemy2SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy2/saltaR.bmp"), 1));
 	enemy2SpritesheetManager->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/enemy2/sparaL.bmp"), 1));
 	enemy2SpritesheetManager->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/enemy2/sparaR.bmp"), 1));
-	enemy2SpritesheetManager->setWidth(24);
+	enemy2SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
+	enemy2SpritesheetManager->setWidth(25);
 	enemy2SpritesheetManager->setHeight(30);
 
 	// enemy 3
@@ -169,10 +177,14 @@ int main() {
 	enemy3SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/enemy3/fermoR.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy3/saltaL.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy3/saltaR.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
 	enemy3SpritesheetManager->setWidth(25);
 	enemy3SpritesheetManager->setHeight(30);
 
-	// player bullet
+	// enemy 2 bullet
 	SpritesheetManager* fireSpritesheetManager = new SpritesheetManager();
 	fireSpritesheetManager->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileFuocoL.bmp"), 1));
 	fireSpritesheetManager->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileFuocoR.bmp"), 1));
@@ -186,8 +198,8 @@ int main() {
 	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
 	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
 	l.registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
-	l.registerEntity("E2", new ActorDescriptor(new Dimensions(24, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
-	l.registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy3"));
+	l.registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	l.registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
 	l.registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	l.registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 

@@ -20,24 +20,50 @@ EnemyAction::~EnemyAction() {
 void EnemyAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
-	int x = rand() % 4;
 	randAction action;
-	switch (x) {
-		case 0:
-			action = left;
-			break;
-		case 1:
-			action = right;
-			break;
-		case 2:
-			action = up;
-			break;
-		case 3:
-			if (tmp->getType() == "Enemy2")
-				action = shoot;
-			else
-				action = fermo;
-			break;
+	if (!tmp->getImmobile())
+	{
+		cooldown = 0;
+		int x = rand() % 4;
+		switch (x) {
+			case 0:
+				action = left;
+				break;
+			case 1:
+				action = right;
+				break;
+			case 2:
+				action = up;
+				break;
+			case 3:
+				if (tmp->getType() == "Enemy2")
+					action = shoot;
+				else
+					action = fermo;
+				break;
+		}
+	}
+	else
+	{
+		if (cooldown > 24)
+		{
+			if (tmp->getLivelloPalla() == POCA)
+			{
+				tmp->setLivelloPalla(NULLA);
+				tmp->setImmobile(false);
+			}
+			else if (tmp->getLivelloPalla() == TANTA)
+			{
+				tmp->setLivelloPalla(POCA);
+			}
+			else if (tmp->getLivelloPalla() == PIENA)
+			{
+				tmp->setLivelloPalla(TANTA);
+			}
+			cooldown = 0;
+		}
+		cooldown++;
+		action = fermo;
 	}
 
 	tmp->setSpawning(false);
@@ -178,6 +204,22 @@ void EnemyAction::onAction(bool* key)
 	}
 
 	tmp->setMoving(false);
+
+	if (tmp->getLivelloPalla() == POCA)
+	{
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("poca");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+	}
+	if (tmp->getLivelloPalla() == TANTA)
+	{
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("tanta");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+	}
+	if (tmp->getLivelloPalla() == PIENA)
+	{
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("piena");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+	}
 }
 
 Action* EnemyAction::clone() { return new EnemyAction(); }

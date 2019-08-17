@@ -24,6 +24,20 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		return true;
 	}
 
+	else if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight"))
+	{
+		tmp->setImmobile(true);
+		if (!(tmp->getLastDirection() == NO_DIRECTION))
+			tmp->setLastDirection(NO_DIRECTION);
+		if (tmp->getLivelloPalla() == NULLA)
+			tmp->setLivelloPalla(POCA);
+		else if (tmp->getLivelloPalla() == POCA)
+			tmp->setLivelloPalla(TANTA);
+		else if (tmp->getLivelloPalla() == TANTA)
+			tmp->setLivelloPalla(PIENA);
+		return true;
+	}
+
 	else if (!checkCollision(other))
 	{
 		return false;
