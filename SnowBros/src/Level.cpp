@@ -28,6 +28,7 @@ Level::Level(std::string fileName, ALLEGRO_BITMAP* levelBackground) {
 	}
 
 	this->levelBackground = levelBackground;
+	this->playerDestroyed = false;
 }
 
 Level::~Level() { }
@@ -55,19 +56,25 @@ void Level::processLevel(int& playerScore, int& highScore, int& nLives, int& nRe
 
 	for(unsigned j = 0; j < constructedEntities.size(); j++)
 	{
-		if (constructedEntities[j]->getDestroyed() && constructedEntities[j]->getType() == "Player" && nLives >= 0)
+		if (constructedEntities[j]->getDestroyed() && constructedEntities[j]->getType() == "Player")
 		{
 			nLives--;
 			constructedEntities.erase(constructedEntities.begin() + j);
 			constructedControllers.erase(constructedControllers.begin() + j);
 			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
-			spawnPlayer();
+			playerDestroyed = true;
 		}
-		if (constructedEntities[j]->getDestroyed())
+		else if (constructedEntities[j]->getDestroyed())
 		{
 			constructedEntities.erase(constructedEntities.begin() + j);
 			constructedControllers.erase(constructedControllers.begin() + j);
 			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
+		}
+
+		if(playerDestroyed && nLives >= 0)
+		{
+			spawnPlayer();
+			playerDestroyed = false;
 		}
 	}
 

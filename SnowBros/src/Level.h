@@ -26,6 +26,7 @@ class Level;
 class Level {
 	static constexpr int dim_x = 16;
 	static constexpr int dim_y = 12;
+	bool playerDestroyed;
 	std::string tileMap[dim_y][dim_x];
 	std::unordered_map<std::string, EntityDescriptor*> entities;
 	std::vector<Entity*> constructedEntities;

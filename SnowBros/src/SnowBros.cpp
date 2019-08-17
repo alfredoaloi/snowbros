@@ -27,52 +27,20 @@
 #include "BulletCollisionHandler.h"
 #include "EnemyCollisionHandler.h"
 
-/*extern const int screenHeight;
-extern const int screenWidth;*/
 const float FPS = 10.0;
 const int BOUNCER_SIZE = 30;
-/*enum MYKEYS {
- KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
- };*/
-
-//void collisionDetection(Actor& a1, Actor& a2)
-//{
-//	if ((a1.getPosX() > a2.getPosX() + a2.getDim().x - 1) || // is b1 on the right side of b2?
-//		(a1.getPosY() > a2.getPosY() + a2.getDim().y - 1) || // is b1 under b2?
-//		(a2.getPosX() > a1.getPosX() + a1.getDim().x - 1) || // is b2 on the right side of b1?
-//		(a2.getPosY() > a1.getPosY() + a1.getDim().y - 1))   // is b2 under b1?
-//	{
-//		return;
-//	}
-//
-//	float x1 = a1.getPosX() + a1.getDim().x / 2;
-//	float y1 = a1.getPosY() + a1.getDim().y / 2;
-//	float x2 = a2.getPosX() + a2.getDim().x / 2;
-//	float y2 = a2.getPosY() + a2.getDim().y / 2;
-//
-//	float x3 = x1;
-//	float y3 = y2;
-//	float x4 = x2;
-//	float y4 = y1;
-//
-//	float distX = sqrt(pow(x2 - x3, 2) + pow(y2 - y3, 2));
-//	float distY = sqrt(pow(x2 - x4, 2) + pow(y2 - y4, 2));
-//
-//	if(distX <= a2.getDim().x && x1 < x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
-//		a1.setPosX(a1.getPosX() - (a2.getDim().x - distX));
-//	if(distX <= a2.getDim().x && x1 > x2 && (y1 > y2 - a2.getDim().y / 2 && y1 < y2 + a2.getDim().y / 2))
-//		a1.setPosX(a1.getPosX() + (a2.getDim().x - distX));
-//	if(distY <= a2.getDim().y && y1 < y2 && (x1 > x2 - a2.getDim().x / 2 && x1 < x2 + a2.getDim().x / 2))
-//		a1.setPosY(a1.getPosY() - (a2.getDim().y - distY));
-//}
 
 enum GAME_STATE
 {
 	MAIN_MENU,
 	MAIN_MENU_TRANSITION,
 	IN_GAME,
+	IN_GAME_TRANSITION,
 	LEVEL_TRANSITION,
-	END_MENU
+	END_MENU,
+	END_MENU_TRANSITION,
+	GAME_OVER_MENU,
+	GAME_OVER_MENU_TRANSITION
 };
 typedef GAME_STATE GameState;
 
@@ -87,7 +55,7 @@ int main() {
 	al_init_image_addon();
 	al_init_font_addon();
 
-	bool key[5] = { false, false, false, false, false };
+	bool key[6] = { false, false, false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
 
@@ -241,8 +209,6 @@ int main() {
 	al_set_target_bitmap(al_get_backbuffer(display));
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
-	//al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 24, 0);
-
 	al_flip_display();
 
 	al_start_timer(timer);
@@ -256,6 +222,7 @@ int main() {
 	int tmp = 0;
 
 	GameState gameState = MAIN_MENU;
+	int levelCounter = 1;
 
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
@@ -267,7 +234,7 @@ int main() {
 			{
 				if(key[KEY_SPACE])
 				{
-					gameState = MAIN_MENU_TRANSITION;
+					gameState = IN_GAME_TRANSITION;
 					blinkCounter = 0;
 					infBlink = 0;
 					supBlink = 1;
@@ -288,6 +255,36 @@ int main() {
 				}
 
 				l.processLevel(playerScore, highScore, nLives, nReplays);
+			}
+			else if(gameState == GAME_OVER_MENU)
+			{
+				if(key[KEY_SPACE])
+				{
+					gameState = MAIN_MENU_TRANSITION;
+					blinkCounter = 0;
+					infBlink = 0;
+					supBlink = 1;
+
+					transparency = 0;
+					tmp = 0;
+				}
+				else if(key[KEY_ESCAPE])
+					doexit = true;
+			}
+			else if(gameState == END_MENU)
+			{
+				if(key[KEY_SPACE])
+				{
+					gameState = MAIN_MENU_TRANSITION;
+					blinkCounter = 0;
+					infBlink = 0;
+					supBlink = 1;
+
+					transparency = 0;
+					tmp = 0;
+				}
+				else if(key[KEY_ESCAPE])
+					doexit = true;
 			}
 
 			redraw = true;
@@ -336,7 +333,7 @@ int main() {
 				break;
 
 			case ALLEGRO_KEY_ESCAPE:
-				doexit = true;
+				key[KEY_ESCAPE] = true;
 				break;
 			}
 		}
@@ -346,7 +343,84 @@ int main() {
 			al_set_target_bitmap(al_get_backbuffer(display));
 			ALLEGRO_TRANSFORM trans2;
 
-			if(gameState == MAIN_MENU)
+			//TRANSIZIONI
+			if (gameState == IN_GAME_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+				{
+					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					if(tmp > 20)
+						gameState = IN_GAME;
+					tmp++;
+				}
+				transparency += 25;
+			}
+			else if (gameState == MAIN_MENU_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+					gameState = MAIN_MENU;
+
+				transparency += 25;
+			}
+			else if (gameState == GAME_OVER_MENU_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+					gameState = GAME_OVER_MENU;
+
+				transparency += 25;
+			}
+			else if (gameState == END_MENU_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+					gameState = END_MENU;
+
+				transparency += 25;
+			}
+			if (gameState == LEVEL_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 24, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+				{
+					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					if(tmp > 20)
+					{
+						gameState = IN_GAME;
+						blinkCounter = 0;
+						infBlink = 0;
+						supBlink = 1;
+
+						transparency = 0;
+						tmp = 0;
+					}
+					tmp++;
+				}
+				transparency += 25;
+			}
+			//
+
+			//STATI
+			else if(gameState == MAIN_MENU)
 			{
 				al_draw_bitmap(al_load_bitmap("./res/MainMenu.bmp"), 0, 0, 0);
 				if(blinkCounter >= INT_MAX)
@@ -376,22 +450,6 @@ int main() {
 				}
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
-			}
-			else if (gameState == MAIN_MENU_TRANSITION)
-			{
-				if(transparency <= 255)
-				{
-					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
-				}
-				else
-				{
-					al_draw_text(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL 1");
-					if(tmp > 20)
-						gameState = IN_GAME;
-				}
-
-				transparency += 25;
-				tmp++;
 			}
 			else if(gameState == IN_GAME)
 			{
@@ -496,7 +554,28 @@ int main() {
 
 				//
 			}
+			else if (gameState == GAME_OVER_MENU)
+			{
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 64, ALLEGRO_ALIGN_CENTRE, "GAME OVER");
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 124, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 64, ALLEGRO_ALIGN_CENTRE, "GAME OVER");
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 94, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+			}
+			else if (gameState == END_MENU)
+			{
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 64, ALLEGRO_ALIGN_CENTRE, "YOU WON!");
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
+				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 64, ALLEGRO_ALIGN_CENTRE, "YOU WON!");
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
+				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+			}
 
+			//
 			al_flip_display();
 		}
 	}
