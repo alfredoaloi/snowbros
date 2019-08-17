@@ -24,8 +24,68 @@ void PlayerAction::onAction(bool* key)
 			tmp->setMaxHeight(tmp->getPosY() - 32);
 		}
 
+		if (key[KEY_LEFT] && tmp->getPosX() >= tmp->getSpeed()) {
+			if(!tmp->isShooting() && !tmp->isJumping() && !tmp->getSpinge())
+			{
+				if(!(tmp->getLastDirection() == LEFT))
+					tmp->getSpritesheetManager()->selectCurrentSpritesheet("camminaL");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(LEFT);
+			}
+			else if(!tmp->isShooting() && !tmp->isJumping() && tmp->getSpinge())
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("spingeL");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(LEFT);
+			}
+			else if(tmp->isShooting() && tmp->getLastDirection() == SHOOTING_RIGHT)
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("sparaL");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(SHOOTING_LEFT);
+			}
+			else
+			{
+				tmp->setLastDirection(SHOOTING_LEFT);
+			}
+
+			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
+			tmp->setMoving(true);
+		}
+
+		if (key[KEY_RIGHT] && tmp->getPosX() <= screenWidth - tmp->getDim()->x - tmp->getSpeed()) {
+			if(!tmp->isShooting() && !tmp->isJumping() && !tmp->getSpinge())
+			{
+				if(!(tmp->getLastDirection() == RIGHT))
+					tmp->getSpritesheetManager()->selectCurrentSpritesheet("camminaR");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(RIGHT);
+			}
+			else if(!tmp->isShooting() && !tmp->isJumping() && tmp->getSpinge())
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("spingeR");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(RIGHT);
+			}
+			else if(tmp->isShooting() && tmp->getLastDirection() == SHOOTING_LEFT)
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("sparaR");
+				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+				tmp->setLastDirection(SHOOTING_RIGHT);
+			}
+			else
+			{
+				tmp->setLastDirection(SHOOTING_RIGHT);
+			}
+
+			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
+			tmp->setMoving(true);
+		}
+
 		if(key[KEY_SPACE])
 		{
+			if (tmp->getSpinge())
+				tmp->setShooting(true);
 			if((!tmp->isShooting() && tmp->getLastDirection() == RIGHT) || (!tmp->isShooting() && tmp->getLastDirection() == NO_DIRECTION_RIGHT) || (!tmp->isShooting() && tmp->getLastDirection() == JUMPING_RIGHT) || (!tmp->isShooting() && tmp->getLastDirection() == FALLING_RIGHT))
 			{
 				tmp->getSpritesheetManager()->selectCurrentSpritesheet("sparaR");
@@ -53,52 +113,6 @@ void PlayerAction::onAction(bool* key)
 			tmp->setShooting(false);
 			//lastDirection = NO_DIRECTION;
 		}
-		if (key[KEY_LEFT] && tmp->getPosX() >= tmp->getSpeed()) {
-			if(!tmp->isShooting() && !tmp->isJumping())
-			{
-				if(!(tmp->getLastDirection() == LEFT))
-					tmp->getSpritesheetManager()->selectCurrentSpritesheet("camminaL");
-				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-				tmp->setLastDirection(LEFT);
-			}
-			else if(tmp->isShooting() && tmp->getLastDirection() == SHOOTING_RIGHT)
-			{
-				tmp->getSpritesheetManager()->selectCurrentSpritesheet("sparaL");
-				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-				tmp->setLastDirection(SHOOTING_LEFT);
-			}
-			else
-			{
-				tmp->setLastDirection(SHOOTING_LEFT);
-			}
-
-			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
-			tmp->setMoving(true);
-		}
-
-		if (key[KEY_RIGHT] && tmp->getPosX() <= screenWidth - tmp->getDim()->x - tmp->getSpeed()) {
-			if(!tmp->isShooting() && !tmp->isJumping())
-			{
-				if(!(tmp->getLastDirection() == RIGHT))
-					tmp->getSpritesheetManager()->selectCurrentSpritesheet("camminaR");
-				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-				tmp->setLastDirection(RIGHT);
-			}
-			else if(tmp->isShooting() && tmp->getLastDirection() == SHOOTING_LEFT)
-			{
-				tmp->getSpritesheetManager()->selectCurrentSpritesheet("sparaR");
-				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-				tmp->setLastDirection(SHOOTING_RIGHT);
-			}
-			else
-			{
-				tmp->setLastDirection(SHOOTING_RIGHT);
-			}
-
-			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
-			tmp->setMoving(true);
-		}
-
 		//	if (tmp->getPosY() <= screenHeight - tmp->getDim()->y - tmp->getMaxHeight() && tmp->isCanFall()) {
 		//		tmp->setFalling(true);
 		//		tmp->setCanFall(false);
@@ -194,6 +208,7 @@ void PlayerAction::onAction(bool* key)
 		spawnCounter++;
 	}
 
+	tmp->setSpinge(false);
 	tmp->setMoving(false);
 }
 

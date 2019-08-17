@@ -68,6 +68,29 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 			tmp->setDestroyed(true);
 			return true;
 		}
+		if ((tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp2->getLivelloPalla() == PIENA)
+		{
+			tmp->setSpinge(true);
+			if (tmp->isShooting())
+				tmp2->setDestroyed(true);
+			if (tmp->getPosX() + tmp->getDim()->x + tmp2->getDim()->x < screenWidth)
+				tmp2->setPosX(tmp->getPosX() + tmp->getDim()->x);
+			else
+				tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
+			return true;
+		}
+		else if ((tmp->getLastDirection() == LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT) && tmp2->getLivelloPalla() == PIENA)
+		{
+			tmp->setSpinge(true);
+			if (tmp->isShooting())
+				tmp2->setDestroyed(true);
+			if (tmp->getPosX() - tmp2->getDim()->x > 0)
+				tmp2->setPosX(tmp->getPosX() - tmp2->getDim()->x);
+			else
+				tmp->setPosX(tmp2->getPosX() + tmp2->getDim()->x);
+			return true;
+		}
+
 		return false;
 	}
 //

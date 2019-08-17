@@ -43,6 +43,7 @@ typedef LAST_DIRECTION LastDirection;
 class Actor : public Entity {
 protected:
 	bool immobile;
+	bool spinge = false;
 	bool jumping;
 	bool falling;
 	bool canJump;
@@ -199,6 +200,10 @@ public:
 	LivelloPalla getLivelloPalla() { return livelloPalla; }
 
 	void setLivelloPalla(LivelloPalla livelloPalla) { this->livelloPalla = livelloPalla; }
+
+	bool getSpinge() { return spinge; }
+
+	void setSpinge(bool spinge) { this->spinge = spinge; }
 };
 
 #endif /* ACTOR_H_ */
