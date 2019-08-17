@@ -34,10 +34,15 @@ enum LAST_DIRECTION {
 	JUMPING = JUMPING_LEFT | JUMPING_RIGHT,
 	FALLING = FALLING_LEFT | FALLING_RIGHT
 };
+
+enum LIVELLO_PALLA { NULLA, POCA, TANTA, PIENA };
+
+typedef LIVELLO_PALLA LivelloPalla;
 typedef LAST_DIRECTION LastDirection;
 
 class Actor : public Entity {
 protected:
+	bool immobile;
 	bool jumping;
 	bool falling;
 	bool canJump;
@@ -52,6 +57,7 @@ protected:
 	ALLEGRO_BITMAP* bitmap;
 	SpritesheetManager* spritesheetManager;
 	LastDirection lastDirection;
+	LivelloPalla livelloPalla = NULLA;
 
 public:
 	Actor(float x, float y, Dimensions* d, float s, float h, float f_s, float j_s, std::string t, SpritesheetManager* ssm) :
@@ -59,7 +65,9 @@ public:
 	{
 		bitmap = al_create_bitmap(d->x, d->y);
 		lastDirection = SPAWN;
+		livelloPalla = NULLA;
 
+		immobile = false;
 		jumping = false;
 		falling = false;
 		canJump = true;
@@ -183,6 +191,14 @@ public:
 	void setSpawning(bool spawning) {
 		this->spawning = spawning;
 	}
+
+	bool getImmobile() { return immobile; }
+
+	void setImmobile(bool immobile) { this->immobile = immobile; }
+
+	LivelloPalla getLivelloPalla() { return livelloPalla; }
+
+	void setLivelloPalla(LivelloPalla livelloPalla) { this->livelloPalla = livelloPalla; }
 };
 
 #endif /* ACTOR_H_ */

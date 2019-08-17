@@ -62,8 +62,13 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 
 	else if (checkCollision(other) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
 	{
-		tmp->setDestroyed(true);
-		return true;
+		Actor* tmp2 = dynamic_cast<Actor*>(other);
+		if (tmp2->getLivelloPalla() == NULLA)
+		{
+			tmp->setDestroyed(true);
+			return true;
+		}
+		return false;
 	}
 //
 //	else if(checkCollision(other) == SIDE_UP && other->getType() == "T")
