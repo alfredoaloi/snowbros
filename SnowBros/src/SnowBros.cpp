@@ -7,6 +7,7 @@
 // Dimensioni = 256X224
 //============================================================================
 #include <iostream>
+#include <climits>
 #include <math.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -62,6 +63,14 @@ const int BOUNCER_SIZE = 30;
 //	if(distY <= a2.getDim().y && y1 < y2 && (x1 > x2 - a2.getDim().x / 2 && x1 < x2 + a2.getDim().x / 2))
 //		a1.setPosY(a1.getPosY() - (a2.getDim().y - distY));
 //}
+
+enum GAME_STATE
+{
+	MAIN_MENU,
+	IN_GAME,
+	END_MENU
+};
+typedef GAME_STATE GameState;
 
 int main() {
 	ALLEGRO_DISPLAY *display = NULL;
@@ -178,11 +187,18 @@ int main() {
 	al_set_target_bitmap(al_get_backbuffer(display));
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
-	al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 24, 0);
+	//al_draw_bitmap(al_load_bitmap("./res/Livello1.bmp"), 0, 24, 0);
 
 	al_flip_display();
 
 	al_start_timer(timer);
+
+	int playerScore = 0, highScore = 50, nLives = 2, nReplays = 9;
+
+	int blinkCounter = 0;
+	int infBlink = 0, supBlink = 1;
+
+	GameState gameState = MAIN_MENU;
 
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
@@ -190,7 +206,27 @@ int main() {
 
 		if (ev.type == ALLEGRO_EVENT_TIMER) {
 
-			l.processLevel();
+			if(gameState == MAIN_MENU)
+			{
+				if(key[KEY_SPACE])
+				{
+					gameState = IN_GAME;
+				}
+			}
+			else if(gameState == IN_GAME)
+			{
+				if(nLives < 0)
+				{
+					if(key[KEY_SPACE])
+					{
+						nLives = 2;
+						nReplays--;
+					}
+				}
+
+				l.processLevel(playerScore, highScore, nLives, nReplays);
+			}
+
 			redraw = true;
 		} else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 			break;
@@ -246,66 +282,141 @@ int main() {
 			redraw = false;
 			al_set_target_bitmap(al_get_backbuffer(display));
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-
-			al_hold_bitmap_drawing(1);
-			l.drawLevel();
-			al_hold_bitmap_drawing(0);
-
-			//DISEGNO INTERFACCIA GRAFICA
 			ALLEGRO_TRANSFORM trans2;
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 18, 6);
-			al_use_transform(&trans2);
-			al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 18, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", 0);
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 17, 6);
-			al_use_transform(&trans2);
-			al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 17, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", 0);
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 82, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", 2);
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 81, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", 2);
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 98, 6);
-			al_use_transform(&trans2);
-			al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 97, 6);
-			al_use_transform(&trans2);
-			al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 98, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", 0);
-			al_identity_transform(&trans2);
-			al_scale_transform(&trans2, 1, 0.77);
-			al_translate_transform(&trans2, 97, 14);
-			al_use_transform(&trans2);
-			al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", 0);
-			al_identity_transform(&trans2);
-			al_use_transform(&trans2);
-			//al_use_transform(&trans);
+
+			if(gameState == MAIN_MENU)
+			{
+				al_draw_bitmap(al_load_bitmap("./res/MainMenu.bmp"), 0, 0, 0);
+				if(blinkCounter >= INT_MAX)
+					blinkCounter = 0;
+
+				if(blinkCounter >= 20 * infBlink && blinkCounter <= 20 * supBlink)
+				{
+					al_identity_transform(&trans2);
+					al_translate_transform(&trans2, 87, 168);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "PRESS SPACE");
+					al_identity_transform(&trans2);
+					al_translate_transform(&trans2, 86, 168);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "PRESS SPACE");
+					blinkCounter++;
+				}
+				else
+				{
+					if(blinkCounter >= 20 * infBlink && blinkCounter <= 20 * (supBlink + 1))
+						blinkCounter++;
+					else
+					{
+						infBlink = supBlink + 1;
+						supBlink = supBlink + 2;
+					}
+				}
+				al_identity_transform(&trans2);
+				al_use_transform(&trans2);
+			}
+			else if(gameState == IN_GAME)
+			{
+				al_hold_bitmap_drawing(1);
+				l.drawLevel();
+				al_hold_bitmap_drawing(0);
+
+				//DISEGNO INTERFACCIA GRAFICA
+
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 18, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 18, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore);
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 17, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 17, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore);
+
+				if(nLives < 0)
+				{
+					if(blinkCounter >= INT_MAX)
+						blinkCounter = 0;
+
+					if(blinkCounter >= 20 * infBlink && blinkCounter <= 20 * supBlink)
+					{
+						al_identity_transform(&trans2);
+						al_scale_transform(&trans2, 1, 0.77);
+						al_translate_transform(&trans2, 82, 14);
+						al_use_transform(&trans2);
+						al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nReplays);
+						al_identity_transform(&trans2);
+						al_scale_transform(&trans2, 1, 0.77);
+						al_translate_transform(&trans2, 81, 14);
+						al_use_transform(&trans2);
+						al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nReplays);
+						blinkCounter++;
+					}
+					else
+					{
+						if(blinkCounter >= 20 * infBlink && blinkCounter <= 20 * (supBlink + 1))
+							blinkCounter++;
+						else
+						{
+							infBlink = supBlink + 1;
+							supBlink = supBlink + 2;
+						}
+					}
+				}
+				else
+				{
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 1, 0.77);
+					al_translate_transform(&trans2, 82, 14);
+					al_use_transform(&trans2);
+					al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nLives);
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 1, 0.77);
+					al_translate_transform(&trans2, 81, 14);
+					al_use_transform(&trans2);
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nLives);
+					blinkCounter = 0;
+					infBlink = 0;
+					supBlink = 1;
+				}
+
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 98, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 97, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 98, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", highScore);
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 97, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", highScore);
+				al_identity_transform(&trans2);
+				al_use_transform(&trans2);
+				//al_use_transform(&trans);
+
+				//
+			}
 
 			al_flip_display();
 		}

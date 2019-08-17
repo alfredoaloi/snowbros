@@ -45,8 +45,11 @@ void Level::drawLevel() {
 	}
 }
 
-void Level::processLevel()
+void Level::processLevel(int& playerScore, int& highScore, int& nLives, int& nReplays)
 {
+	if(playerScore >= highScore)
+		highScore = playerScore;
+
 	if(constructedEntities.empty() || constructedControllers.empty())
 			constructLevel();
 

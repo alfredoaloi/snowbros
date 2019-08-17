@@ -38,7 +38,7 @@ public:
 	void registerPlayer(std::string ,EntityDescriptor*);
 	void registerController(Controller*);
 	void setLevelbackground(ALLEGRO_BITMAP*);
-	void processLevel();
+	void processLevel(int&, int&, int&, int&);
 	Level(std::string, ALLEGRO_BITMAP*);
 	~Level();
 	void drawLevel();
