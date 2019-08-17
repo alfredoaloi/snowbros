@@ -47,7 +47,7 @@ public:
 
 	Action* getDescriptedAction() { return (action == nullptr) ? (action) : (action->clone()); }
 
-	SpritesheetManager* getDescriptedSpritesheetManager() { return spritesheetManager;}
+	SpritesheetManager* getDescriptedSpritesheetManager() {  return (spritesheetManager == nullptr) ? (spritesheetManager) : (spritesheetManager->clone());}
 
 	Controller* getDescriptedController() { return (controller == nullptr) ? (controller) : (controller->clone()); }
 };

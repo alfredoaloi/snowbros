@@ -24,12 +24,14 @@ class SpritesheetManager {
 
 public:
 	SpritesheetManager();
+	SpritesheetManager(std::map<std::string, Spritesheet*>, int, int);
 	virtual ~SpritesheetManager();
 	void setNewSpritesheet(std::string, Spritesheet*);
 	void selectCurrentSpritesheet(std::string);
 	void nextSprite(ALLEGRO_BITMAP*);
 	void setWidth(float);
 	void setHeight(float);
+	SpritesheetManager* clone();
 };
 
 #endif /* SPRITESHEETMANAGER_H_ */

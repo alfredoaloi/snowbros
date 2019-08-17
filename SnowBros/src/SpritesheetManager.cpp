@@ -15,6 +15,15 @@ SpritesheetManager::SpritesheetManager()
 	currentSprite = 0;
 }
 
+SpritesheetManager::SpritesheetManager(std::map<std::string, Spritesheet*> map, int width, int height)
+{
+	currentSpritesheet = new Spritesheet();
+	spritesheets = map;
+	this->width = width;
+	this->height = height;
+	currentSprite = 0;
+}
+
 SpritesheetManager::~SpritesheetManager() { }
 
 void SpritesheetManager::nextSprite(ALLEGRO_BITMAP* sprite)
@@ -61,3 +70,5 @@ void SpritesheetManager::setHeight(float height)
 {
 	this->height = height;
 }
+
+SpritesheetManager* SpritesheetManager::clone() { return new SpritesheetManager(spritesheets, width, height); }

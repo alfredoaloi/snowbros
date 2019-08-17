@@ -22,7 +22,7 @@ public:
 	virtual ~ActorDescriptor() {}
 	Entity* getDescripted(float x, float y)
 	{
-		return new Actor(x, y, dim, speed, max_height, f_speed, j_speed, type, spritesheetManager);
+		return new Actor(x, y, dim, speed, max_height, f_speed, j_speed, type, spritesheetManager->clone());
 	}
 };
 

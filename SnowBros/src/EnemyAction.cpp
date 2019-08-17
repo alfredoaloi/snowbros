@@ -6,7 +6,7 @@
  */
 
 #include "EnemyAction.h"
-#include <iostream>>
+#include <iostream>
 
 EnemyAction::EnemyAction() {
 	// TODO Auto-generated constructor stub
