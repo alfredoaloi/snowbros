@@ -59,6 +59,12 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
 		return true;
 	}
+
+	else if (checkCollision(other) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
+	{
+		tmp->setDestroyed(true);
+		return true;
+	}
 //
 //	else if(checkCollision(other) == SIDE_UP && other->getType() == "T")
 //	{

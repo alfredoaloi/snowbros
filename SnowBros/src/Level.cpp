@@ -55,6 +55,14 @@ void Level::processLevel(int& playerScore, int& highScore, int& nLives, int& nRe
 
 	for(unsigned j = 0; j < constructedEntities.size(); j++)
 	{
+		if (constructedEntities[j]->getDestroyed() && constructedEntities[j]->getType() == "Player" && nLives >= 0)
+		{
+			nLives--;
+			constructedEntities.erase(constructedEntities.begin() + j);
+			constructedControllers.erase(constructedControllers.begin() + j);
+			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
+			spawnPlayer();
+		}
 		if (constructedEntities[j]->getDestroyed())
 		{
 			constructedEntities.erase(constructedEntities.begin() + j);
@@ -190,5 +198,43 @@ void Level::spawn(std::string entity, double x, double y)
 			constructedCollisionHandlers.push_back(nullptr);
 
 		constructedEntities.push_back(tmpEntity);
+	}
+}
+
+void Level::spawnPlayer()
+{
+	std::unordered_map<std::string, EntityDescriptor*>::iterator it;
+	it = entities.find("P");
+	for(int i = 0; i < dim_y; i++)
+	{
+		for(int j = 0; j < dim_x; j++)
+		{
+			if(tileMap[i][j] == "P")
+			{
+				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16 + (float)24);
+				if(it->second->getDescriptedController() != nullptr)
+				{
+					Controller* tmpController = it->second->getDescriptedController();
+					Action* action = it->second->getDescriptedAction();
+					tmpEntity->setSpawner(new LevelSpawner(this));
+					action->setEntity(tmpEntity);
+					tmpController->changeAction(action);
+					constructedControllers.push_back(tmpController);
+				}
+				else
+					constructedControllers.push_back(nullptr);
+
+				if(it->second->getDescriptedCollisionHandler() != nullptr)
+				{
+					CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
+					tmpCollisionhandler->setEntity(tmpEntity);
+					constructedCollisionHandlers.push_back(tmpCollisionhandler);
+				}
+				else
+					constructedCollisionHandlers.push_back(nullptr);
+
+				constructedEntities.push_back(tmpEntity);
+			}
+		}
 	}
 }

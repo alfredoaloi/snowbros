@@ -43,6 +43,7 @@ public:
 	~Level();
 	void drawLevel();
 	void spawn(std::string, double, double);
+	void spawnPlayer();
 };
 
 #endif /* LEVEL_H_ */
