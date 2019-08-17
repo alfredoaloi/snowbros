@@ -107,6 +107,7 @@ int main() {
 
 	Level l("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
 
+	// player
 	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
 	playerSpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/player/camminaL.bmp"), 3));
 	playerSpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/player/camminaR.bmp"), 3));
@@ -123,15 +124,15 @@ int main() {
 	playerSpritesheetManager->setWidth(25);
 	playerSpritesheetManager->setHeight(30);
 
+	// player bullet
 	SpritesheetManager* bulletSpritesheetManager = new SpritesheetManager();
 	bulletSpritesheetManager->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileL.bmp"), 1));
 	bulletSpritesheetManager->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileR.bmp"), 1));
 	bulletSpritesheetManager->setWidth(6);
 	bulletSpritesheetManager->setHeight(11);
 
+	// enemy 1
 	SpritesheetManager* enemy1SpritesheetManager = new SpritesheetManager();
-	enemy1SpritesheetManager->setNewSpritesheet("atterraL", new Spritesheet(al_load_bitmap("./res/enemy1/atterraL.bmp"), 1));
-	enemy1SpritesheetManager->setNewSpritesheet("atterraR", new Spritesheet(al_load_bitmap("./res/enemy1/atterraR.bmp"), 1));
 	enemy1SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/enemy1/camminaL.bmp"), 2));
 	enemy1SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/enemy1/camminaR.bmp"), 2));
 	enemy1SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/enemy1/fermoL.bmp"), 1));
@@ -143,6 +144,39 @@ int main() {
 	enemy1SpritesheetManager->setWidth(25);
 	enemy1SpritesheetManager->setHeight(30);
 
+	// enemy 2
+	SpritesheetManager* enemy2SpritesheetManager = new SpritesheetManager();
+	enemy2SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/enemy2/camminaL.bmp"), 2));
+	enemy2SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/enemy2/camminaR.bmp"), 2));
+	enemy2SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/enemy2/fermoL.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/enemy2/fermoR.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/enemy2/mortoL.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/enemy2/mortoR.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy2/saltaL.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy2/saltaR.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/enemy2/sparaL.bmp"), 1));
+	enemy2SpritesheetManager->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/enemy2/sparaR.bmp"), 1));
+	enemy2SpritesheetManager->setWidth(24);
+	enemy2SpritesheetManager->setHeight(30);
+
+	// enemy 3
+	SpritesheetManager* enemy3SpritesheetManager = new SpritesheetManager();
+	enemy3SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/enemy3/camminaL.bmp"), 3));
+	enemy3SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/enemy3/camminaR.bmp"), 3));
+	enemy3SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/enemy3/fermoL.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/enemy3/fermoR.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy3/saltaL.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy3/saltaR.bmp"), 1));
+	enemy3SpritesheetManager->setWidth(25);
+	enemy3SpritesheetManager->setHeight(30);
+
+	// player bullet
+	SpritesheetManager* fireSpritesheetManager = new SpritesheetManager();
+	fireSpritesheetManager->setNewSpritesheet("left", new Spritesheet(al_load_bitmap("./res/others/proiettileFuocoL.bmp"), 1));
+	fireSpritesheetManager->setNewSpritesheet("right", new Spritesheet(al_load_bitmap("./res/others/proiettileFuocoR.bmp"), 1));
+	fireSpritesheetManager->setWidth(25);
+	fireSpritesheetManager->setHeight(16);
+
 	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	l.registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
 	l.registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
@@ -150,6 +184,10 @@ int main() {
 	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
 	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
 	l.registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
+	l.registerEntity("E2", new ActorDescriptor(new Dimensions(24, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	l.registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy3"));
+	l.registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
+	l.registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 
 //	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);

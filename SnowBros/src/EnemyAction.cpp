@@ -66,9 +66,9 @@ void EnemyAction::onAction(bool* key)
 			tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
 			tmp->setShooting(true);
 			if (tmp->getLastDirection() == SHOOTING_LEFT)
-				tmp->getSpawner()->spawnEntity("BL", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);
+				tmp->getSpawner()->spawnEntity("FL", tmp->getPosX(), tmp->getPosY());
 			if (tmp->getLastDirection() == SHOOTING_RIGHT)
-				tmp->getSpawner()->spawnEntity("BR", tmp->getPosX() + tmp->getDim()->x, tmp->getPosY() + tmp->getDim()->y/2);
+				tmp->getSpawner()->spawnEntity("FR", tmp->getPosX() + tmp->getDim()->x, tmp->getPosY());
 		}
 	}
 

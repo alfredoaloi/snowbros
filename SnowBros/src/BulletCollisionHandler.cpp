@@ -26,7 +26,19 @@ bool BulletCollisionHandler::handleCollision(Entity* other)
 		return true;
 	}
 
-	else if (checkCollision(other) && other->getType() == "Enemy1")
+	else if (checkCollision(other) == SIDE_RIGHT && other->getType() == "TL")
+	{
+		tmp->setDestroyed(true);
+		return true;
+	}
+
+	else if (checkCollision(other) == SIDE_LEFT && other->getType() == "TR")
+	{
+		tmp->setDestroyed(true);
+		return true;
+	}
+
+	else if (checkCollision(other) && (entity->getType() == "BulletLeft" || entity->getType() == "BulletRight") && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
 	{
 		tmp->setDestroyed(true);
 		other->setDestroyed(true);

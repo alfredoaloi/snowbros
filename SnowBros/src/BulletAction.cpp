@@ -18,43 +18,58 @@ void BulletAction::onAction(bool* key) {
 	// MAXhEIGT VIENE IDENTIFICATO COME LA MASSIMA DISTANZA IN TERMINI DI X PRIMA CHE IL PROIETTILE INIZI A CADERE
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
-	if (tmp->getType() == "BulletLeft" && !(tmp->getLastDirection() == LEFT) && !(tmp->getLastDirection() == DOWN))
+	if ((tmp->getType() == "BulletLeft" || tmp->getType() == "FireLeft") && !(tmp->getLastDirection() == LEFT) && !(tmp->getLastDirection() == DOWN))
 	{
 		tmp->setLastDirection(LEFT);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("left");
 		tmp->setMaxHeight(tmp->getPosX() - 100);
 	}
 
-	else if (tmp->getType() == "BulletRight" && !(tmp->getLastDirection() == RIGHT) && !(tmp->getLastDirection() == DOWN))
+	else if ((tmp->getType() == "BulletRight" || tmp->getType() == "FireRight") && !(tmp->getLastDirection() == RIGHT) && !(tmp->getLastDirection() == DOWN))
 	{
 		tmp->setLastDirection(RIGHT);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("right");
 		tmp->setMaxHeight(tmp->getPosX() + 100);
 	}
 
-	if (tmp->getLastDirection() == LEFT && tmp->getPosX() > tmp->getMaxHeight())
+	if (tmp->getType() == "BulletLeft" || tmp->getType() == "BulletRight")
 	{
-		tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
-	}
+		if (tmp->getLastDirection() == LEFT && tmp->getPosX() > tmp->getMaxHeight())
+		{
+			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
+		}
 
-	if (tmp->getLastDirection() == RIGHT && tmp->getPosX() < tmp->getMaxHeight())
-	{
-		tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
-	}
+		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() < tmp->getMaxHeight())
+		{
+			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
+		}
 
-	if (tmp->getLastDirection() == LEFT && tmp->getPosX() < tmp->getMaxHeight())
-	{
-		tmp->setLastDirection(DOWN);
-	}
+		if (tmp->getLastDirection() == LEFT && tmp->getPosX() < tmp->getMaxHeight())
+		{
+			tmp->setLastDirection(DOWN);
+		}
 
-	if (tmp->getLastDirection() == RIGHT && tmp->getPosX() > tmp->getMaxHeight())
-	{
-		tmp->setLastDirection(DOWN);
-	}
+		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() > tmp->getMaxHeight())
+		{
+			tmp->setLastDirection(DOWN);
+		}
 
-	if (tmp->getLastDirection() == DOWN)
+		if (tmp->getLastDirection() == DOWN)
+		{
+			tmp->setPosY(tmp->getPosY() + tmp->getSpeed());
+		}
+	}
+	else
 	{
-		tmp->setPosY(tmp->getPosY() + tmp->getSpeed());
+		if (tmp->getLastDirection() == LEFT)
+		{
+			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
+		}
+
+		if (tmp->getLastDirection() == RIGHT)
+		{
+			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
+		}
 	}
 
 	tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
