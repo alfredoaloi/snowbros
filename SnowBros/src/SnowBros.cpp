@@ -69,7 +69,9 @@ const int BOUNCER_SIZE = 30;
 enum GAME_STATE
 {
 	MAIN_MENU,
+	MAIN_MENU_TRANSITION,
 	IN_GAME,
+	LEVEL_TRANSITION,
 	END_MENU
 };
 typedef GAME_STATE GameState;
@@ -189,7 +191,7 @@ int main() {
 	l.registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	l.registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 
-//	al_init_primitives_addon();
+	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
 //	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 //	//display = al_create_display(disp_data.width, disp_data.height);*/
@@ -250,6 +252,9 @@ int main() {
 	int blinkCounter = 0;
 	int infBlink = 0, supBlink = 1;
 
+	unsigned transparency = 0;
+	int tmp = 0;
+
 	GameState gameState = MAIN_MENU;
 
 	while (!doexit) {
@@ -262,7 +267,13 @@ int main() {
 			{
 				if(key[KEY_SPACE])
 				{
-					gameState = IN_GAME;
+					gameState = MAIN_MENU_TRANSITION;
+					blinkCounter = 0;
+					infBlink = 0;
+					supBlink = 1;
+
+					transparency = 0;
+					tmp = 0;
 				}
 			}
 			else if(gameState == IN_GAME)
@@ -333,7 +344,6 @@ int main() {
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
 			al_set_target_bitmap(al_get_backbuffer(display));
-			al_clear_to_color(al_map_rgb(0, 0, 0));
 			ALLEGRO_TRANSFORM trans2;
 
 			if(gameState == MAIN_MENU)
@@ -367,8 +377,25 @@ int main() {
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
 			}
+			else if (gameState == MAIN_MENU_TRANSITION)
+			{
+				if(transparency <= 255)
+				{
+					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
+				}
+				else
+				{
+					al_draw_text(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL 1");
+					if(tmp > 20)
+						gameState = IN_GAME;
+				}
+
+				transparency += 25;
+				tmp++;
+			}
 			else if(gameState == IN_GAME)
 			{
+				al_clear_to_color(al_map_rgb(0, 0, 0));
 				al_hold_bitmap_drawing(1);
 				l.drawLevel();
 				al_hold_bitmap_drawing(0);
