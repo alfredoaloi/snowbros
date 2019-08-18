@@ -68,7 +68,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 			tmp->setDestroyed(true);
 			return true;
 		}
-		if ((tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp2->getLivelloPalla() == PIENA)
+		if ((tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp->getPosY() + tmp->getDim()->y >= tmp2->getPosY() && tmp2->getLivelloPalla() == PIENA)
 		{
 			tmp->setSpinge(true);
 			if (tmp->isShooting())
@@ -79,7 +79,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 				tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
 			return true;
 		}
-		else if ((tmp->getLastDirection() == LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT) && tmp2->getLivelloPalla() == PIENA)
+		else if ((tmp->getLastDirection() == LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT) && tmp->getPosY() + tmp->getDim()->y >= tmp2->getPosY() && tmp2->getLivelloPalla() == PIENA)
 		{
 			tmp->setSpinge(true);
 			if (tmp->isShooting())
