@@ -26,6 +26,7 @@
 #include "PlayerCollisionHandler.h"
 #include "BulletCollisionHandler.h"
 #include "EnemyCollisionHandler.h"
+#include "PlayerScore.h"
 
 const float FPS = 10.0;
 const int BOUNCER_SIZE = 30;
@@ -45,7 +46,7 @@ enum GAME_STATE
 typedef GAME_STATE GameState;
 
 int main() {
-	srand(time(0));
+    	srand(time(0));
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -58,6 +59,8 @@ int main() {
 	bool key[6] = { false, false, false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
+
+	const int nLevels = 2;
 
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
@@ -75,7 +78,10 @@ int main() {
 		return -1;
 	}
 
-	Level l("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
+	Level* levels[nLevels];
+
+	levels[0] = new Level("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
+	levels[1] = new Level("./res/Level2.txt", al_load_bitmap("./res/Livello2.bmp"));
 
 	// player
 	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
@@ -159,17 +165,29 @@ int main() {
 	fireSpritesheetManager->setWidth(25);
 	fireSpritesheetManager->setHeight(16);
 
-	l.registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
-	l.registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
-	l.registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
-	l.registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
-	l.registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
-	l.registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
-	l.registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
-	l.registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
-	l.registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
-	l.registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
-	l.registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
+	levels[0]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
+	levels[0]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
+	levels[0]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
+	levels[0]->registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
+	levels[0]->registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
+	levels[0]->registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
+	levels[0]->registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
+	levels[0]->registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	levels[0]->registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
+	levels[0]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
+	levels[0]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
+
+	levels[1]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
+	levels[1]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
+	levels[1]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
+	levels[1]->registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
+	levels[1]->registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
+	levels[1]->registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
+	levels[1]->registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
+	levels[1]->registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	levels[1]->registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
+	levels[1]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
+	levels[1]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 
 	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
@@ -225,7 +243,7 @@ int main() {
 
 	al_start_timer(timer);
 
-	int playerScore = 0, highScore = 50, nLives = 2, nReplays = 9;
+	int highScore = 50, nLives = 2, nReplays = 9;
 
 	int blinkCounter = 0;
 	int infBlink = 0, supBlink = 1;
@@ -234,7 +252,11 @@ int main() {
 	int tmp = 0;
 
 	GameState gameState = MAIN_MENU;
-	int levelCounter = 1;
+
+	int levelCounter = 0;
+
+	EnemyCounter* enemyCounter = EnemyCounter::getinstance();
+	PlayerScore* playerScore = PlayerScore::getInstance();
 
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
@@ -257,16 +279,60 @@ int main() {
 			}
 			else if(gameState == IN_GAME)
 			{
-				if(nLives < 0)
+				if(nReplays >= 0)
 				{
-					if(key[KEY_SPACE])
+					if(nLives < 0)
 					{
-						nLives = 2;
-						nReplays--;
+						if(key[KEY_SPACE])
+						{
+							nLives = 2;
+							nReplays--;
+						}
+					}
+					if(enemyCounter->getEnemiesNumber() == 0)
+					{
+						levelCounter++;
+
+						if(levelCounter >= nLevels)
+						{
+							gameState = END_MENU_TRANSITION;
+							blinkCounter = 0;
+							infBlink = 0;
+							supBlink = 1;
+
+							transparency = 0;
+							tmp = 0;
+						}
+						else
+						{
+							gameState = LEVEL_TRANSITION;
+							blinkCounter = 0;
+							infBlink = 0;
+							supBlink = 1;
+
+							transparency = 0;
+							tmp = 0;
+
+							levels[levelCounter - 1]->clearLevel();
+						}
 					}
 				}
+				else
+				{
+					gameState = GAME_OVER_MENU_TRANSITION;
+					blinkCounter = 0;
+					infBlink = 0;
+					supBlink = 1;
 
-				l.processLevel(playerScore, highScore, nLives, nReplays);
+					transparency = 0;
+					tmp = 0;
+				}
+				if(levelCounter < nLevels)
+				{
+					levels[levelCounter]->processLevel(nLives);
+					if(playerScore->getScore() >= highScore)
+							highScore = playerScore->getScore();
+				}
 			}
 			else if(gameState == GAME_OVER_MENU)
 			{
@@ -279,6 +345,11 @@ int main() {
 
 					transparency = 0;
 					tmp = 0;
+
+					nLives = 2;
+					nReplays = 9;
+
+					levelCounter = 0;
 				}
 				else if(key[KEY_ESCAPE])
 					doexit = true;
@@ -294,6 +365,11 @@ int main() {
 
 					transparency = 0;
 					tmp = 0;
+
+					nLives = 2;
+					nReplays = 9;
+
+					levelCounter = 0;
 				}
 				else if(key[KEY_ESCAPE])
 					doexit = true;
@@ -364,8 +440,8 @@ int main() {
 				}
 				else
 				{
-					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
-					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
 					if(tmp > 20)
 						gameState = IN_GAME;
 					tmp++;
@@ -407,14 +483,70 @@ int main() {
 			}
 			if (gameState == LEVEL_TRANSITION)
 			{
+				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
+
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 18, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 18, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore->getScore());
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 17, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 17, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore->getScore());
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 82, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nLives);
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 81, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nLives);
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 98, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 97, 6);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 98, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", highScore);
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 1, 0.77);
+				al_translate_transform(&trans2, 97, 14);
+				al_use_transform(&trans2);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", highScore);
+				al_identity_transform(&trans2);
+				al_use_transform(&trans2);
+
+
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 24, 256, 224, al_map_rgba(0, 0, 0, transparency));
 				}
 				else
 				{
-					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
-					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter);
+					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
+					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
 					if(tmp > 20)
 					{
 						gameState = IN_GAME;
@@ -467,7 +599,7 @@ int main() {
 			{
 				al_clear_to_color(al_map_rgb(0, 0, 0));
 				al_hold_bitmap_drawing(1);
-				l.drawLevel();
+				levels[levelCounter]->drawLevel();
 				al_hold_bitmap_drawing(0);
 
 				//DISEGNO INTERFACCIA GRAFICA
@@ -481,7 +613,7 @@ int main() {
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 14);
 				al_use_transform(&trans2);
-				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore->getScore());
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 6);
@@ -491,7 +623,7 @@ int main() {
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 14);
 				al_use_transform(&trans2);
-				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore->getScore());
 
 				if(nLives < 0)
 				{
@@ -578,11 +710,11 @@ int main() {
 			else if (gameState == END_MENU)
 			{
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 64, ALLEGRO_ALIGN_CENTRE, "YOU WON!");
-				al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore);
+				al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 64, ALLEGRO_ALIGN_CENTRE, "YOU WON!");
-				al_draw_textf(font, al_map_rgb(255, 255, 255), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore);
+				al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
 			}

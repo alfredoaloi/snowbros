@@ -46,30 +46,36 @@ void Level::drawLevel() {
 	}
 }
 
-void Level::processLevel(int& playerScore, int& highScore, int& nLives, int& nReplays)
+void Level::processLevel(int& nLives)
 {
-	if(playerScore >= highScore)
-		highScore = playerScore;
-
 	if(constructedEntities.empty() || constructedControllers.empty())
 			constructLevel();
 
-	for(unsigned j = 0; j < constructedEntities.size(); j++)
+	unsigned j = 0;
+	while(j < constructedEntities.size())
 	{
 		if (constructedEntities[j]->getDestroyed() && constructedEntities[j]->getType() == "Player")
 		{
 			nLives--;
+			delete constructedEntities[j];
 			constructedEntities.erase(constructedEntities.begin() + j);
+			delete constructedControllers[j];
 			constructedControllers.erase(constructedControllers.begin() + j);
+			delete constructedCollisionHandlers[j];
 			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
 			playerDestroyed = true;
 		}
 		else if (constructedEntities[j]->getDestroyed())
 		{
+			delete constructedEntities[j];
 			constructedEntities.erase(constructedEntities.begin() + j);
+			delete constructedControllers[j];
 			constructedControllers.erase(constructedControllers.begin() + j);
+			delete constructedCollisionHandlers[j];
 			constructedCollisionHandlers.erase(constructedCollisionHandlers.begin() + j);
 		}
+		else
+			j++;
 
 		if(playerDestroyed && nLives >= 0)
 		{
@@ -244,4 +250,11 @@ void Level::spawnPlayer()
 			}
 		}
 	}
+}
+
+void Level::clearLevel()
+{
+	constructedEntities.clear();
+	constructedControllers.clear();
+	constructedCollisionHandlers.clear();
 }

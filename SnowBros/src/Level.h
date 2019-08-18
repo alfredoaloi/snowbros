@@ -39,12 +39,13 @@ public:
 	void registerPlayer(std::string ,EntityDescriptor*);
 	void registerController(Controller*);
 	void setLevelbackground(ALLEGRO_BITMAP*);
-	void processLevel(int&, int&, int&, int&);
+	void processLevel(int&);
 	Level(std::string, ALLEGRO_BITMAP*);
 	~Level();
 	void drawLevel();
 	void spawn(std::string, double, double);
 	void spawnPlayer();
+	void clearLevel();
 };
 
 #endif /* LEVEL_H_ */

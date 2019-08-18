@@ -13,7 +13,13 @@ void Entity::onRedraw() { }
 
 Entity::Entity(float x, float y, Dimensions* d, std::string t) : pos_x(x), pos_y(y), dim(d), type(t), spawner(nullptr)
 {
-
+	if(t == "Enemy1" || t == "Enemy2" || t == "Enemy3")
+	{
+		enemyCounter = EnemyCounter::getinstance();
+		enemyCounter->incCounter();
+	}
+	else
+		enemyCounter = nullptr;
 }
 
 Entity::Entity(Entity* e)
@@ -23,9 +29,10 @@ Entity::Entity(Entity* e)
 	this->dim = e->dim;
 	this->type = e->type;
 	this->spawner = e->spawner;
+	this->enemyCounter = e->enemyCounter;
 }
 
-Entity::~Entity() { }
+Entity::~Entity() { if(enemyCounter != nullptr) enemyCounter->decCounter(); }
 
 /*void Entity::setAction(Action*& action) {
 	this->action = action;

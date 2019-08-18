@@ -10,6 +10,7 @@
 
 #include "Dimensions.h"
 #include "Spawner.h"
+#include "EnemyCounter.h"
 #include <string>
 #include <list>
 
@@ -21,6 +22,7 @@ protected:
 	std::string type;
 	Spawner* spawner;
 	bool destroyed = false;
+	EnemyCounter* enemyCounter;
 
 public:
 	Entity();
