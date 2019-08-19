@@ -203,6 +203,34 @@ void EnemyAction::onAction(bool* key)
 		tmp->setLastDirection(NO_DIRECTION_LEFT);
 	}
 
+	if (tmp->getLastDirection() == ROTOLA_LEFT)
+	{
+		if (tmp->getPosX() - tmp->getSpeed() >= 0)
+			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
+		else
+		{
+			tmp->setLastDirection(ROTOLA_RIGHT);
+			tmp->setPosX(1);
+		}
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+	}
+	else if (tmp->getLastDirection() == ROTOLA_RIGHT)
+	{
+		if (tmp->getPosX() + tmp->getDim()->x + tmp->getSpeed() <= screenWidth)
+			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
+		else
+		{
+			tmp->setLastDirection(ROTOLA_LEFT);
+			tmp->setPosX(screenWidth - tmp->getDim()->x - 1);
+		}
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+	}
+
+	if (tmp->getLivelloPalla() == ROTOLA && tmp->getPosY() >= 176 && (tmp->getPosX() - tmp->getSpeed() <= 0 || tmp->getPosX() + tmp->getDim()->x + tmp->getSpeed() >= screenWidth))
+	{
+		tmp->setDestroyed(true);
+	}
+
 	tmp->setMoving(false);
 
 	if (tmp->getLivelloPalla() == POCA)

@@ -15,16 +15,20 @@ EnemyCollisionHandler::~EnemyCollisionHandler() {
 
 bool EnemyCollisionHandler::handleCollision(Entity* other)
 {
+	if (!checkCollision(other))
+	{
+		return false;
+	}
+
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 	if(checkCollision(other) == SIDE_DOWN && (other->getType() == "T" || other->getType() == "TL" || other->getType() == "TR") && tmp->isFalling())
 	{
 		tmp->setPosY(other->getPosY() - tmp->getDim()->y);
 		tmp->setCanJump(true);
 		tmp->setFalling(false);
-		return true;
 	}
 
-	else if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight"))
+	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight") &&!(tmp->getLivelloPalla() == ROTOLA))
 	{
 		tmp->setImmobile(true);
 		if (!(tmp->getLastDirection() == NO_DIRECTION))
@@ -35,13 +39,21 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 			tmp->setLivelloPalla(TANTA);
 		else if (tmp->getLivelloPalla() == TANTA)
 			tmp->setLivelloPalla(PIENA);
-		return true;
 	}
 
-	else if (!checkCollision(other))
+	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping())
 	{
-		return false;
+		tmp->setPosX(other->getPosX() + other->getDim()->x);
+		tmp->setLastDirection(ROTOLA_RIGHT);
 	}
+
+	if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping())
+	{
+		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
+		tmp->setLastDirection(ROTOLA_LEFT);
+	}
+
+	return true;
 }
 
 CollisionHandler* EnemyCollisionHandler::clone() { return new EnemyCollisionHandler(); }

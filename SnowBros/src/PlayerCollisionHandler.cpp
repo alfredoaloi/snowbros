@@ -78,7 +78,12 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		{
 			tmp->setSpinge(true);
 			if (tmp->isShooting())
-				tmp2->setDestroyed(true);
+			{
+				tmp2->setLivelloPalla(ROTOLA);
+				tmp2->setLastDirection(ROTOLA_LEFT);
+				tmp2->setSpeed(9);
+				tmp2->getSpritesheetManager()->selectCurrentSpritesheet("rotola");
+			}
 			else if (tmp2->getPosX() <= 0)
 			{
 				tmp2->setPosX(0);
@@ -96,7 +101,12 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 			{
 				tmp->setSpinge(true);
 				if (tmp->isShooting())
-					tmp2->setDestroyed(true);
+				{
+					tmp2->setLivelloPalla(ROTOLA);
+					tmp2->setLastDirection(ROTOLA_RIGHT);
+					tmp2->setSpeed(9);
+					tmp2->getSpritesheetManager()->selectCurrentSpritesheet("rotola");
+				}
 				else if (tmp2->getPosX() + tmp2->getDim()->x >= screenWidth)
 				{
 					tmp2->setPosX(screenWidth - tmp2->getDim()->x);
