@@ -13,6 +13,11 @@ PlayerCollisionHandler::~PlayerCollisionHandler() { }
 
 bool PlayerCollisionHandler::handleCollision(Entity* other)
 {
+	if(!checkCollision(other))
+	{
+		return false;
+	}
+
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 	if(checkCollision(other) == SIDE_DOWN && (other->getType() == "T" || other->getType() == "TL" || other->getType() == "TR") && tmp->isFalling())
 	{
@@ -45,79 +50,64 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		tmp->setPosY(other->getPosY() - tmp->getDim()->y);
 		tmp->setCanJump(true);
 		tmp->setFalling(false);
-		return true;
 	}
 
-	else if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping())
+	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping())
 	{
 		tmp->setPosX(other->getPosX() + other->getDim()->x);
-		return true;
 	}
 
-	else if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping())
+	if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping())
 	{
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
-		return true;
 	}
 
-	else if (checkCollision(other) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
+	if (checkCollision(other) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getLivelloPalla() == NULLA)
 		{
 			tmp->setDestroyed(true);
-			return true;
 		}
-		if ((tmp->getLastDirection() == RIGHT || tmp->getLastDirection() == SHOOTING_RIGHT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp->getPosY() + tmp->getDim()->y >= tmp2->getPosY() && tmp2->getLivelloPalla() == PIENA)
-		{
-			tmp->setSpinge(true);
-			if (tmp->isShooting())
-				tmp2->setDestroyed(true);
-			if (tmp->getPosX() + tmp->getDim()->x + tmp2->getDim()->x < screenWidth)
-				tmp2->setPosX(tmp->getPosX() + tmp->getDim()->x);
-			else
-				tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
-			return true;
-		}
-		else if ((tmp->getLastDirection() == LEFT || tmp->getLastDirection() == SHOOTING_LEFT || tmp->getLastDirection() == NO_DIRECTION_LEFT) && tmp->getPosY() + tmp->getDim()->y >= tmp2->getPosY() && tmp2->getLivelloPalla() == PIENA)
-		{
-			tmp->setSpinge(true);
-			if (tmp->isShooting())
-				tmp2->setDestroyed(true);
-			if (tmp->getPosX() - tmp2->getDim()->x > 0)
-				tmp2->setPosX(tmp->getPosX() - tmp2->getDim()->x);
-			else
-				tmp->setPosX(tmp2->getPosX() + tmp2->getDim()->x);
-			return true;
-		}
-
-		return false;
 	}
-//
-//	else if(checkCollision(other) == SIDE_UP && other->getType() == "T")
-//	{
-//		tmp->setPosY(other->getPosY() + other->getDim()->y);
-//		tmp->setFalling(true);
-//		tmp->setCanJump(false);
-//		tmp->setJumping(false);
-//		return true;
-//	}
 
-	else if(!checkCollision(other))
+	if (checkCollision(other) == SIDE_LEFT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
 	{
-//		if(!tmp->isJumping())
-//		{
-//			tmp->setCanFall(true);
-//			tmp->setCanJump(false);
-//		}
-//		else
-//		{
-//			tmp->setCanFall(false);
-//			tmp->setCanJump(true);
-//		}
-
-		return false;
+		Actor* tmp2 = dynamic_cast<Actor*>(other);
+		if (tmp2->getLivelloPalla() == PIENA)
+		{
+			tmp->setSpinge(true);
+			if (tmp->isShooting())
+				tmp2->setDestroyed(true);
+			else if (tmp2->getPosX() <= 0)
+			{
+				tmp2->setPosX(0);
+				tmp->setPosX(tmp2->getDim()->x);
+			}
+			else
+				tmp2->setPosX(tmp->getPosX() - tmp2->getDim()->x);
+		}
 	}
+
+	if (checkCollision(other) == SIDE_RIGHT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+		{
+			Actor* tmp2 = dynamic_cast<Actor*>(other);
+			if (tmp2->getLivelloPalla() == PIENA)
+			{
+				tmp->setSpinge(true);
+				if (tmp->isShooting())
+					tmp2->setDestroyed(true);
+				else if (tmp2->getPosX() + tmp2->getDim()->x >= screenWidth)
+				{
+					tmp2->setPosX(screenWidth - tmp2->getDim()->x);
+					tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
+				}
+				else
+					tmp2->setPosX(tmp->getPosX() + tmp->getDim()->x);
+			}
+		}
+
+	return true;
 }
 
 CollisionHandler* PlayerCollisionHandler::clone() { return new PlayerCollisionHandler(); }

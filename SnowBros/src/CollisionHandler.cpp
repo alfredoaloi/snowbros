@@ -23,9 +23,9 @@ Side_t CollisionHandler::checkCollision(Entity* other)
 		{ /*std::cout << "side_up" << std::endl << std::flush;*/ return SIDE_UP; }
 	if(entity->getPosY() + entity->getDim()->y > other->getPosY() && entity->getPosY() + entity->getDim()->y < other->getPosY() + other->getDim()->y && entity->getPosX() + entity->getDim()->x > other->getPosX() && entity->getPosX() < other->getPosX() + other->getDim()->x)
 		{ /*std::cout << "side_down" << std::endl << std::flush;*/ return SIDE_DOWN; }
-	if(other->getPosX() + other->getDim()->x > entity->getPosX() && other->getPosX() + other->getDim()->x < entity->getPosX() + entity->getDim()->x && ((other->getPosY() > entity->getPosY() && other->getPosY() < entity->getPosY() + entity->getDim()->y) || (other->getPosY() + other->getDim()->y > entity->getPosY() && other->getPosY() + other->getDim()->y < entity->getPosY() + entity->getDim()->y)))
+	if(other->getPosX() + other->getDim()->x > entity->getPosX() && other->getPosX() < entity->getPosX() + entity->getDim()->x && ((other->getPosY() + other->getDim()->y > entity->getPosY() && other->getPosY() < entity->getPosY() + entity->getDim()->y)))
 		{ /*std::cout << "side_left" << std::endl << std::flush;*/ return SIDE_LEFT; }
-	if(entity->getPosX() + entity->getDim()->x > other->getPosX() && entity->getPosX() + entity->getDim()->x < other->getPosX() + other->getDim()->x && ((other->getPosY() > entity->getPosY() && other->getPosY() < entity->getPosY() + entity->getDim()->y) || (other->getPosY() + other->getDim()->y > entity->getPosY() && other->getPosY() + other->getDim()->y < entity->getPosY() + entity->getDim()->y)))
+	if(entity->getPosX() + entity->getDim()->x > other->getPosX() && entity->getPosX() < other->getPosX() + other->getDim()->x && ((other->getPosY() + other->getDim()->y > entity->getPosY() && other->getPosY() < entity->getPosY() + entity->getDim()->y)))
 		{ /*std::cout << "side_right" << std::endl << std::flush;*/ return SIDE_RIGHT; }
 
 	return NO_COLLISION;
