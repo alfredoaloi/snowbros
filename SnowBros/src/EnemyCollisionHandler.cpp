@@ -53,6 +53,12 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp->setLastDirection(ROTOLA_LEFT);
 	}
 
+	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+	{
+		Actor* tmp2 = dynamic_cast<Actor*>(other);
+		tmp2->setDestroyed(true);
+	}
+
 	return true;
 }
 
