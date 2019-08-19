@@ -302,6 +302,8 @@ int main() {
 
 							transparency = 0;
 							tmp = 0;
+
+							levels[levelCounter - 1]->clearLevel();
 						}
 						else
 						{
