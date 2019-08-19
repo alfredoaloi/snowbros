@@ -59,12 +59,6 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp2->setDestroyed(true);
 	}
 
-	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && other->getType() == "Player")
-	{
-		other->setPosX(tmp->getPosX());
-		other->setPosY(tmp->getPosY());
-	}
-
 	return true;
 }
 
