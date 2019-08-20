@@ -9,13 +9,30 @@
 
 //PlayerAction::PlayerAction(Player* e) : Action(e) { }
 
-PlayerAction::PlayerAction() { spawnCounter = 0; }
+PlayerAction::PlayerAction() { spawnCounter = 0; mortoCounter = 0; }
 
 PlayerAction::~PlayerAction() { }
 
 void PlayerAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
+
+	if (tmp->getImmobile())
+	{
+		if(mortoCounter > 12)
+			tmp->setDestroyed(true);
+		if(mortoCounter % 4 == 0 && mortoCounter != 12)
+		{
+			if(tmp->getLastDirection() == SPAWN)
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("morto");
+				tmp->setLastDirection(NO_DIRECTION);
+			}
+			tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		}
+		mortoCounter++;
+		return;
+	}
 
 	if(!tmp->isSpawning())
 	{

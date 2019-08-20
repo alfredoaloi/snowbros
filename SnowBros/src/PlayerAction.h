@@ -18,6 +18,7 @@ enum MYKEYS {
 
 class PlayerAction: public Action {
 	int spawnCounter;
+	int mortoCounter;
 public:
 	PlayerAction();
 	//PlayerAction(Player*);
