@@ -14,6 +14,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
+#include <allegro5/allegro_acodec.h>
 #include "Actor.h"
 #include "Level.h"
 #include "Controller.h"
@@ -47,16 +48,20 @@ enum GAME_STATE
 };
 typedef GAME_STATE GameState;
 
-int main() {
-    	srand(time(0));
+int main()
+{
+   	srand(time(0));
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT* font;
+	ALLEGRO_SAMPLE* sample;
 
 	al_init_image_addon();
 	al_init_font_addon();
+	al_install_audio();
+	al_init_acodec_addon();
 
 	bool key[6] = { false, false, false, false, false, false };
 	bool redraw = true;
@@ -305,6 +310,10 @@ int main() {
 	EnemyCounter* enemyCounter = EnemyCounter::getinstance();
 	PlayerScore* playerScore = PlayerScore::getInstance();
 
+	al_reserve_samples(1);
+
+	sample = al_load_sample("./res/MainMenu.wav");
+	bool isPlaying = false;
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -313,6 +322,10 @@ int main() {
 
 			if(gameState == MAIN_MENU)
 			{
+				if(!isPlaying)
+				{
+					al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_LOOP, NULL);
+				}
 				if(key[KEY_SPACE])
 				{
 					gameState = IN_GAME_TRANSITION;
@@ -775,6 +788,7 @@ int main() {
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
+	al_destroy_sample(sample);
 
 	return 0;
 }
