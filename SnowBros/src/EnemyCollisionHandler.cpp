@@ -41,13 +41,23 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 			tmp->setLivelloPalla(PIENA);
 	}
 
-	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping())
+	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping() && tmp->getLivelloPalla() == NULLA)
+	{
+		tmp->setPosX(other->getPosX() + other->getDim()->x);
+	}
+
+	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping() && tmp->getLivelloPalla() == NULLA)
+	{
+		tmp->setPosX(other->getPosX() + other->getDim()->x);
+	}
+
+	if(checkCollision(other) == SIDE_LEFT && other->getType() == "TR" && tmp->isFalling() && !tmp->isJumping() && tmp->getLivelloPalla() == ROTOLA)
 	{
 		tmp->setPosX(other->getPosX() + other->getDim()->x);
 		tmp->setLastDirection(ROTOLA_RIGHT);
 	}
 
-	if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping())
+	if(checkCollision(other) == SIDE_RIGHT && other->getType() == "TL" && tmp->isFalling() && !tmp->isJumping() && tmp->getLivelloPalla() == ROTOLA)
 	{
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
 		tmp->setLastDirection(ROTOLA_LEFT);
@@ -58,10 +68,13 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (!(tmp2->getLivelloPalla() == ROTOLA))
 		{
-			tmp2->setDestroyed(true);
-			int x = rand() % 10;
-			// if (x == 0)
-				tmp->getSpawner()->spawnEntity("G", tmp->getPosX(), tmp->getPosY());
+			if (tmp2->getLastDirection() == LEFT)
+				tmp2->setLastDirection(NO_DIRECTION_LEFT);
+			else
+				tmp2->setLastDirection(NO_DIRECTION_RIGHT);
+			tmp2->setImmobile(true);
+			tmp2->setSpawning(true);
+			tmp2->setPosY(tmp2->getPosY() - 20);
 		}
 	}
 

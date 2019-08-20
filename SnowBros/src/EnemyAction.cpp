@@ -9,8 +9,7 @@
 #include <iostream>
 
 EnemyAction::EnemyAction() {
-	// TODO Auto-generated constructor stub
-
+	mortoCounter = 0;
 }
 
 EnemyAction::~EnemyAction() {
@@ -20,6 +19,40 @@ EnemyAction::~EnemyAction() {
 void EnemyAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
+
+	if (tmp->getImmobile() && (tmp->getLastDirection() == NO_DIRECTION || tmp->getLastDirection() == NO_DIRECTION_LEFT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp->isSpawning())
+	{
+		tmp->setFalling(true);
+
+		if (tmp->isFalling()) {
+			tmp->setPosY(tmp->getPosY() + tmp->getSpeed());
+		}
+
+		if(mortoCounter > 10)
+		{
+			tmp->setDestroyed(true);
+			// int x = rand() % 10;
+			// if (x == 0)
+				tmp->getSpawner()->spawnEntity("G", tmp->getPosX(), tmp->getPosY());
+		}
+		if(mortoCounter >= 0 && mortoCounter != 10)
+		{
+			if(tmp->getLastDirection() == NO_DIRECTION_LEFT)
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("mortoL");
+				tmp->setLastDirection(NO_DIRECTION);
+			}
+			else if (tmp->getLastDirection() == NO_DIRECTION_RIGHT)
+			{
+				tmp->getSpritesheetManager()->selectCurrentSpritesheet("mortoR");
+				tmp->setLastDirection(NO_DIRECTION);
+			}
+			tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		}
+		mortoCounter++;
+		return;
+	}
+
 	randAction action;
 	if (!tmp->getImmobile())
 	{

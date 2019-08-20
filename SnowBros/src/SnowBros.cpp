@@ -152,6 +152,8 @@ int main() {
 	enemy3SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/enemy3/fermoL.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/enemy3/fermoR.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/enemy3/saltaL.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/enemy3/mortoL.bmp"), 1));
+	enemy3SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/enemy3/mortoR.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/enemy3/saltaR.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
 	enemy3SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
