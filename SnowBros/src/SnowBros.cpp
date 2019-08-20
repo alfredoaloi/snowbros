@@ -100,8 +100,8 @@ int main()
 	playerSpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/player/fermoR.bmp"), 1));
 	playerSpritesheetManager->setNewSpritesheet("morto", new Spritesheet(al_load_bitmap("./res/player/morto.bmp"), 3));
 	playerSpritesheetManager->setNewSpritesheet("respawn", new Spritesheet(al_load_bitmap("./res/player/respawn.bmp"), 4));
-	playerSpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/player/saltaL.bmp"), 5));
-	playerSpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/player/saltaR.bmp"), 5));
+	playerSpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/player/veroSaltaL.bmp"), 1));
+	playerSpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/player/veroSaltaR.bmp"), 1));
 	playerSpritesheetManager->setNewSpritesheet("sparaL", new Spritesheet(al_load_bitmap("./res/player/sparaL.bmp"), 2));
 	playerSpritesheetManager->setNewSpritesheet("sparaR", new Spritesheet(al_load_bitmap("./res/player/sparaR.bmp"), 2));
 	playerSpritesheetManager->setNewSpritesheet("spingeL", new Spritesheet(al_load_bitmap("./res/player/spingeL.bmp"), 3));
@@ -309,6 +309,7 @@ int main()
 
 	EnemyCounter* enemyCounter = EnemyCounter::getinstance();
 	PlayerScore* playerScore = PlayerScore::getInstance();
+	highScore = playerScore->readHighScore("./res/HighScore.txt");
 
 	al_reserve_samples(1);
 
@@ -393,7 +394,7 @@ int main()
 				{
 					levels[levelCounter]->processLevel(nLives);
 					if(playerScore->getScore() >= highScore)
-							highScore = playerScore->getScore();
+						highScore = playerScore->getScore();
 				}
 			}
 			else if(gameState == GAME_OVER_MENU)
@@ -432,6 +433,8 @@ int main()
 					nReplays = 9;
 
 					levelCounter = 0;
+
+					playerScore->addScore(playerScore->getScore() * (-1));
 				}
 				else if(key[KEY_ESCAPE])
 					doexit = true;
@@ -779,6 +782,7 @@ int main()
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+				playerScore->writeHighScore("./res/HighScore.txt", highScore);
 			}
 
 			//
