@@ -48,7 +48,7 @@ enum GAME_STATE
 };
 typedef GAME_STATE GameState;
 
-int main()
+int main() 
 {
    	srand(time(0));
 	ALLEGRO_DISPLAY *display = NULL;

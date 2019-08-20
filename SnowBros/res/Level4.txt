@@ -3,10 +3,10 @@
 0 0 0 0 0 0 0 TL TR 0 0 0 0 0 0 0
 T T T T 0 0 TL 0 0 TR 0 0 T T T T
 0 0 0 0 0 0 TL 0 0 TR 0 0 0 0 0 0
-0 0 T T T T 0 0 0 0 T T T T 0 0
-0 0 0 0 0 0 TL 0 0 TR 0 0 0 0 0 0 
-T T T T 0 0 0 TL TR 0 0 0 T T T T
+0 0 T T T T TL 0 0 TR T T T T 0 0
+0 0 0 0 0 0 TL TL TR TR 0 0 0 0 0 0 
+T T T T 0 E1 0 TL TR 0 0 0 T T T T
 0 0 0 0 0 0 0 TL TR 0 0 0 0 0 0 0
-0 0 T T T T T T T T T T T T 0 0
-0 0 0 0 0 0 0 0 P 0 0 0 0 0 0 0
+0 0 T T T T T 0 P T T T T T 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 T T T T T T T T T T T T T T T T

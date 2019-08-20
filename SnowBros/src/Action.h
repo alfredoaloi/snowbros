@@ -9,6 +9,7 @@
 #define ACTION_H_
 
 #include "Entity.h"
+#include "PlayerScore.h"
 
 class Action {
 protected:

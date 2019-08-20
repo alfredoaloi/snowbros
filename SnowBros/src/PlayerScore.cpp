@@ -28,3 +28,34 @@ PlayerScore* PlayerScore::getInstance()
 void PlayerScore::addScore(int n) { score += n; }
 
 int PlayerScore::getScore() { return score; }
+
+int PlayerScore::readHighScore(std::string fileName)
+{
+	std::ifstream file(fileName);
+
+	if(file.fail())
+	{
+		return 0;
+	}
+
+	std::string s;
+	std::getline(file, s);
+	std::stringstream ss(s);
+
+	int x;
+	ss >> x;
+
+	return x;
+}
+
+void PlayerScore::writeHighScore(std::string fileName, int highScore)
+{
+	std::ofstream file(fileName);
+
+	if(file.fail())
+	{
+		return;
+	}
+
+	file << highScore;
+}

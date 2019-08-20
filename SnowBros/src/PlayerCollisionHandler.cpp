@@ -62,10 +62,10 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
 	}
 
-	if (checkCollision(other) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
+	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
-		if (tmp2->getLivelloPalla() == NULLA && !tmp->getImmobile())
+		if (tmp2->getLivelloPalla() == NULLA && !tmp->getImmobile() && !tmp2->getImmobile() && !tmp->getInvincibile())
 		{
 			tmp->setImmobile(true);
 			tmp->setLastDirection(SPAWN);
@@ -122,6 +122,8 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 	{
 		other->setDestroyed(true);
 		tmp->setMaxGittata(100);
+		PlayerScore* p = PlayerScore::getInstance();
+		p->addScore(100);
 	}
 
 	return true;

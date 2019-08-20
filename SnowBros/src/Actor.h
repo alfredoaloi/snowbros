@@ -45,6 +45,7 @@ typedef LAST_DIRECTION LastDirection;
 class Actor : public Entity {
 protected:
 	bool immobile;
+	bool invincibile = false;
 	bool spinge = false;
 	bool jumping;
 	bool falling;
@@ -83,7 +84,13 @@ public:
 	}
 
 	virtual ~Actor() { al_destroy_bitmap(bitmap); }
-	void onRedraw() override { al_draw_bitmap(bitmap, pos_x, pos_y, 0); }
+	void onRedraw() override
+	{
+		if (!invincibile)
+			al_draw_bitmap(bitmap, pos_x, pos_y, 0);
+		else
+			al_draw_tinted_bitmap(bitmap, al_map_rgba_f(1, 1, 1, 0.3), pos_x, pos_y, 0);
+	}
 
 	ALLEGRO_BITMAP* getBitmap() const {
 		return bitmap;
@@ -216,6 +223,10 @@ public:
 	void setGittata(float gittata) { this->gittata = gittata; }
 
 	float getGittata() { return gittata; }
+
+	bool getInvincibile() { return invincibile; }
+
+	void setInvincibile(bool invincibile) { this->invincibile = invincibile; }
 };
 
 #endif /* ACTOR_H_ */

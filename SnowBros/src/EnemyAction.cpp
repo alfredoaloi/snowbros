@@ -13,7 +13,6 @@ EnemyAction::EnemyAction() {
 }
 
 EnemyAction::~EnemyAction() {
-	// TODO Auto-generated destructor stub
 }
 
 void EnemyAction::onAction(bool* key)
@@ -34,6 +33,8 @@ void EnemyAction::onAction(bool* key)
 			// int x = rand() % 10;
 			// if (x == 0)
 				tmp->getSpawner()->spawnEntity("G", tmp->getPosX(), tmp->getPosY());
+			PlayerScore* p = PlayerScore::getInstance();
+			p->addScore(500);
 		}
 		if(mortoCounter >= 0 && mortoCounter != 10)
 		{
@@ -262,6 +263,8 @@ void EnemyAction::onAction(bool* key)
 	if (tmp->getLivelloPalla() == ROTOLA && tmp->getPosY() >= 176 && (tmp->getPosX() - tmp->getSpeed() <= 0 || tmp->getPosX() + tmp->getDim()->x + tmp->getSpeed() >= screenWidth))
 	{
 		tmp->setDestroyed(true);
+		PlayerScore* p = PlayerScore::getInstance();
+		p->addScore(400);
 	}
 
 	tmp->setMoving(false);
