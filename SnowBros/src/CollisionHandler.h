@@ -9,6 +9,7 @@
 #define COLLISIONHANDLER_H_
 
 #include "Entity.h"
+#include "PlayerScore.h"
 #include <iostream>
 
 enum SIDE

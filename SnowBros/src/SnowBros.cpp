@@ -48,7 +48,7 @@ enum GAME_STATE
 typedef GAME_STATE GameState;
 
 int main() {
-    	srand(time(0));
+    srand(time(0));
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
@@ -419,6 +419,8 @@ int main() {
 					nReplays = 9;
 
 					levelCounter = 0;
+
+					playerScore->addScore(playerScore->getScore() * (-1));
 				}
 				else if(key[KEY_ESCAPE])
 					doexit = true;

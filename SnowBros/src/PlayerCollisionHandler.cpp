@@ -122,6 +122,8 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 	{
 		other->setDestroyed(true);
 		tmp->setMaxGittata(100);
+		PlayerScore* p = PlayerScore::getInstance();
+		p->addScore(100);
 	}
 
 	return true;
