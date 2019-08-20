@@ -54,6 +54,8 @@ protected:
 	bool moving;
 	bool spawning;
 	float speed;
+	float maxGittata = 48;
+	float gittata = 0;
 	float max_height;
 	float f_speed; //falling speed
 	float j_speed; //jumping speed
@@ -206,6 +208,14 @@ public:
 	bool getSpinge() { return spinge; }
 
 	void setSpinge(bool spinge) { this->spinge = spinge; }
+
+	void setMaxGittata(float maxGittata) { this->maxGittata = maxGittata; }
+
+	float getMaxGittata() { return maxGittata; }
+
+	void setGittata(float gittata) { this->gittata = gittata; }
+
+	float getGittata() { return gittata; }
 };
 
 #endif /* ACTOR_H_ */

@@ -95,27 +95,33 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 	}
 
 	if (checkCollision(other) == SIDE_RIGHT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+	{
+		Actor* tmp2 = dynamic_cast<Actor*>(other);
+		if (tmp2->getLivelloPalla() == PIENA)
 		{
-			Actor* tmp2 = dynamic_cast<Actor*>(other);
-			if (tmp2->getLivelloPalla() == PIENA)
+			tmp->setSpinge(true);
+			if (tmp->isShooting())
 			{
-				tmp->setSpinge(true);
-				if (tmp->isShooting())
-				{
-					tmp2->setLivelloPalla(ROTOLA);
-					tmp2->setLastDirection(ROTOLA_RIGHT);
-					tmp2->setSpeed(9);
-					tmp2->getSpritesheetManager()->selectCurrentSpritesheet("rotola");
-				}
-				else if (tmp2->getPosX() + tmp2->getDim()->x >= screenWidth)
-				{
-					tmp2->setPosX(screenWidth - tmp2->getDim()->x);
-					tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
-				}
-				else
-					tmp2->setPosX(tmp->getPosX() + tmp->getDim()->x);
+				tmp2->setLivelloPalla(ROTOLA);
+				tmp2->setLastDirection(ROTOLA_RIGHT);
+				tmp2->setSpeed(9);
+				tmp2->getSpritesheetManager()->selectCurrentSpritesheet("rotola");
 			}
+			else if (tmp2->getPosX() + tmp2->getDim()->x >= screenWidth)
+			{
+				tmp2->setPosX(screenWidth - tmp2->getDim()->x);
+				tmp->setPosX(tmp2->getPosX() - tmp->getDim()->x);
+			}
+			else
+				tmp2->setPosX(tmp->getPosX() + tmp->getDim()->x);
 		}
+	}
+
+	if (checkCollision(other) && other->getType() == "Powerup")
+	{
+		other->setDestroyed(true);
+		tmp->setMaxGittata(100);
+	}
 
 	return true;
 }

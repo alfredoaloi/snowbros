@@ -18,38 +18,41 @@ void BulletAction::onAction(bool* key) {
 	// MAXhEIGT VIENE IDENTIFICATO COME LA MASSIMA DISTANZA IN TERMINI DI X PRIMA CHE IL PROIETTILE INIZI A CADERE
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
-	if ((tmp->getType() == "BulletLeft" || tmp->getType() == "FireLeft") && !(tmp->getLastDirection() == LEFT) && !(tmp->getLastDirection() == DOWN))
+	if (tmp->getType() == "BulletPLeft" || tmp->getType() == "BulletPRight")
+		tmp->setMaxGittata(100);
+
+	if ((tmp->getType() == "BulletLeft" || tmp->getType() == "BulletPLeft" || tmp->getType() == "FireLeft") && !(tmp->getLastDirection() == LEFT) && !(tmp->getLastDirection() == DOWN))
 	{
 		tmp->setLastDirection(LEFT);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("left");
-		tmp->setMaxHeight(tmp->getPosX() - 100);
+		tmp->setGittata(tmp->getPosX() - tmp->getMaxGittata());
 	}
 
-	else if ((tmp->getType() == "BulletRight" || tmp->getType() == "FireRight") && !(tmp->getLastDirection() == RIGHT) && !(tmp->getLastDirection() == DOWN))
+	else if ((tmp->getType() == "BulletRight" || tmp->getType() == "BulletPRight" || tmp->getType() == "FireRight") && !(tmp->getLastDirection() == RIGHT) && !(tmp->getLastDirection() == DOWN))
 	{
 		tmp->setLastDirection(RIGHT);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("right");
-		tmp->setMaxHeight(tmp->getPosX() + 100);
+		tmp->setGittata(tmp->getPosX() + tmp->getMaxGittata());
 	}
 
-	if (tmp->getType() == "BulletLeft" || tmp->getType() == "BulletRight")
+	if (tmp->getType() == "BulletLeft" || tmp->getType() == "BulletRight" || tmp->getType() == "BulletPLeft" || tmp->getType() == "BulletPRight")
 	{
-		if (tmp->getLastDirection() == LEFT && tmp->getPosX() > tmp->getMaxHeight())
+		if (tmp->getLastDirection() == LEFT && tmp->getPosX() > tmp->getGittata())
 		{
 			tmp->setPosX(tmp->getPosX() - tmp->getSpeed());
 		}
 
-		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() < tmp->getMaxHeight())
+		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() < tmp->getGittata())
 		{
 			tmp->setPosX(tmp->getPosX() + tmp->getSpeed());
 		}
 
-		if (tmp->getLastDirection() == LEFT && tmp->getPosX() < tmp->getMaxHeight())
+		if (tmp->getLastDirection() == LEFT && tmp->getPosX() < tmp->getGittata())
 		{
 			tmp->setLastDirection(DOWN);
 		}
 
-		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() > tmp->getMaxHeight())
+		if (tmp->getLastDirection() == RIGHT && tmp->getPosX() > tmp->getGittata())
 		{
 			tmp->setLastDirection(DOWN);
 		}

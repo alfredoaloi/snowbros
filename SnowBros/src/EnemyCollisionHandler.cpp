@@ -28,7 +28,7 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp->setFalling(false);
 	}
 
-	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight") &&!(tmp->getLivelloPalla() == ROTOLA))
+	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight" || other->getType() == "BulletPLeft" || other->getType() == "BulletPRight") &&!(tmp->getLivelloPalla() == ROTOLA))
 	{
 		tmp->setImmobile(true);
 		if (!(tmp->getLastDirection() == NO_DIRECTION))
@@ -56,7 +56,13 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
-		tmp2->setDestroyed(true);
+		if (!(tmp2->getLivelloPalla() == ROTOLA))
+		{
+			tmp2->setDestroyed(true);
+			int x = rand() % 10;
+			// if (x == 0)
+				tmp->getSpawner()->spawnEntity("G", tmp->getPosX(), tmp->getPosY());
+		}
 	}
 
 	return true;
