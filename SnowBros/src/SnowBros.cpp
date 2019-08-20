@@ -325,7 +325,7 @@ int main()
 			{
 				if(!isPlaying)
 				{
-					al_play_sample(sample, 1.0, 0.0,1.0,ALLEGRO_PLAYMODE_LOOP, NULL);
+					al_play_sample(sample, 1.0, 0.0,1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
 				}
 				if(key[KEY_SPACE])
 				{
@@ -662,13 +662,8 @@ int main()
 			}
 			else if(gameState == IN_GAME)
 			{
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_hold_bitmap_drawing(1);
-				levels[levelCounter]->drawLevel();
-				al_hold_bitmap_drawing(0);
-
+				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
 				//DISEGNO INTERFACCIA GRAFICA
-
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 6);
@@ -760,8 +755,11 @@ int main()
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
 				//al_use_transform(&trans);
-
 				//
+
+				al_hold_bitmap_drawing(1);
+				levels[levelCounter]->drawLevel();
+				al_hold_bitmap_drawing(0);
 			}
 			else if (gameState == GAME_OVER_MENU)
 			{

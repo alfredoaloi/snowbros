@@ -29,6 +29,7 @@ Level::Level(std::string fileName, ALLEGRO_BITMAP* levelBackground) {
 
 	this->levelBackground = levelBackground;
 	this->playerDestroyed = false;
+	this->backgroundDrawn = false;
 }
 
 Level::~Level() { }
@@ -38,7 +39,11 @@ void Level::drawLevel() {
 	if(constructedEntities.empty() || constructedControllers.empty())
 		constructLevel();
 
-	al_draw_bitmap(levelBackground, 0, 24, 0);
+	if(!backgroundDrawn)
+	{
+		al_draw_bitmap(levelBackground, 0, 24, 0);
+		backgroundDrawn = false;
+	}
 
 	for(std::vector<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
 	{
