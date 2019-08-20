@@ -304,6 +304,7 @@ int main() {
 
 	EnemyCounter* enemyCounter = EnemyCounter::getinstance();
 	PlayerScore* playerScore = PlayerScore::getInstance();
+	highScore = playerScore->readHighScore("./res/HighScore.txt");
 
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
@@ -380,7 +381,7 @@ int main() {
 				{
 					levels[levelCounter]->processLevel(nLives);
 					if(playerScore->getScore() >= highScore)
-							highScore = playerScore->getScore();
+						highScore = playerScore->getScore();
 				}
 			}
 			else if(gameState == GAME_OVER_MENU)
@@ -768,6 +769,7 @@ int main() {
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
+				playerScore->writeHighScore("./res/HighScore.txt", highScore);
 			}
 
 			//
