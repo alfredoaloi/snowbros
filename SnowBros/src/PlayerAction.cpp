@@ -36,6 +36,12 @@ void PlayerAction::onAction(bool* key)
 
 	if(!tmp->isSpawning())
 	{
+		if (invCounter > 24)
+		{
+			tmp->setInvincibile(false);
+		}
+		invCounter++;
+
 		if (!tmp->isJumping())
 		{
 			tmp->setMaxHeight(tmp->getPosY() - 32);
@@ -217,7 +223,11 @@ void PlayerAction::onAction(bool* key)
 		}
 
 		if(spawnCounter > 24)
+		{
 			tmp->setSpawning(false);
+			tmp->setInvincibile(true);
+			invCounter = 0;
+		}
 		if(spawnCounter % 6 == 0 && spawnCounter != 24)
 		{
 			if(tmp->getLastDirection() == SPAWN)
