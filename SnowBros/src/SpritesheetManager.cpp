@@ -24,7 +24,13 @@ SpritesheetManager::SpritesheetManager(std::map<std::string, Spritesheet*> map, 
 	currentSprite = 0;
 }
 
-SpritesheetManager::~SpritesheetManager() { }
+SpritesheetManager::~SpritesheetManager()
+{
+	for(std::map<std::string, Spritesheet*>::iterator it = spritesheets.begin(); it != spritesheets.end(); it++)
+	{
+		delete it->second;
+	}
+}
 
 void SpritesheetManager::nextSprite(ALLEGRO_BITMAP* sprite)
 {

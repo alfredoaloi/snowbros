@@ -11,7 +11,13 @@ SoundBank* SoundBank::instance = 0;
 
 SoundBank::SoundBank() { backgroundPlaying = false; }
 
-SoundBank::~SoundBank() { }
+SoundBank::~SoundBank()
+{
+	for(std::map<std::string, ALLEGRO_SAMPLE*>::iterator it = samples.begin(); it != samples.end(); it++)
+	{
+		al_destroy_sample(it->second);
+	}
+}
 
 SoundBank* SoundBank::getInstance()
 {

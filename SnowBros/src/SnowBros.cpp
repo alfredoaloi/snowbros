@@ -59,7 +59,6 @@ int main()
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer = NULL;
 	ALLEGRO_FONT* font;
-	ALLEGRO_SAMPLE* sample;
 
 	al_init_image_addon();
 	al_init_font_addon();
@@ -895,7 +894,6 @@ int main()
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
-	al_destroy_sample(sample);
 
 	return 0;
 }
