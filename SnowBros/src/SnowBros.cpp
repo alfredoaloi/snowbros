@@ -32,6 +32,7 @@
 #include "PowerupCollisionHandler.h"
 #include "BossOneCollisionHandler.h"
 #include "PlayerScore.h"
+#include "SoundBank.h"
 
 const float FPS = 10.0;
 const int BOUNCER_SIZE = 30;
@@ -340,10 +341,26 @@ int main()
 	PlayerScore* playerScore = PlayerScore::getInstance();
 	highScore = playerScore->readHighScore("./res/HighScore.txt");
 
-	al_reserve_samples(1);
+	SoundBank* soundBank = SoundBank::getInstance();
 
-	sample = al_load_sample("./res/MainMenu.wav");
-	bool isPlaying = false;
+	al_reserve_samples(1);
+	soundBank->addSample("main_menu", al_load_sample("./res/tracks/MainMenu.wav"));
+	soundBank->addSample("level", al_load_sample("./res/tracks/Level.wav"));
+	soundBank->addSample("boss_level", al_load_sample("./res/tracks/BossLevel.wav"));
+	soundBank->addSample("game_over", al_load_sample("./res/tracks/GameOver.wav"));
+	soundBank->addSample("end", al_load_sample("./res/tracks/End.wav"));
+	soundBank->addSample("boss_defeat", al_load_sample("./res/tracks/BossDefeat.wav"));
+	soundBank->addSample("bullet", al_load_sample("./res/tracks/Bullet.wav"));
+	soundBank->addSample("death", al_load_sample("./res/tracks/Death.wav"));
+	soundBank->addSample("delball", al_load_sample("./res/tracks/DelBall.wav"));
+	soundBank->addSample("enemy_ball", al_load_sample("./res/tracks/EnemyBall.wav"));
+	soundBank->addSample("jump", al_load_sample("./res/tracks/Jump.wav"));
+	soundBank->addSample("power_up", al_load_sample("./res/tracks/PowerUp.wav"));
+	soundBank->addSample("push_ball", al_load_sample("./res/tracks/PushBall.wav"));
+	soundBank->addSample("spawn", al_load_sample("./res/tracks/Spawn.wav"));
+
+	bool backgroundPlaying = false;
+
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -352,12 +369,10 @@ int main()
 
 			if(gameState == MAIN_MENU)
 			{
-				if(!isPlaying)
-				{
-					al_play_sample(sample, 1.0, 0.0,1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
-				}
+				soundBank->playBackgroundMusic("main_menu");
 				if(key[KEY_SPACE])
 				{
+					soundBank->stopBackgroundMusic();
 					gameState = IN_GAME_TRANSITION;
 					blinkCounter = 0;
 					infBlink = 0;
@@ -369,6 +384,11 @@ int main()
 			}
 			else if(gameState == IN_GAME)
 			{
+				if(levelCounter != 2 || levelCounter != 5)
+					soundBank->playBackgroundMusic("level");
+				else
+					soundBank->playBackgroundMusic("boss_level");
+
 				if(nReplays >= 0)
 				{
 					if(nLives < 0)
@@ -385,6 +405,7 @@ int main()
 
 						if(levelCounter >= nLevels)
 						{
+							soundBank->stopBackgroundMusic();
 							gameState = END_MENU_TRANSITION;
 							blinkCounter = 0;
 							infBlink = 0;
@@ -411,6 +432,7 @@ int main()
 				}
 				else
 				{
+					soundBank->stopBackgroundMusic();
 					gameState = GAME_OVER_MENU_TRANSITION;
 					blinkCounter = 0;
 					infBlink = 0;
@@ -428,8 +450,15 @@ int main()
 			}
 			else if(gameState == GAME_OVER_MENU)
 			{
+				if(!backgroundPlaying)
+				{
+					soundBank->playSample("game_over");
+					backgroundPlaying = true;
+				}
 				if(key[KEY_SPACE])
 				{
+					backgroundPlaying = false;
+					soundBank->stopBackgroundMusic();
 					gameState = MAIN_MENU_TRANSITION;
 					blinkCounter = 0;
 					infBlink = 0;
@@ -448,8 +477,10 @@ int main()
 			}
 			else if(gameState == END_MENU)
 			{
+				soundBank->playBackgroundMusic("end");
 				if(key[KEY_SPACE])
 				{
+					soundBank->stopBackgroundMusic();
 					gameState = MAIN_MENU_TRANSITION;
 					blinkCounter = 0;
 					infBlink = 0;
