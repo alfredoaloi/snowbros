@@ -11,8 +11,10 @@
 #include "CollisionHandler.h"
 #include "Actor.h"
 #include <cmath>
+#include "SoundBank.h"
 
 class PlayerCollisionHandler: public CollisionHandler {
+	SoundBank* soundBank;
 public:
 	PlayerCollisionHandler();
 	virtual ~PlayerCollisionHandler();

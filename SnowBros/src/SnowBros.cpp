@@ -360,7 +360,7 @@ int main()
 
 	SoundBank* soundBank = SoundBank::getInstance();
 
-	al_reserve_samples(1);
+	al_reserve_samples(14);
 	soundBank->addSample("main_menu", al_load_sample("./res/tracks/MainMenu.wav"));
 	soundBank->addSample("level", al_load_sample("./res/tracks/Level.wav"));
 	soundBank->addSample("boss_level", al_load_sample("./res/tracks/BossLevel.wav"));
@@ -377,6 +377,9 @@ int main()
 	soundBank->addSample("spawn", al_load_sample("./res/tracks/Spawn.wav"));
 
 	bool backgroundPlaying = false;
+	bool playerSpawned = false;
+	bool changeMusic = false;
+	std::string backgroundMusic;
 
 	while (!doexit) {
 		ALLEGRO_EVENT ev;
@@ -389,6 +392,7 @@ int main()
 				soundBank->playBackgroundMusic("main_menu");
 				if(key[KEY_SPACE])
 				{
+					backgroundMusic = "level";
 					soundBank->stopBackgroundMusic();
 					gameState = IN_GAME_TRANSITION;
 					blinkCounter = 0;
@@ -397,14 +401,19 @@ int main()
 
 					transparency = 0;
 					tmp = 0;
+					playerSpawned = false;
 				}
 			}
 			else if(gameState == IN_GAME)
 			{
-				if(levelCounter != 2 || levelCounter != 5)
-					soundBank->playBackgroundMusic("level");
+				if(changeMusic)
+				{
+					soundBank->playBackgroundMusic(backgroundMusic);
+				}
 				else
-					soundBank->playBackgroundMusic("boss_level");
+				{
+					soundBank->playBackgroundMusic("level");
+				}
 
 				if(nReplays >= 0)
 				{
@@ -435,6 +444,19 @@ int main()
 						}
 						else
 						{
+							if((levelCounter == 2 || levelCounter == 5) && backgroundMusic != "boss_level")
+							{
+								soundBank->stopBackgroundMusic();
+								changeMusic = true;
+								backgroundMusic = "boss_level";
+							}
+							else if(backgroundMusic == "boss_level")
+							{
+								soundBank->stopBackgroundMusic();
+								changeMusic = true;
+								backgroundMusic = "level";
+							}
+
 							gameState = LEVEL_TRANSITION;
 							blinkCounter = 0;
 							infBlink = 0;
@@ -444,6 +466,7 @@ int main()
 							tmp = 0;
 
 							levels[levelCounter - 1]->clearLevel();
+							playerSpawned = false;
 						}
 					}
 				}
@@ -460,6 +483,11 @@ int main()
 				}
 				if(levelCounter < nLevels)
 				{
+					if(gameState == IN_GAME && !playerSpawned)
+					{
+						levels[levelCounter]->spawnPlayer();
+						playerSpawned = true;
+					}
 					levels[levelCounter]->processLevel(nLives);
 					if(playerScore->getScore() >= highScore)
 						highScore = playerScore->getScore();

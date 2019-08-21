@@ -9,7 +9,7 @@
 
 //PlayerAction::PlayerAction(Player* e) : Action(e) { }
 
-PlayerAction::PlayerAction() { spawnCounter = 0; mortoCounter = 0; }
+PlayerAction::PlayerAction() { spawnCounter = 0; mortoCounter = 0; soundBank = SoundBank::getInstance(); }
 
 PlayerAction::~PlayerAction() { }
 
@@ -25,6 +25,7 @@ void PlayerAction::onAction(bool* key)
 		{
 			if(tmp->getLastDirection() == SPAWN)
 			{
+				soundBank->playSample("death");
 				tmp->getSpritesheetManager()->selectCurrentSpritesheet("morto");
 				tmp->setLastDirection(NO_DIRECTION);
 			}
@@ -122,18 +123,24 @@ void PlayerAction::onAction(bool* key)
 
 			if(!tmp->isJumping() && !tmp->isFalling())
 			{
+				soundBank->playSample("bullet");
 				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
 				tmp->setShooting(true);
 				if (tmp->getLastDirection() == SHOOTING_LEFT)
+				{
 					if (tmp->getMaxGittata() == 100)
 						tmp->getSpawner()->spawnEntity("BPL", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);
 					else
 						tmp->getSpawner()->spawnEntity("BL", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);
+				}
 				if (tmp->getLastDirection() == SHOOTING_RIGHT)
+				{
 					if (tmp->getMaxGittata() == 100)
 						tmp->getSpawner()->spawnEntity("BPR", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);
 					else
-						tmp->getSpawner()->spawnEntity("BR", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);			}
+						tmp->getSpawner()->spawnEntity("BR", tmp->getPosX(), tmp->getPosY() + tmp->getDim()->y/2);
+				}
+			}
 		}
 
 		if(!key[KEY_SPACE])
@@ -148,7 +155,9 @@ void PlayerAction::onAction(bool* key)
 		//		isMoving = true;
 		//	}
 
-		if (key[KEY_UP] && tmp->isCanJump()) {
+		if (key[KEY_UP] && tmp->isCanJump())
+		{
+			soundBank->playSample("jump");
 			tmp->setJumping(true);
 			tmp->setFalling(false);
 			tmp->setCanJump(false);
@@ -232,6 +241,7 @@ void PlayerAction::onAction(bool* key)
 		{
 			if(tmp->getLastDirection() == SPAWN)
 			{
+				soundBank->playSample("spawn");
 				tmp->getSpritesheetManager()->selectCurrentSpritesheet("respawn");
 				tmp->setLastDirection(NO_DIRECTION);
 			}

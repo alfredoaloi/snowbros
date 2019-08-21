@@ -10,8 +10,10 @@
 
 #include "CollisionHandler.h"
 #include "Actor.h"
+#include "SoundBank.h"
 
 class EnemyCollisionHandler: public CollisionHandler {
+	SoundBank* soundBank;
 public:
 	EnemyCollisionHandler();
 	virtual ~EnemyCollisionHandler();

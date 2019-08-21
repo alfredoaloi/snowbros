@@ -15,11 +15,13 @@ enum MYKEYS {
 #include "Action.h"
 #include "Actor.h"
 #include <string>
+#include "SoundBank.h"
 
 class PlayerAction: public Action {
 	int spawnCounter;
 	int mortoCounter;
 	int invCounter;
+	SoundBank* soundBank;
 public:
 	PlayerAction();
 	//PlayerAction(Player*);

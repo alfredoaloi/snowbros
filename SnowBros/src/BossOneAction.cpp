@@ -40,8 +40,8 @@ void BossOneAction::onAction(bool* key) {
 		tmp->setJumping(true);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY() - 100);
-		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY());
+//		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY() - 100);
+//		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY());
 	}
 
 	if (tmp->isFalling() && saltaCounter >= 0)
