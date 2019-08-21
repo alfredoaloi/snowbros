@@ -36,7 +36,7 @@ void PlayerAction::onAction(bool* key)
 
 	if(!tmp->isSpawning())
 	{
-		if (invCounter > 24)
+		if (invCounter > 224)
 		{
 			tmp->setInvincibile(false);
 		}

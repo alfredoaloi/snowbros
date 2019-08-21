@@ -44,6 +44,7 @@ typedef LAST_DIRECTION LastDirection;
 
 class Actor : public Entity {
 protected:
+	int vita = 50;
 	bool immobile;
 	bool invincibile = false;
 	bool spinge = false;
@@ -227,6 +228,10 @@ public:
 	bool getInvincibile() { return invincibile; }
 
 	void setInvincibile(bool invincibile) { this->invincibile = invincibile; }
+
+	int getVita() { return vita; }
+
+	void setVita(int vita) { this->vita = vita; }
 };
 
 #endif /* ACTOR_H_ */

@@ -28,7 +28,7 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp->setFalling(false);
 	}
 
-	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight" || other->getType() == "BulletPLeft" || other->getType() == "BulletPRight") &&!(tmp->getLivelloPalla() == ROTOLA))
+	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight" || other->getType() == "BulletPLeft" || other->getType() == "BulletPRight") && !(tmp->getLivelloPalla() == ROTOLA))
 	{
 		tmp->setImmobile(true);
 		if (!(tmp->getLastDirection() == NO_DIRECTION))

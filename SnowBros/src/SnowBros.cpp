@@ -22,6 +22,7 @@
 #include "BulletAction.h"
 #include "EnemyAction.h"
 #include "PowerupAction.h"
+#include "BossOneAction.h"
 #include "TileDescriptor.h"
 #include "ActorDescriptor.h"
 #include "SpritesheetManager.h"
@@ -29,6 +30,7 @@
 #include "BulletCollisionHandler.h"
 #include "EnemyCollisionHandler.h"
 #include "PowerupCollisionHandler.h"
+#include "BossOneCollisionHandler.h"
 #include "PlayerScore.h"
 
 const float FPS = 10.0;
@@ -182,6 +184,16 @@ int main()
 	powerupSpritesheetManager->setWidth(16);
 	powerupSpritesheetManager->setHeight(16);
 
+	// Boss 1
+	SpritesheetManager* bossOneSpritesheetManager = new SpritesheetManager();
+	bossOneSpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/boss1/fermoL.bmp"), 1));
+	bossOneSpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/boss1/saltaL.bmp"), 1));
+	bossOneSpritesheetManager->setNewSpritesheet("pocoMortoL", new Spritesheet(al_load_bitmap("./res/boss1/pocoMortoL.bmp"), 1));
+	bossOneSpritesheetManager->setNewSpritesheet("quasiMortoL", new Spritesheet(al_load_bitmap("./res/boss1/quasiMortoL.bmp"), 1));
+	bossOneSpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/boss1/mortoL.bmp"), 1));
+	bossOneSpritesheetManager->setWidth(66);
+	bossOneSpritesheetManager->setHeight(96);
+
 	levels[0]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[0]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
 	levels[0]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
@@ -226,6 +238,7 @@ int main()
 	levels[2]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	levels[2]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 	levels[2]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
+	levels[2]->registerEntity("B", new ActorDescriptor(new Dimensions(66, 96),  0, 32, 10, 10, new Controller(key), new BossOneAction(), new BossOneCollisionHandler(), bossOneSpritesheetManager, "BossOne"));
 
 	levels[3]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[3]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
