@@ -67,7 +67,7 @@ int main()
 	bool redraw = true;
 	bool doexit = false;
 
-	const int nLevels = 4;
+	const int nLevels = 5;
 
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
@@ -89,8 +89,9 @@ int main()
 
 	levels[0] = new Level("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
 	levels[1] = new Level("./res/Level2.txt", al_load_bitmap("./res/Livello2.bmp"));
-	levels[2] = new Level("./res/Level3.txt", al_load_bitmap("./res/Livello3.bmp"));
-	levels[3] = new Level("./res/Level4.txt", al_load_bitmap("./res/Livello4.bmp"));
+	levels[2] = new Level("./res/LevelBoss1.txt", al_load_bitmap("./res/LivelloBoss1.bmp"));
+	levels[3] = new Level("./res/Level3.txt", al_load_bitmap("./res/Livello3.bmp"));
+	levels[4] = new Level("./res/Level4.txt", al_load_bitmap("./res/Livello4.bmp"));
 
 	// player
 	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
@@ -240,6 +241,21 @@ int main()
 	levels[3]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	levels[3]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 	levels[3]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
+
+	levels[4]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
+	levels[4]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
+	levels[4]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
+	levels[4]->registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
+	levels[4]->registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
+	levels[4]->registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
+	levels[4]->registerEntity("BPL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletPLeft"));
+	levels[4]->registerEntity("BPR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletPRight"));
+	levels[4]->registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
+	levels[4]->registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	levels[4]->registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
+	levels[4]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
+	levels[4]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
+	levels[4]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
 
 	al_init_primitives_addon();
 //	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
@@ -780,8 +796,8 @@ int main()
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 255, 255), 128, 154, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
-				playerScore->writeHighScore("./res/HighScore.txt", highScore);
 			}
+			playerScore->writeHighScore("./res/HighScore.txt", highScore);
 
 			//
 			al_flip_display();
