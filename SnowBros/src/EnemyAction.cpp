@@ -19,6 +19,18 @@ void EnemyAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
+	if (tmp->getType() == "MinionOne" && tmp->isSpawning())
+	{
+		if (tmp->getPosX() > 20)
+			tmp->setPosX(tmp->getPosX() - 10);
+		else
+			tmp->setSpawning(false);
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("volaL");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		tmp->setImmobile(false);
+		return;
+	}
+
 	if (tmp->getImmobile() && (tmp->getLastDirection() == NO_DIRECTION || tmp->getLastDirection() == NO_DIRECTION_LEFT || tmp->getLastDirection() == NO_DIRECTION_RIGHT) && tmp->isSpawning())
 	{
 		tmp->setFalling(true);
@@ -67,7 +79,10 @@ void EnemyAction::onAction(bool* key)
 				action = right;
 				break;
 			case 2:
-				action = up;
+				if (tmp->getType() == "MinionOne")
+					action = fermo;
+				else
+					action = up;
 				break;
 			case 3:
 				if (tmp->getType() == "Enemy2")

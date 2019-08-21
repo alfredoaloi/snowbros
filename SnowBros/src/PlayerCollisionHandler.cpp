@@ -62,7 +62,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
 	}
 
-	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
+	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "BossOne" || other->getType() == "BossTwo" || other->getType() == "MinionOne" || other->getType() == "MinionTwo" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getLivelloPalla() == NULLA && !tmp->getImmobile() && !tmp2->getImmobile() && !tmp->getInvincibile())

@@ -195,6 +195,22 @@ int main()
 	bossOneSpritesheetManager->setWidth(66);
 	bossOneSpritesheetManager->setHeight(96);
 
+	// enemy 3
+	SpritesheetManager* minion1SpritesheetManager = new SpritesheetManager();
+	minion1SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/minion1/camminaL.bmp"), 2));
+	minion1SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/minion1/camminaR.bmp"), 2));
+	minion1SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/minion1/fermoL.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/minion1/fermoR.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/minion1/mortoL.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/minion1/mortoR.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("volaL", new Spritesheet(al_load_bitmap("./res/minion1/volaL.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
+	minion1SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
+	minion1SpritesheetManager->setWidth(21);
+	minion1SpritesheetManager->setHeight(30);
+
 	levels[0]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[0]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
 	levels[0]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
@@ -239,7 +255,8 @@ int main()
 	levels[2]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	levels[2]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 	levels[2]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
-	levels[2]->registerEntity("B", new ActorDescriptor(new Dimensions(66, 96),  0, 32, 10, 10, new Controller(key), new BossOneAction(), new BossOneCollisionHandler(), bossOneSpritesheetManager, "BossOne"));
+	levels[2]->registerEntity("B1", new ActorDescriptor(new Dimensions(66, 96),  0, 32, 10, 10, new Controller(key), new BossOneAction(), new BossOneCollisionHandler(), bossOneSpritesheetManager, "BossOne"));
+	levels[2]->registerEntity("M1", new ActorDescriptor(new Dimensions(21, 30),  6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), minion1SpritesheetManager, "MinionOne"));
 
 	levels[3]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[3]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));

@@ -101,7 +101,7 @@ void Level::processLevel(int& nLives)
 		{
 			Actor* tmp = dynamic_cast<Actor*>(constructedCollisionHandlers[i]->getEntity());
 			bool chk = false;
-			for(unsigned j = 0; j < constructedEntities.size(); j++)
+			for(j = 0; j < constructedEntities.size(); j++)
 			{
 				if(constructedCollisionHandlers[i]->getEntity() != constructedEntities[j])
 				{

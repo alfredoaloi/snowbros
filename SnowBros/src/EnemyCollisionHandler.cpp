@@ -31,8 +31,7 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight" || other->getType() == "BulletPLeft" || other->getType() == "BulletPRight") && !(tmp->getLivelloPalla() == ROTOLA))
 	{
 		tmp->setImmobile(true);
-		if (!(tmp->getLastDirection() == NO_DIRECTION))
-			tmp->setLastDirection(NO_DIRECTION);
+		tmp->setLastDirection(NO_DIRECTION);
 		if (tmp->getLivelloPalla() == NULLA)
 			tmp->setLivelloPalla(POCA);
 		else if (tmp->getLivelloPalla() == POCA)
@@ -63,7 +62,7 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp->setLastDirection(ROTOLA_LEFT);
 	}
 
-	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (!(tmp2->getLivelloPalla() == ROTOLA))

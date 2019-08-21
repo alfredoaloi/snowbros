@@ -13,7 +13,7 @@ void Entity::onRedraw() { }
 
 Entity::Entity(float x, float y, Dimensions* d, std::string t) : pos_x(x), pos_y(y), dim(d), type(t), spawner(nullptr)
 {
-	if(t == "Enemy1" || t == "Enemy2" || t == "Enemy3" || t == "BossOne" || t == "BossTwo")
+	if(t == "Enemy1" || t == "Enemy2" || t == "Enemy3" || t == "BossOne" || t == "BossTwo" || t == "MinionOne" || t == "MinionTwo")
 	{
 		enemyCounter = EnemyCounter::getinstance();
 		enemyCounter->incCounter();
