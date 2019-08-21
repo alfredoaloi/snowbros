@@ -11,12 +11,14 @@
 #include "Action.h"
 #include "Actor.h"
 #include "stdlib.h"
+#include "SoundBank.h"
 
 enum randAction { left, right, up, shoot, fermo };
 
 class EnemyAction: public Action {
 	int cooldown;
 	int mortoCounter;
+	SoundBank* soundBank;
 public:
 	EnemyAction();
 	virtual ~EnemyAction();

@@ -145,42 +145,41 @@ void Level::processLevel(int& nLives)
 
 void Level::constructLevel()
 {
-	for(int i = 0; i < dim_y; i++)
-	{
-		for(int j = 0; j < dim_x; j++)
-		{
-			std::unordered_map<std::string, EntityDescriptor*>::iterator it;
-			it = entities.find(tileMap[i][j]);
-			if(it != entities.end())
-			{
-				Entity* tmpEntity = it->second->getDescripted((float)j * (float)16, (float)i * (float)16 + (float)24);
-				if(it->second->getDescriptedController() != nullptr)
-				{
-					Controller* tmpController = it->second->getDescriptedController();
-					Action* action = it->second->getDescriptedAction();
-					tmpEntity->setSpawner(new LevelSpawner(this));
-					action->setEntity(tmpEntity);
-					tmpController->changeAction(action);
-					constructedControllers.push_back(tmpController);
-				}
-				else
-					constructedControllers.push_back(nullptr);
+	for (int i = 0; i < dim_y; i++) {
+		for (int j = 0; j < dim_x; j++) {
+			if (tileMap[i][j] != "P") {
+				std::unordered_map<std::string, EntityDescriptor*>::iterator it;
+				it = entities.find(tileMap[i][j]);
+				if (it != entities.end()) {
+					Entity *tmpEntity = it->second->getDescripted(
+							(float) j * (float) 16,
+							(float) i * (float) 16 + (float) 24);
+					if (it->second->getDescriptedController() != nullptr) {
+						Controller *tmpController =
+								it->second->getDescriptedController();
+						Action *action = it->second->getDescriptedAction();
+						tmpEntity->setSpawner(new LevelSpawner(this));
+						action->setEntity(tmpEntity);
+						tmpController->changeAction(action);
+						constructedControllers.push_back(tmpController);
+					} else
+						constructedControllers.push_back(nullptr);
 
-				if(it->second->getDescriptedCollisionHandler() != nullptr)
-				{
-					CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
-					tmpCollisionhandler->setEntity(tmpEntity);
-					constructedCollisionHandlers.push_back(tmpCollisionhandler);
-				}
-				else
-					constructedCollisionHandlers.push_back(nullptr);
+					if (it->second->getDescriptedCollisionHandler()
+							!= nullptr) {
+						CollisionHandler *tmpCollisionhandler =
+								it->second->getDescriptedCollisionHandler();
+						tmpCollisionhandler->setEntity(tmpEntity);
+						constructedCollisionHandlers.push_back(
+								tmpCollisionhandler);
+					} else
+						constructedCollisionHandlers.push_back(nullptr);
 
-				constructedEntities.push_back(tmpEntity);
+					constructedEntities.push_back(tmpEntity);
+				}
 			}
 		}
 	}
-
-	//entities.clear();
 }
 
 void Level::registerEntity(std::string key, EntityDescriptor* e) { entities[key] = e; }

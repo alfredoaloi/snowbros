@@ -15,6 +15,7 @@
 class SoundBank {
 	static SoundBank* instance;
 	std::map<std::string, ALLEGRO_SAMPLE*> samples;
+	bool backgroundPlaying;
 protected:
 	SoundBank();
 	virtual ~SoundBank();

@@ -9,7 +9,7 @@
 
 //PlayerAction::PlayerAction(Player* e) : Action(e) { }
 
-PlayerAction::PlayerAction() { spawnCounter = 0; mortoCounter = 0; }
+PlayerAction::PlayerAction() { spawnCounter = 0; mortoCounter = 0; soundBank = SoundBank::getInstance();}
 
 PlayerAction::~PlayerAction() { }
 
@@ -25,6 +25,7 @@ void PlayerAction::onAction(bool* key)
 		{
 			if(tmp->getLastDirection() == SPAWN)
 			{
+				soundBank->playSample("death");
 				tmp->getSpritesheetManager()->selectCurrentSpritesheet("morto");
 				tmp->setLastDirection(NO_DIRECTION);
 			}
@@ -122,6 +123,7 @@ void PlayerAction::onAction(bool* key)
 
 			if(!tmp->isJumping() && !tmp->isFalling())
 			{
+				soundBank->playSample("bullet");
 				tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
 				tmp->setShooting(true);
 				if (tmp->getLastDirection() == SHOOTING_LEFT)
@@ -149,6 +151,7 @@ void PlayerAction::onAction(bool* key)
 		//	}
 
 		if (key[KEY_UP] && tmp->isCanJump()) {
+			soundBank->playSample("jump");
 			tmp->setJumping(true);
 			tmp->setFalling(false);
 			tmp->setCanJump(false);
@@ -232,6 +235,7 @@ void PlayerAction::onAction(bool* key)
 		{
 			if(tmp->getLastDirection() == SPAWN)
 			{
+				soundBank->playSample("spawn");
 				tmp->getSpritesheetManager()->selectCurrentSpritesheet("respawn");
 				tmp->setLastDirection(NO_DIRECTION);
 			}

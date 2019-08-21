@@ -7,8 +7,7 @@
 
 #include "EnemyCollisionHandler.h"
 
-EnemyCollisionHandler::EnemyCollisionHandler() {
-}
+EnemyCollisionHandler::EnemyCollisionHandler() { soundBank = SoundBank::getInstance(); }
 
 EnemyCollisionHandler::~EnemyCollisionHandler() {
 }
@@ -68,6 +67,7 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (!(tmp2->getLivelloPalla() == ROTOLA))
 		{
+			soundBank->playSample("enemy_ball");
 			if (tmp2->getLastDirection() == LEFT)
 				tmp2->setLastDirection(NO_DIRECTION_LEFT);
 			else

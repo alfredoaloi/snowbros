@@ -7,7 +7,7 @@
 
 #include "PlayerCollisionHandler.h"
 
-PlayerCollisionHandler::PlayerCollisionHandler() { }
+PlayerCollisionHandler::PlayerCollisionHandler() { soundBank = SoundBank::getInstance(); }
 
 PlayerCollisionHandler::~PlayerCollisionHandler() { }
 
@@ -80,6 +80,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 			tmp->setSpinge(true);
 			if (tmp->isShooting())
 			{
+				soundBank->playSample("push_ball");
 				tmp2->setLivelloPalla(ROTOLA);
 				tmp2->setLastDirection(ROTOLA_LEFT);
 				tmp2->setSpeed(9);
@@ -120,6 +121,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 
 	if (checkCollision(other) && other->getType() == "Powerup")
 	{
+		soundBank->playSample("power_up");
 		other->setDestroyed(true);
 		tmp->setMaxGittata(100);
 		PlayerScore* p = PlayerScore::getInstance();

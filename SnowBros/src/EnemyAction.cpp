@@ -10,6 +10,7 @@
 
 EnemyAction::EnemyAction() {
 	mortoCounter = 0;
+	soundBank = SoundBank::getInstance();
 }
 
 EnemyAction::~EnemyAction() {
@@ -262,6 +263,7 @@ void EnemyAction::onAction(bool* key)
 
 	if (tmp->getLivelloPalla() == ROTOLA && tmp->getPosY() >= 176 && (tmp->getPosX() - tmp->getSpeed() <= 0 || tmp->getPosX() + tmp->getDim()->x + tmp->getSpeed() >= screenWidth))
 	{
+		soundBank->playSample("delball");
 		tmp->setDestroyed(true);
 		PlayerScore* p = PlayerScore::getInstance();
 		p->addScore(400);
