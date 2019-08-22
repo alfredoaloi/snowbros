@@ -71,6 +71,8 @@ int main()
 
 	const int nLevels = 5;
 
+	bool fullscreen = false;
+
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
 		return -1;
@@ -288,30 +290,33 @@ int main()
 	levels[4]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
 
 	al_init_primitives_addon();
-//	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
-//	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-//	//display = al_create_display(disp_data.width, disp_data.height);*/
-//
-//	float windowWidth = disp_data.width;
-//	float windowHeight = disp_data.height;
-//
-//	//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-//	display = al_create_display(windowWidth, windowHeight);
-//	al_clear_to_color(al_map_rgb(100, 100, 100));
-//
-//	windowWidth = al_get_display_width(display);
-//	windowHeight = al_get_display_height(display);
-//
-//	float sx = windowWidth / (float) screenWidth;
-//	float sy = windowHeight / (float) screenHeight;
-//
-//	//Provare il metodo dello stretched buffer
-//	ALLEGRO_TRANSFORM trans;
-//	al_identity_transform(&trans);
-//	al_scale_transform(&trans, sx, sy);
-//	al_use_transform(&trans);
+	ALLEGRO_TRANSFORM trans;
+	if(fullscreen)
+	{
+		al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
+		al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+		//display = al_create_display(disp_data.width, disp_data.height);*/
 
-	display = al_create_display(256, 224);
+		float windowWidth = disp_data.width;
+		float windowHeight = disp_data.height;
+
+		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+		display = al_create_display(windowWidth, windowHeight);
+		al_clear_to_color(al_map_rgb(100, 100, 100));
+
+		windowWidth = al_get_display_width(display);
+		windowHeight = al_get_display_height(display);
+
+		float sx = windowWidth / (float) screenWidth;
+		float sy = windowHeight / (float) screenHeight;
+
+		al_identity_transform(&trans);
+		al_scale_transform(&trans, sx, sy);
+		al_use_transform(&trans);
+	}
+
+	if(!fullscreen)
+		display = al_create_display(256, 224);
 
 	if (!display) {
 		std::cerr << "Failed to create display!";
@@ -479,6 +484,7 @@ int main()
 
 					transparency = 0;
 					tmp = 0;
+					levels[levelCounter]->clearLevel();
 				}
 				if(levelCounter < nLevels)
 				{
@@ -515,6 +521,7 @@ int main()
 					nReplays = 9;
 
 					levelCounter = 0;
+					playerScore->addScore(playerScore->getScore() * (-1));
 				}
 				else if(key[KEY_ESCAPE])
 					doexit = true;
@@ -603,6 +610,7 @@ int main()
 			//TRANSIZIONI
 			if (gameState == IN_GAME_TRANSITION)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
@@ -619,6 +627,7 @@ int main()
 			}
 			else if (gameState == MAIN_MENU_TRANSITION)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
@@ -630,6 +639,7 @@ int main()
 			}
 			else if (gameState == GAME_OVER_MENU_TRANSITION)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
@@ -641,6 +651,7 @@ int main()
 			}
 			else if (gameState == END_MENU_TRANSITION)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 0, 256, 224, al_map_rgba(0, 0, 0, transparency));
@@ -652,62 +663,73 @@ int main()
 			}
 			if (gameState == LEVEL_TRANSITION)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
 
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore->getScore());
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore->getScore());
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 82, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nLives);
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 81, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nLives);
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 98, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 97, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 98, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", highScore);
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 97, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", highScore);
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
 
-
+				if(fullscreen) al_use_transform(&trans);
 				if(transparency <= 255)
 				{
 					al_draw_filled_rectangle(0, 24, 256, 224, al_map_rgba(0, 0, 0, transparency));
@@ -735,6 +757,7 @@ int main()
 			//STATI
 			else if(gameState == MAIN_MENU)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				al_draw_bitmap(al_load_bitmap("./res/MainMenu.bmp"), 0, 0, 0);
 				if(blinkCounter >= INT_MAX)
 					blinkCounter = 0;
@@ -743,10 +766,12 @@ int main()
 				{
 					al_identity_transform(&trans2);
 					al_translate_transform(&trans2, 87, 168);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
 					al_use_transform(&trans2);
 					al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "PRESS SPACE");
 					al_identity_transform(&trans2);
 					al_translate_transform(&trans2, 86, 168);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
 					al_use_transform(&trans2);
 					al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "PRESS SPACE");
 					blinkCounter++;
@@ -763,6 +788,7 @@ int main()
 				}
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
+				if(fullscreen) al_use_transform(&trans);
 			}
 			else if(gameState == IN_GAME)
 			{
@@ -771,21 +797,25 @@ int main()
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "1P");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 18, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", playerScore->getScore());
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "1P");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 17, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", playerScore->getScore());
 
@@ -799,11 +829,13 @@ int main()
 						al_identity_transform(&trans2);
 						al_scale_transform(&trans2, 1, 0.77);
 						al_translate_transform(&trans2, 82, 14);
+						if(fullscreen) al_compose_transform(&trans2, &trans);
 						al_use_transform(&trans2);
 						al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nReplays);
 						al_identity_transform(&trans2);
 						al_scale_transform(&trans2, 1, 0.77);
 						al_translate_transform(&trans2, 81, 14);
+						if(fullscreen) al_compose_transform(&trans2, &trans);
 						al_use_transform(&trans2);
 						al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nReplays);
 						blinkCounter++;
@@ -824,11 +856,13 @@ int main()
 					al_identity_transform(&trans2);
 					al_scale_transform(&trans2, 1, 0.77);
 					al_translate_transform(&trans2, 82, 14);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
 					al_use_transform(&trans2);
 					al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%d", nLives);
 					al_identity_transform(&trans2);
 					al_scale_transform(&trans2, 1, 0.77);
 					al_translate_transform(&trans2, 81, 14);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
 					al_use_transform(&trans2);
 					al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%d", nLives);
 					blinkCounter = 0;
@@ -839,26 +873,30 @@ int main()
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 98, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "HI");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 97, 6);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "HI");
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 98, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 0, 0, 0, "%07d", highScore);
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);
 				al_translate_transform(&trans2, 97, 14);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
 				al_use_transform(&trans2);
 				al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "%07d", highScore);
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
-				//al_use_transform(&trans);
+				if(fullscreen) al_use_transform(&trans);
 				//
 
 				al_hold_bitmap_drawing(1);
@@ -867,6 +905,7 @@ int main()
 			}
 			else if (gameState == GAME_OVER_MENU)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 64, ALLEGRO_ALIGN_CENTRE, "GAME OVER");
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 124, ALLEGRO_ALIGN_CENTRE, "[ESC] EXIT");
@@ -876,6 +915,7 @@ int main()
 			}
 			else if (gameState == END_MENU)
 			{
+				if(fullscreen) al_use_transform(&trans);
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 64, ALLEGRO_ALIGN_CENTRE, "YOU WON!");
 				al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 94, ALLEGRO_ALIGN_CENTRE, "YOUR SCORE IS: %d", playerScore->getScore());
 				al_draw_text(font, al_map_rgb(255, 80, 0), 129, 124, ALLEGRO_ALIGN_CENTRE, "[SPACE] MAIN MENU");

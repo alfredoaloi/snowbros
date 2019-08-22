@@ -104,6 +104,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 			tmp->setSpinge(true);
 			if (tmp->isShooting())
 			{
+				soundBank->playSample("push_ball");
 				tmp2->setLivelloPalla(ROTOLA);
 				tmp2->setLastDirection(ROTOLA_RIGHT);
 				tmp2->setSpeed(9);
