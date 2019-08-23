@@ -841,6 +841,9 @@ int main()
 			}
 			else if(gameState == IN_GAME)
 			{
+				al_hold_bitmap_drawing(1);
+				levels[levelCounter]->drawLevel();
+				al_hold_bitmap_drawing(0);
 				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
 				//DISEGNO INTERFACCIA GRAFICA
 				al_identity_transform(&trans2);
@@ -947,10 +950,6 @@ int main()
 				al_use_transform(&trans2);
 				if(fullscreen) al_use_transform(&trans);
 				//
-
-				al_hold_bitmap_drawing(1);
-				levels[levelCounter]->drawLevel();
-				al_hold_bitmap_drawing(0);
 			}
 			else if (gameState == GAME_OVER_MENU)
 			{
