@@ -68,7 +68,11 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getType() == "BossOne" || tmp2->getType() == "BossTwo")
 		{
-			tmp2->setVita(tmp2->getVita() - 1);
+			soundBank->playSample("delball");
+			tmp2->setVita(tmp2->getVita() - 10);
+			tmp->setDestroyed(true);
+			PlayerScore* p = PlayerScore::getInstance();
+			p->addScore(500);
 		}
 
 		else if (!(tmp2->getLivelloPalla() == ROTOLA))
