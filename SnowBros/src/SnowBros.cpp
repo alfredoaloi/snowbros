@@ -209,7 +209,7 @@ int main()
 	minion1SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
 	minion1SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
 	minion1SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
-	minion1SpritesheetManager->setWidth(21);
+	minion1SpritesheetManager->setWidth(25);
 	minion1SpritesheetManager->setHeight(30);
 
 	levels[0]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));

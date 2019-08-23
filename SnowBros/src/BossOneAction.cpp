@@ -27,6 +27,12 @@ void BossOneAction::onAction(bool* key) {
 		tmp->setJumping(true);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		EnemyCounter* enemyCounter = EnemyCounter::getinstance();
+		if (enemyCounter->getEnemiesNumber() <= 1)
+		{
+			tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY() + 100);
+			tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY());
+		}
 	}
 
 	if (tmp->getPosY() >= 102)
@@ -40,8 +46,12 @@ void BossOneAction::onAction(bool* key) {
 		tmp->setJumping(true);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("saltaL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-//		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY() - 100);
-//		tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY());
+		EnemyCounter* enemyCounter = EnemyCounter::getinstance();
+		if (enemyCounter->getEnemiesNumber() <= 1)
+		{
+			tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY() - 100);
+			tmp->getSpawner()->spawnEntity("M1", tmp->getPosX(), tmp->getPosY());
+		}
 	}
 
 	if (tmp->isFalling() && saltaCounter >= 0)
@@ -71,7 +81,7 @@ void BossOneAction::onAction(bool* key) {
 	if (tmp->getVita() == 25)
 	{
 		saltaCounter = -1;
-		tmp->setImmobile(true);
+		tmp->setSpinge(true);
 		tmp->setPosY(102);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("pocoMortoL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
