@@ -63,10 +63,15 @@ bool EnemyCollisionHandler::handleCollision(Entity* other)
 		tmp->setLastDirection(ROTOLA_LEFT);
 	}
 
-	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne" || other->getType() == "MinionTwo"))
+	if (checkCollision(other) && tmp->getLivelloPalla() == ROTOLA && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne" || other->getType() == "MinionTwo" || other->getType() == "BossOne" || other->getType() == "BossTwo"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
-		if (!(tmp2->getLivelloPalla() == ROTOLA))
+		if (tmp2->getType() == "BossOne" || tmp2->getType() == "BossTwo")
+		{
+			tmp2->setVita(tmp2->getVita() - 1);
+		}
+
+		else if (!(tmp2->getLivelloPalla() == ROTOLA))
 		{
 			soundBank->playSample("enemy_ball");
 			if (tmp2->getLastDirection() == LEFT)

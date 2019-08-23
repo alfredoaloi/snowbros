@@ -16,6 +16,8 @@
 class BossOneAction: public Action {
 	int saltaCounter;
 	int mortoCounter;
+	int pocoMortoCounter;
+	int quasiMortoCounter;
 public:
 	BossOneAction();
 	virtual ~BossOneAction();

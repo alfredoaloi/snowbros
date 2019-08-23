@@ -9,6 +9,8 @@
 
 BossOneAction::BossOneAction() {
 	saltaCounter = 0;
+	pocoMortoCounter = 0;
+	quasiMortoCounter = 0;
 	mortoCounter = 0;
 }
 
@@ -78,37 +80,31 @@ void BossOneAction::onAction(bool* key) {
 		tmp->setFalling(true);
 	}
 
-	if (tmp->getVita() == 25)
+	if (tmp->getVita() <= 0 && pocoMortoCounter <= 12)
 	{
 		saltaCounter = -1;
-		tmp->setSpinge(true);
 		tmp->setPosY(102);
+		tmp->setSpinge(true);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("pocoMortoL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		pocoMortoCounter++;
 	}
 
-	if (tmp->getVita() == 15)
+	if (pocoMortoCounter > 12 && quasiMortoCounter <= 12)
 	{
-		saltaCounter = -1;
-		tmp->setPosY(102);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("quasiMortoL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		quasiMortoCounter++;
 	}
 
-	if (tmp->getVita() == 5)
+	if (quasiMortoCounter > 12 && mortoCounter <= 12)
 	{
-		saltaCounter = -1;
-		tmp->setPosY(102);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("mortoL");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
-	}
-
-	if (tmp->getVita() <= 0)
-	{
 		mortoCounter++;
 	}
 
-	if (mortoCounter > 15)
+	if (mortoCounter > 12)
 	{
 		tmp->setDestroyed(true);
 		EnemyCounter* enemyCounter = EnemyCounter::getinstance();
