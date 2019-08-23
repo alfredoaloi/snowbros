@@ -62,7 +62,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		tmp->setPosX(other->getPosX() - tmp->getDim()->x);
 	}
 
-	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "BossOne" || other->getType() == "BossTwo" || other->getType() == "MinionOne" || other->getType() == "MinionTwo" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
+	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne" || other->getType() == "MinionTwo" || other->getType() == "FireLeft" || other->getType() == "FireRight"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getLivelloPalla() == NULLA && !tmp->getImmobile() && !tmp2->getImmobile() && !tmp->getInvincibile())
@@ -72,7 +72,17 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		}
 	}
 
-	if (checkCollision(other) == SIDE_LEFT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+	if (checkCollision(other) && !(tmp->isSpawning()) && (other->getType() == "BossOne" || other->getType() == "BossTwo"))
+	{
+		Actor* tmp2 = dynamic_cast<Actor*>(other);
+		if (!tmp->getImmobile() && !tmp->getInvincibile() && !tmp2->getSpinge())
+		{
+			tmp->setImmobile(true);
+			tmp->setLastDirection(SPAWN);
+		}
+	}
+
+	if (checkCollision(other) == SIDE_LEFT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne" || other->getType() == "MinionTwo"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getLivelloPalla() == PIENA)
@@ -96,7 +106,7 @@ bool PlayerCollisionHandler::handleCollision(Entity* other)
 		}
 	}
 
-	if (checkCollision(other) == SIDE_RIGHT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3"))
+	if (checkCollision(other) == SIDE_RIGHT && (other->getType() == "Enemy1" || other->getType() == "Enemy2" || other->getType() == "Enemy3" || other->getType() == "MinionOne" || other->getType() == "MinionTwo"))
 	{
 		Actor* tmp2 = dynamic_cast<Actor*>(other);
 		if (tmp2->getLivelloPalla() == PIENA)

@@ -10,6 +10,7 @@
 
 #include "Action.h"
 #include "Actor.h"
+#include "EnemyCounter.h"
 
 class BossOneAction: public Action {
 	int saltaCounter;
