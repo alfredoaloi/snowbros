@@ -61,7 +61,7 @@ void BossTwoAction::onAction(bool* key) {
 		tmp->setLastDirection(SHOOTING);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("spara");
 		EnemyCounter* enemyCounter = EnemyCounter::getinstance();
-		if (enemyCounter->getEnemiesNumber() <= 2)
+		if (enemyCounter->getEnemiesNumber() <= 1)
 		{
 			tmp->getSpawner()->spawnEntity("M2", tmp->getPosX() + 38, tmp->getPosY());
 			tmp->getSpawner()->spawnEntity("M2", tmp->getPosX() + tmp->getDim()->x - 38, tmp->getPosY());
