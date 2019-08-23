@@ -350,6 +350,7 @@ int main()
 
 		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 		display = al_create_display(windowWidth, windowHeight);
+		al_hide_mouse_cursor(display);
 		al_clear_to_color(al_map_rgb(100, 100, 100));
 
 		windowWidth = al_get_display_width(display);
