@@ -73,7 +73,7 @@ int main()
 
 	const int nLevels = 6;
 
-	bool fullscreen = false;
+	bool fullscreen = true;
 
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
@@ -93,12 +93,12 @@ int main()
 
 	Level* levels[nLevels];
 
-	levels[0] = new Level("./res/Level1.txt", al_load_bitmap("./res/Livello1.bmp"));
-	levels[1] = new Level("./res/Level2.txt", al_load_bitmap("./res/Livello2.bmp"));
-	levels[2] = new Level("./res/LevelBoss1.txt", al_load_bitmap("./res/LivelloBoss1.bmp"));
-	levels[3] = new Level("./res/Level3.txt", al_load_bitmap("./res/Livello3.bmp"));
-	levels[4] = new Level("./res/Level4.txt", al_load_bitmap("./res/Livello4.bmp"));
-	levels[5] = new Level("./res/LevelBoss2.txt", al_load_bitmap("./res/LivelloBoss2.bmp"));
+	levels[0] = new Level("./res/levels/Level1.txt", al_load_bitmap("./res/levels/Livello1.bmp"));
+	levels[1] = new Level("./res/levels/Level2.txt", al_load_bitmap("./res/levels/Livello2.bmp"));
+	levels[2] = new Level("./res/levels/LevelBoss1.txt", al_load_bitmap("./res/levels/LivelloBoss1.bmp"));
+	levels[3] = new Level("./res/levels/Level3.txt", al_load_bitmap("./res/levels/Livello3.bmp"));
+	levels[4] = new Level("./res/levels/Level4.txt", al_load_bitmap("./res/levels/Livello4.bmp"));
+	levels[5] = new Level("./res/levels/LevelBoss2.txt", al_load_bitmap("./res/levels/LivelloBoss2.bmp"));
 
 	// player
 	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
@@ -386,7 +386,7 @@ int main()
 
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	font = al_load_font("./res/fixed_font.tga", 0, 0);
+	font = al_load_font("./res/font/fixed_font.tga", 0, 0);
 
 	al_set_target_bitmap(al_get_backbuffer(display));
 	al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -807,7 +807,7 @@ int main()
 			else if(gameState == MAIN_MENU)
 			{
 				if(fullscreen) al_use_transform(&trans);
-				al_draw_bitmap(al_load_bitmap("./res/MainMenu.bmp"), 0, 0, 0);
+				al_draw_bitmap(al_load_bitmap("./res/others/MainMenu.bmp"), 0, 0, 0);
 				if(blinkCounter >= INT_MAX)
 					blinkCounter = 0;
 

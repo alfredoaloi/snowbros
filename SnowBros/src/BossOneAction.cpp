@@ -111,6 +111,9 @@ void BossOneAction::onAction(bool* key) {
 	if (mortoCounter > 15)
 	{
 		tmp->setDestroyed(true);
+		EnemyCounter* enemyCounter = EnemyCounter::getinstance();
+		for (int i = 0; i < enemyCounter->getEnemiesNumber(); i++)
+			enemyCounter->decCounter();
 		PlayerScore* playerScore = PlayerScore::getInstance();
 		playerScore->addScore(2000);
 	}
