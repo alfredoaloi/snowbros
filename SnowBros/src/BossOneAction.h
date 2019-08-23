@@ -11,6 +11,7 @@
 #include "Action.h"
 #include "Actor.h"
 #include "EnemyCounter.h"
+#include "PlayerScore.h"
 
 class BossOneAction: public Action {
 	int saltaCounter;

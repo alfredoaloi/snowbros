@@ -111,6 +111,8 @@ void BossOneAction::onAction(bool* key) {
 	if (mortoCounter > 15)
 	{
 		tmp->setDestroyed(true);
+		PlayerScore* playerScore = PlayerScore::getInstance();
+		playerScore->addScore(2000);
 	}
 
 	if (saltaCounter >= 0)

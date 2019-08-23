@@ -23,6 +23,7 @@
 #include "EnemyAction.h"
 #include "PowerupAction.h"
 #include "BossOneAction.h"
+#include "BossTwoAction.h"
 #include "TileDescriptor.h"
 #include "ActorDescriptor.h"
 #include "SpritesheetManager.h"
@@ -31,6 +32,7 @@
 #include "EnemyCollisionHandler.h"
 #include "PowerupCollisionHandler.h"
 #include "BossOneCollisionHandler.h"
+#include "BossTwoCollisionHandler.h"
 #include "PlayerScore.h"
 #include "SoundBank.h"
 
@@ -69,7 +71,7 @@ int main()
 	bool redraw = true;
 	bool doexit = false;
 
-	const int nLevels = 5;
+	const int nLevels = 6;
 
 	bool fullscreen = false;
 
@@ -96,6 +98,7 @@ int main()
 	levels[2] = new Level("./res/LevelBoss1.txt", al_load_bitmap("./res/LivelloBoss1.bmp"));
 	levels[3] = new Level("./res/Level3.txt", al_load_bitmap("./res/Livello3.bmp"));
 	levels[4] = new Level("./res/Level4.txt", al_load_bitmap("./res/Livello4.bmp"));
+	levels[5] = new Level("./res/LevelBoss2.txt", al_load_bitmap("./res/LivelloBoss2.bmp"));
 
 	// player
 	SpritesheetManager* playerSpritesheetManager = new SpritesheetManager();
@@ -196,7 +199,16 @@ int main()
 	bossOneSpritesheetManager->setWidth(66);
 	bossOneSpritesheetManager->setHeight(96);
 
-	// enemy 3
+	// Boss 2
+	SpritesheetManager* bossTwoSpritesheetManager = new SpritesheetManager();
+	bossTwoSpritesheetManager->setNewSpritesheet("fermo", new Spritesheet(al_load_bitmap("./res/boss2/fermo.bmp"), 1));
+	bossTwoSpritesheetManager->setNewSpritesheet("spara", new Spritesheet(al_load_bitmap("./res/boss2/spara.bmp"), 1));
+	bossTwoSpritesheetManager->setNewSpritesheet("morente", new Spritesheet(al_load_bitmap("./res/boss2/morente.bmp"), 2));
+	bossTwoSpritesheetManager->setNewSpritesheet("morto", new Spritesheet(al_load_bitmap("./res/boss2/morto.bmp"), 1));
+	bossTwoSpritesheetManager->setWidth(128);
+	bossTwoSpritesheetManager->setHeight(72);
+
+	// minion 1
 	SpritesheetManager* minion1SpritesheetManager = new SpritesheetManager();
 	minion1SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/minion1/camminaL.bmp"), 2));
 	minion1SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/minion1/camminaR.bmp"), 2));
@@ -211,6 +223,25 @@ int main()
 	minion1SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
 	minion1SpritesheetManager->setWidth(25);
 	minion1SpritesheetManager->setHeight(30);
+
+	// minion 2
+	SpritesheetManager* minion2SpritesheetManager = new SpritesheetManager();
+	minion2SpritesheetManager->setNewSpritesheet("camminaL", new Spritesheet(al_load_bitmap("./res/minion2/camminaL.bmp"), 2));
+	minion2SpritesheetManager->setNewSpritesheet("camminaR", new Spritesheet(al_load_bitmap("./res/minion2/camminaR.bmp"), 2));
+	minion2SpritesheetManager->setNewSpritesheet("fermoL", new Spritesheet(al_load_bitmap("./res/minion2/fermoL.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("fermoR", new Spritesheet(al_load_bitmap("./res/minion2/fermoR.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("mortoL", new Spritesheet(al_load_bitmap("./res/minion2/mortoL.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("mortoR", new Spritesheet(al_load_bitmap("./res/minion2/mortoR.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("saltaL", new Spritesheet(al_load_bitmap("./res/minion2/fermoL.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("saltaR", new Spritesheet(al_load_bitmap("./res/minion2/fermoR.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("volaL", new Spritesheet(al_load_bitmap("./res/minion2/mortoL.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("volaR", new Spritesheet(al_load_bitmap("./res/minion2/mortoR.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("poca", new Spritesheet(al_load_bitmap("./res/others/pallaPoca.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("tanta", new Spritesheet(al_load_bitmap("./res/others/pallaTanta.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("piena", new Spritesheet(al_load_bitmap("./res/others/pallaPiena.bmp"), 1));
+	minion2SpritesheetManager->setNewSpritesheet("rotola", new Spritesheet(al_load_bitmap("./res/others/pallaRotola.bmp"), 4));
+	minion2SpritesheetManager->setWidth(25);
+	minion2SpritesheetManager->setHeight(30);
 
 	levels[0]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[0]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
@@ -257,7 +288,7 @@ int main()
 	levels[2]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 	levels[2]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
 	levels[2]->registerEntity("B1", new ActorDescriptor(new Dimensions(66, 96),  0, 32, 10, 10, new Controller(key), new BossOneAction(), new BossOneCollisionHandler(), bossOneSpritesheetManager, "BossOne"));
-	levels[2]->registerEntity("M1", new ActorDescriptor(new Dimensions(21, 30),  6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), minion1SpritesheetManager, "MinionOne"));
+	levels[2]->registerEntity("M1", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), minion1SpritesheetManager, "MinionOne"));
 
 	levels[3]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
 	levels[3]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
@@ -288,6 +319,23 @@ int main()
 	levels[4]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
 	levels[4]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
 	levels[4]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
+
+	levels[5]->registerEntity("T", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "T"));
+	levels[5]->registerEntity("TL", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TL"));
+	levels[5]->registerEntity("TR", new TileDescriptor(new Dimensions(16, 16), EntityDescriptor::createBitmapFromColor(new Dimensions(16, 16), 255, 255, 255), "TR"));
+	levels[5]->registerEntity("P", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new PlayerAction(), new PlayerCollisionHandler(), playerSpritesheetManager, "Player"));
+	levels[5]->registerEntity("BL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletLeft"));
+	levels[5]->registerEntity("BR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletRight"));
+	levels[5]->registerEntity("BPL", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletPLeft"));
+	levels[5]->registerEntity("BPR", new ActorDescriptor(new Dimensions(6, 11),  11, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), bulletSpritesheetManager, "BulletPRight"));
+	levels[5]->registerEntity("E1", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy1SpritesheetManager, "Enemy1"));
+	levels[5]->registerEntity("E2", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy2SpritesheetManager, "Enemy2"));
+	levels[5]->registerEntity("E3", new ActorDescriptor(new Dimensions(25, 30), 6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), enemy3SpritesheetManager, "Enemy3"));
+	levels[5]->registerEntity("FL", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireLeft"));
+	levels[5]->registerEntity("FR", new ActorDescriptor(new Dimensions(25, 16),  6, 0, 0, 0, new Controller(key), new BulletAction(), new BulletCollisionHandler(), fireSpritesheetManager, "FireRight"));
+	levels[5]->registerEntity("G", new ActorDescriptor(new Dimensions(16, 16),  6, 0, 0, 0, new Controller(key), new PowerupAction(), new PowerupCollisionHandler(), powerupSpritesheetManager, "Powerup"));
+	levels[5]->registerEntity("B2", new ActorDescriptor(new Dimensions(128, 72),  0, 32, 10, 10, new Controller(key), new BossTwoAction(), new BossTwoCollisionHandler(), bossTwoSpritesheetManager, "BossTwo"));
+	levels[5]->registerEntity("M2", new ActorDescriptor(new Dimensions(25, 30),  6, 32, 10, 10, new Controller(key), new EnemyAction(), new EnemyCollisionHandler(), minion2SpritesheetManager, "MinionTwo"));
 
 	al_init_primitives_addon();
 	ALLEGRO_TRANSFORM trans;

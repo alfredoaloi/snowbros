@@ -20,13 +20,43 @@ void EnemyAction::onAction(bool* key)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
-	if (tmp->getType() == "MinionOne" && tmp->isSpawning())
+	if (tmp->getType() == "MinionOne" && tmp->isSpawning() && !tmp->getImmobile())
 	{
 		if (tmp->getPosX() > 20)
 			tmp->setPosX(tmp->getPosX() - 10);
 		else
 			tmp->setSpawning(false);
 		tmp->getSpritesheetManager()->selectCurrentSpritesheet("volaL");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		tmp->setImmobile(false);
+		return;
+	}
+
+	if (tmp->getType() == "MinionTwo" && tmp->isSpawning() && !tmp->getImmobile() && tmp->getPosX() < screenWidth / 2)
+	{
+		if (tmp->getPosX() > 20)
+		{
+			tmp->setPosX(tmp->getPosX() - 10);
+			tmp->setPosY(tmp->getPosY() - 5);
+		}
+		else
+			tmp->setSpawning(false);
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("volaL");
+		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
+		tmp->setImmobile(false);
+		return;
+	}
+
+	else if (tmp->getType() == "MinionTwo" && !tmp->getImmobile() && tmp->isSpawning() && tmp->getPosX() > screenWidth / 2)
+	{
+		if (tmp->getPosX() < screenWidth - 20)
+		{
+			tmp->setPosX(tmp->getPosX() + 10);
+			tmp->setPosY(tmp->getPosY() - 5);
+		}
+		else
+			tmp->setSpawning(false);
+		tmp->getSpritesheetManager()->selectCurrentSpritesheet("volaR");
 		tmp->getSpritesheetManager()->nextSprite(tmp->getBitmap());
 		tmp->setImmobile(false);
 		return;

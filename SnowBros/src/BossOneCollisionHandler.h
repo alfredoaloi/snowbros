@@ -10,6 +10,7 @@
 
 #include "CollisionHandler.h"
 #include "Actor.h"
+#include "PlayerScore.h"
 
 class BossOneCollisionHandler: public CollisionHandler {
 public:

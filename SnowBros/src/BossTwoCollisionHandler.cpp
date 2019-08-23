@@ -1,22 +1,22 @@
 /*
- * BossOneCollisionHandler.cpp
+ * BossTwoCollisionHandler.cpp
  *
- *  Created on: 21 ago 2019
+ *  Created on: 23 ago 2019
  *      Author: laolr
  */
 
-#include "BossOneCollisionHandler.h"
+#include "BossTwoCollisionHandler.h"
 
-BossOneCollisionHandler::BossOneCollisionHandler() {
+BossTwoCollisionHandler::BossTwoCollisionHandler() {
 	// TODO Auto-generated constructor stub
 
 }
 
-BossOneCollisionHandler::~BossOneCollisionHandler() {
+BossTwoCollisionHandler::~BossTwoCollisionHandler() {
 	// TODO Auto-generated destructor stub
 }
 
-bool BossOneCollisionHandler::handleCollision(Entity* other)
+bool BossTwoCollisionHandler::handleCollision(Entity* other)
 {
 	Actor* tmp = dynamic_cast<Actor*>(entity);
 
@@ -25,7 +25,7 @@ bool BossOneCollisionHandler::handleCollision(Entity* other)
 		return false;
 	}
 
-	if (checkCollision(other) == SIDE_DOWN && !tmp->getImmobile() && (other->getType() == "T" || other->getType() == "TL" || other->getType() == "TR"))
+	if (checkCollision(other) == SIDE_DOWN && (other->getType() == "T" || other->getType() == "TL" || other->getType() == "TR"))
 	{
 		tmp->setPosY(other->getPosY() - tmp->getDim()->y);
 		tmp->setCanJump(true);
@@ -42,4 +42,4 @@ bool BossOneCollisionHandler::handleCollision(Entity* other)
 	return true;
 }
 
-CollisionHandler* BossOneCollisionHandler::clone() { return new BossOneCollisionHandler(); }
+CollisionHandler* BossTwoCollisionHandler::clone() { return new BossTwoCollisionHandler(); }
