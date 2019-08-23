@@ -89,10 +89,20 @@ void Level::processLevel(int& nLives)
 		}
 	}
 
+	bool playerServed = false;
+	auto playerIt = find_if(constructedEntities.begin(), constructedEntities.end(), [](Entity* e){ return e->getType() == "Player"; });
+	unsigned playerPos = playerIt - constructedEntities.begin();
 	for(unsigned i = 0; i < constructedControllers.size(); i++)
 	{
-		if(constructedControllers[i] != nullptr)
+		if(constructedControllers[i] != nullptr && i != playerPos)
 			constructedControllers[i]->processAction();
+		else if(constructedControllers[i] != nullptr && i == playerPos && !playerServed)
+		{
+			constructedControllers[i]->processAction();
+			playerServed = true;
+			playerIt = find_if(constructedEntities.begin(), constructedEntities.end(), [](Entity* e){ return e->getType() == "Player"; });
+			playerPos = playerIt - constructedEntities.begin();
+		}
 	}
 
 	for(unsigned i = 0; i < constructedCollisionHandlers.size(); i++)
@@ -192,33 +202,38 @@ void Level::setLevelbackground(ALLEGRO_BITMAP* levelBackground) { this->levelBac
 
 void Level::spawn(std::string entity, double x, double y)
 {
-	std::unordered_map<std::string, EntityDescriptor*>::iterator it;
-	it = entities.find(entity);
-	if(it != entities.end())
+	auto playerIt = find_if(constructedEntities.begin(), constructedEntities.end(), [](Entity* e){ return e->getType() == "Player"; });
+	if(playerIt != constructedEntities.end())
 	{
-		Entity* tmpEntity = it->second->getDescripted(x, y);
-		if(it->second->getDescriptedController() != nullptr)
+		unsigned playerPos = playerIt - constructedEntities.begin();
+		std::unordered_map<std::string, EntityDescriptor*>::iterator it;
+		it = entities.find(entity);
+		if(it != entities.end())
 		{
-			Controller* tmpController = it->second->getDescriptedController();
-			Action* action = it->second->getDescriptedAction();
-			action->setEntity(tmpEntity);
-			tmpEntity->setSpawner(new LevelSpawner(this));
-			tmpController->changeAction(action);
-			constructedControllers.push_back(tmpController);
-		}
-		else
-			constructedControllers.push_back(nullptr);
+			Entity* tmpEntity = it->second->getDescripted(x, y);
+			if(it->second->getDescriptedController() != nullptr)
+			{
+				Controller* tmpController = it->second->getDescriptedController();
+				Action* action = it->second->getDescriptedAction();
+				action->setEntity(tmpEntity);
+				tmpEntity->setSpawner(new LevelSpawner(this));
+				tmpController->changeAction(action);
+				constructedControllers.insert(constructedControllers.begin() + playerPos, tmpController);
+			}
+			else
+				constructedControllers.insert(constructedControllers.begin() + playerPos, nullptr);
 
-		if(it->second->getDescriptedCollisionHandler() != nullptr)
-		{
-			CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
-			tmpCollisionhandler->setEntity(tmpEntity);
-			constructedCollisionHandlers.push_back(tmpCollisionhandler);
-		}
-		else
-			constructedCollisionHandlers.push_back(nullptr);
+			if(it->second->getDescriptedCollisionHandler() != nullptr)
+			{
+				CollisionHandler* tmpCollisionhandler = it->second->getDescriptedCollisionHandler();
+				tmpCollisionhandler->setEntity(tmpEntity);
+				constructedCollisionHandlers.insert(constructedCollisionHandlers.begin() + playerPos, tmpCollisionhandler);
+			}
+			else
+				constructedCollisionHandlers.insert(constructedCollisionHandlers.begin() + playerPos, nullptr);
 
-		constructedEntities.push_back(tmpEntity);
+			constructedEntities.insert(playerIt, tmpEntity);
+		}
 	}
 }
 

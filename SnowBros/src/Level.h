@@ -7,6 +7,7 @@
 
 #ifndef LEVEL_H_
 #define LEVEL_H_
+#include <algorithm>
 #include <unordered_map>
 #include <list>
 #include <vector>
