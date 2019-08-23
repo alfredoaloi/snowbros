@@ -841,10 +841,11 @@ int main()
 			}
 			else if(gameState == IN_GAME)
 			{
+				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
 				al_hold_bitmap_drawing(1);
 				levels[levelCounter]->drawLevel();
 				al_hold_bitmap_drawing(0);
-				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
+
 				//DISEGNO INTERFACCIA GRAFICA
 				al_identity_transform(&trans2);
 				al_scale_transform(&trans2, 1, 0.77);

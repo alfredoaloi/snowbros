@@ -27,7 +27,15 @@ protected:
 
 public:
 	EntityDescriptor(Dimensions* d, ALLEGRO_BITMAP* b, Controller* c, Action* a, CollisionHandler* ch, SpritesheetManager* ssm, std::string t): dim(d), bitmap(b), controller(c), action(a), collisionHandler(ch), spritesheetManager(ssm), type(t) {}
-	virtual ~EntityDescriptor() {}
+	virtual ~EntityDescriptor()
+	{
+		delete dim;
+		al_destroy_bitmap(bitmap);
+		delete controller;
+		delete action;
+		delete collisionHandler;
+		delete spritesheetManager;
+	}
 
 	static ALLEGRO_BITMAP* createBitmapFromColor(Dimensions* d, int r, int g, int b)
 	{

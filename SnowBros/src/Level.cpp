@@ -29,22 +29,22 @@ Level::Level(std::string fileName, ALLEGRO_BITMAP* levelBackground) {
 
 	this->levelBackground = levelBackground;
 	this->playerDestroyed = false;
-	this->backgroundDrawn = false;
 }
 
-Level::~Level() { }
+Level::~Level()
+{
+	for(std::unordered_map<std::string, EntityDescriptor*>::iterator it = entities.begin(); it != entities.end(); it++)
+	{
+		delete it->second;
+	}
+}
 
 void Level::drawLevel() {
 
 	if(constructedEntities.empty() || constructedControllers.empty())
 		constructLevel();
 
-	if(!backgroundDrawn)
-	{
-		al_draw_bitmap(levelBackground, 0, 24, 0);
-		backgroundDrawn = false;
-	}
-
+	al_draw_bitmap(levelBackground, 0, 24, 0);
 	for(std::vector<Entity*>::iterator it = constructedEntities.begin(); it != constructedEntities.end(); it++)
 	{
 		(*it)->onRedraw();
