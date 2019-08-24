@@ -33,9 +33,9 @@ void BossTwoAction::onAction(bool* key) {
 
 	if (tmp->getVita() <= 0 && morenteCounter <= 24)
 	{
-		tmp->setLastDirection(MORTO);
-		if (tmp->getVita() == 0)
+		if (!(tmp->getLastDirection() == MORTO))
 			tmp->getSpritesheetManager()->selectCurrentSpritesheet("morente");
+		tmp->setLastDirection(MORTO);
 		tmp->setSpinge(true);
 		morenteCounter++;
 	}

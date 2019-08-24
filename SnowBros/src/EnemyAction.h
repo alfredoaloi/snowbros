@@ -18,6 +18,7 @@ enum randAction { left, right, up, shoot, fermo };
 class EnemyAction: public Action {
 	int cooldown;
 	int mortoCounter;
+	int sparaCounter;
 	SoundBank* soundBank;
 public:
 	EnemyAction();

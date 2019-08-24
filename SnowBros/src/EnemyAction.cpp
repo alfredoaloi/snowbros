@@ -10,6 +10,7 @@
 
 EnemyAction::EnemyAction() {
 	mortoCounter = 0;
+	sparaCounter = 0;
 	soundBank = SoundBank::getInstance();
 }
 
@@ -116,12 +117,16 @@ void EnemyAction::onAction(bool* key)
 					action = up;
 				break;
 			case 3:
-				if (tmp->getType() == "Enemy2")
+				if (tmp->getType() == "Enemy2" && sparaCounter > 12)
+				{
+					sparaCounter = 0;
 					action = shoot;
+				}
 				else
 					action = fermo;
 				break;
 		}
+		sparaCounter++;
 	}
 	else
 	{
