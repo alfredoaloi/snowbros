@@ -34,7 +34,6 @@ public:
 		delete controller;
 		delete action;
 		delete collisionHandler;
-		delete spritesheetManager;
 	}
 
 	static ALLEGRO_BITMAP* createBitmapFromColor(Dimensions* d, int r, int g, int b)

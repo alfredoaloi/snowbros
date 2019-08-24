@@ -32,7 +32,10 @@ Entity::Entity(Entity* e)
 	this->enemyCounter = e->enemyCounter;
 }
 
-Entity::~Entity() { if(enemyCounter != nullptr) enemyCounter->decCounter(); }
+Entity::~Entity()
+{
+	if(enemyCounter != nullptr) enemyCounter->decCounter();
+}
 
 /*void Entity::setAction(Action*& action) {
 	this->action = action;

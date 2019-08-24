@@ -842,9 +842,7 @@ int main()
 			else if(gameState == IN_GAME)
 			{
 				al_draw_filled_rectangle(0, 0, 256, 24, al_map_rgb(0, 0, 0));
-				al_hold_bitmap_drawing(1);
 				levels[levelCounter]->drawLevel();
-				al_hold_bitmap_drawing(0);
 
 				//DISEGNO INTERFACCIA GRAFICA
 				al_identity_transform(&trans2);
@@ -983,6 +981,21 @@ int main()
 	al_destroy_timer(timer);
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
+
+	for(int i = 0; i < nLevels; i++)
+		delete levels[i];
+
+	delete playerSpritesheetManager;
+	delete bulletSpritesheetManager;
+	delete enemy1SpritesheetManager;
+	delete enemy2SpritesheetManager;
+	delete enemy3SpritesheetManager;
+	delete fireSpritesheetManager;
+	delete powerupSpritesheetManager;
+	delete bossOneSpritesheetManager;
+	delete bossTwoSpritesheetManager;
+	delete minion1SpritesheetManager;
+	delete minion2SpritesheetManager;
 
 	return 0;
 }

@@ -33,10 +33,31 @@ Level::Level(std::string fileName, ALLEGRO_BITMAP* levelBackground) {
 
 Level::~Level()
 {
-	for(std::unordered_map<std::string, EntityDescriptor*>::iterator it = entities.begin(); it != entities.end(); it++)
+	for(auto it = entities.begin(); it != entities.end(); it++)
 	{
-		delete it->second;
+		if(it->second != nullptr)
+			delete it->second;
 	}
+
+	for(auto it = constructedEntities.begin(); it != constructedEntities.end(); it++)
+	{
+		if(*it != nullptr)
+			delete *it;
+	}
+
+	for(auto it = constructedControllers.begin(); it != constructedControllers.end(); it++)
+	{
+		if(*it != nullptr)
+			delete *it;
+	}
+
+	for(auto it = constructedCollisionHandlers.begin(); it != constructedCollisionHandlers.end(); it++)
+	{
+		if(*it != nullptr)
+			delete *it;
+	}
+
+	al_destroy_bitmap(levelBackground);
 }
 
 void Level::drawLevel() {
