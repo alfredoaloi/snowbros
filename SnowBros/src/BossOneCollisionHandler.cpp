@@ -32,7 +32,7 @@ bool BossOneCollisionHandler::handleCollision(Entity* other)
 		tmp->setFalling(false);
 	}
 
-	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight"))
+	if (checkCollision(other) && (other->getType() == "BulletLeft" || other->getType() == "BulletRight" || other->getType() == "BulletPLeft" || other->getType() == "BulletPRight"))
 	{
 		tmp->setVita(tmp->getVita() - 1);
 		PlayerScore* playerScore = PlayerScore::getInstance();

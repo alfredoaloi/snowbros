@@ -785,8 +785,16 @@ int main()
 				}
 				else
 				{
-					al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
-					al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
+					if (levelCounter + 1 == 3 || levelCounter + 1 == 6)
+					{
+						al_draw_text(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "BOSS LEVEL");
+						al_draw_text(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "BOSS LEVEL");
+					}
+					else
+					{
+						al_draw_textf(font, al_map_rgb(255, 80, 0), 129, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
+						al_draw_textf(font, al_map_rgb(255, 255, 255), 128, 112, ALLEGRO_ALIGN_CENTRE, "LEVEL %d", levelCounter + 1);
+					}
 					if(tmp > 20)
 					{
 						gameState = IN_GAME;
