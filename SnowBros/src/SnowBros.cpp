@@ -879,20 +879,40 @@ int main()
 						supBlink = supBlink + 2;
 					}
 				}
-				al_identity_transform(&trans2);
-				al_scale_transform(&trans2, 0.77, 0.77);
-				al_translate_transform(&trans2, 83, 0);
-				if(fullscreen) al_compose_transform(&trans2, &trans);
-				al_use_transform(&trans2);
-				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "[F] FULLSCREEN");
-				al_identity_transform(&trans2);
-				al_scale_transform(&trans2, 0.77, 0.77);
-				al_translate_transform(&trans2, 82, 0);
-				if(fullscreen) al_compose_transform(&trans2, &trans);
-				al_use_transform(&trans2);
-				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "[F] FULLSCREEN");
-				al_identity_transform(&trans2);
-				al_use_transform(&trans2);
+				if(!fullscreen)
+				{
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 0.77, 0.77);
+					al_translate_transform(&trans2, 87, 0);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "[F] FULLSCREEN");
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 0.77, 0.77);
+					al_translate_transform(&trans2, 86, 0);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "[F] FULLSCREEN");
+					al_identity_transform(&trans2);
+					al_use_transform(&trans2);
+				}
+				else
+				{
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 0.77, 0.77);
+					al_translate_transform(&trans2, 88, 0);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "[F] WINDOWED");
+					al_identity_transform(&trans2);
+					al_scale_transform(&trans2, 0.77, 0.77);
+					al_translate_transform(&trans2, 87, 0);
+					if(fullscreen) al_compose_transform(&trans2, &trans);
+					al_use_transform(&trans2);
+					al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "[F] WINDOWED");
+					al_identity_transform(&trans2);
+					al_use_transform(&trans2);
+				}
 				if(fullscreen) al_use_transform(&trans);
 			}
 			else if(gameState == IN_GAME)
