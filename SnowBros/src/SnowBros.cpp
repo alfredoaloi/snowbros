@@ -73,7 +73,7 @@ int main()
 
 	const int nLevels = 6;
 
-	bool fullscreen = false;
+	bool fullscreen = true;
 
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
@@ -344,6 +344,7 @@ int main()
 	float windowWidth = disp_data.width;
 	float windowHeight = disp_data.height;
 	float sx, sy;
+	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
 	if(fullscreen)
 	{
@@ -365,10 +366,11 @@ int main()
 	}
 
 	if(!fullscreen)
+	{
 		display = al_create_display(256, 224);
+		al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
+	}
 
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-	al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
 	al_hide_mouse_cursor(display);
 
 	if (!display) {
