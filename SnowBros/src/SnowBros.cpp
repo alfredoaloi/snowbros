@@ -67,13 +67,13 @@ int main()
 	al_install_audio();
 	al_init_acodec_addon();
 
-	bool key[6] = { false, false, false, false, false, false };
+	bool key[7] = { false, false, false, false, false, false, false };
 	bool redraw = true;
 	bool doexit = false;
 
 	const int nLevels = 6;
 
-	bool fullscreen = true;
+	bool fullscreen = false;
 
 	if (!al_init()) {
 		std::cerr << "Failed to initialize allegro!";
@@ -339,25 +339,25 @@ int main()
 
 	al_init_primitives_addon();
 	ALLEGRO_TRANSFORM trans;
+
+	al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
+	float windowWidth = disp_data.width;
+	float windowHeight = disp_data.height;
+	float sx, sy;
+
 	if(fullscreen)
 	{
-		al_get_display_mode(al_get_num_display_modes() - 1, &disp_data);
-		al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+		al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, true);
 		//display = al_create_display(disp_data.width, disp_data.height);*/
-
-		float windowWidth = disp_data.width;
-		float windowHeight = disp_data.height;
-
 		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 		display = al_create_display(windowWidth, windowHeight);
-		al_hide_mouse_cursor(display);
-		al_clear_to_color(al_map_rgb(100, 100, 100));
 
 		windowWidth = al_get_display_width(display);
 		windowHeight = al_get_display_height(display);
 
-		float sx = windowWidth / (float) screenWidth;
-		float sy = windowHeight / (float) screenHeight;
+		sx = windowWidth / (float) screenWidth;
+		sy = windowHeight / (float) screenHeight;
 
 		al_identity_transform(&trans);
 		al_scale_transform(&trans, sx, sy);
@@ -366,6 +366,10 @@ int main()
 
 	if(!fullscreen)
 		display = al_create_display(256, 224);
+
+	al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+	al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
+	al_hide_mouse_cursor(display);
 
 	if (!display) {
 		std::cerr << "Failed to create display!";
@@ -455,6 +459,32 @@ int main()
 					transparency = 0;
 					tmp = 0;
 					playerSpawned = false;
+				}
+				if(key[KEY_F])
+				{
+					if(fullscreen)
+					{
+						al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, false);
+						al_resize_display(display, 256, 224);
+						fullscreen = false;
+						key[KEY_F] = false;
+					}
+					else
+					{
+						al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, true);
+						al_resize_display(display, windowWidth, windowHeight);
+						windowWidth = al_get_display_width(display);
+						windowHeight = al_get_display_height(display);
+
+						sx = windowWidth / (float) screenWidth;
+						sy = windowHeight / (float) screenHeight;
+
+						al_identity_transform(&trans);
+						al_scale_transform(&trans, sx, sy);
+						al_use_transform(&trans);
+						fullscreen = true;
+						key[KEY_F] = false;
+					}
 				}
 			}
 			else if(gameState == IN_GAME)
@@ -623,6 +653,9 @@ int main()
 			case ALLEGRO_KEY_SPACE:
 				key[KEY_SPACE] = true;
 				break;
+			/*case ALLEGRO_KEY_F:
+				key[KEY_F] = true;
+				break;*/
 			}
 		} else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
 			switch (ev.keyboard.keycode) {
@@ -647,6 +680,9 @@ int main()
 
 			case ALLEGRO_KEY_ESCAPE:
 				key[KEY_ESCAPE] = true;
+				break;
+			case ALLEGRO_KEY_F:
+				key[KEY_F] = true;
 				break;
 			}
 		}
@@ -843,6 +879,18 @@ int main()
 						supBlink = supBlink + 2;
 					}
 				}
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 0.77, 0.77);
+				al_translate_transform(&trans2, 83, 0);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 80, 0), 0, 0, 0, "[F] FULLSCREEN");
+				al_identity_transform(&trans2);
+				al_scale_transform(&trans2, 0.77, 0.77);
+				al_translate_transform(&trans2, 82, 0);
+				if(fullscreen) al_compose_transform(&trans2, &trans);
+				al_use_transform(&trans2);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, "[F] FULLSCREEN");
 				al_identity_transform(&trans2);
 				al_use_transform(&trans2);
 				if(fullscreen) al_use_transform(&trans);

@@ -18,7 +18,11 @@ public:
 
 	Entity* getDescripted(float x, float y) override
 	{
-		return new Tile(x, y, dim, bitmap, type);
+		ALLEGRO_BITMAP* tmp;
+		tmp = al_create_bitmap(dim->x, dim->y);
+		al_set_target_bitmap(tmp);
+		al_draw_bitmap(bitmap, 0, 0, 0);
+		return new Tile(x, y, dim, tmp, type);
 	}
 };
 
