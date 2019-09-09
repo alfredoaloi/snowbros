@@ -348,11 +348,8 @@ int main()
 
 	if(fullscreen)
 	{
-		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-		al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, true);
-		//display = al_create_display(disp_data.width, disp_data.height);*/
-		//al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 		display = al_create_display(windowWidth, windowHeight);
+		al_toggle_display_flag(display, ALLEGRO_FULLSCREEN_WINDOW, true);
 
 		windowWidth = al_get_display_width(display);
 		windowHeight = al_get_display_height(display);
